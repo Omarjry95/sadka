@@ -7,7 +7,10 @@ export default function Form() {
 
     return (
         <View style={styles.container}>
-            <TextInput variant="labelInside" />
+            <TextInput
+                variant="labelInside"
+                label="Adresse éléctronique / Identifiant"
+            />
         </View>
     )
 }

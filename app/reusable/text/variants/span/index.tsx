@@ -3,16 +3,17 @@ import { Text } from "react-native";
 import styles from "@app/reusable/text/variants/span/styles";
 import {BaseStrictProps} from "@app/reusable/text/models";
 
-export default function Span({ value, color, size, transform }: BaseStrictProps) {
+const Span = ({ value, paddings, margins, color, size, transform }: BaseStrictProps) => (
+    <Text style={{
+        ...styles.main,
+        ...paddings,
+        ...margins,
+        color,
+        fontSize: size,
+        textTransform: transform
+    }}>
+        {value}
+    </Text>
+)
 
-    return (
-        <Text style={{
-            ...styles.main,
-            color,
-            fontSize: size,
-            textTransform: transform
-        }}>
-            {value}
-        </Text>
-    )
-}
+export default Span;

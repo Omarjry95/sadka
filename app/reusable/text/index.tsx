@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react';
-import {BaseProps, BaseStrictProps, TextVariants} from "@app/reusable/text/models";
+import { BaseProps, BaseStrictProps } from "@app/reusable/text/models";
 import { Title, Span } from "@app/reusable/text/variants";
+import {getStyleMargin, getStylePadding} from "@app/utilities/spacing";
 
-export default function Text({ variant, ...props }: { variant: TextVariants } & BaseProps) {
+export default function Text({ variant, ...props }: BaseProps) {
+
+    const { value, padding, margin, color, size, transform } = props;
 
     const TextVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -11,16 +14,19 @@ export default function Text({ variant, ...props }: { variant: TextVariants } & 
             case "title":
                 return Title
             default:
-                return Title
+                return Span
         }
     }, [variant]);
 
     const variantProps: BaseStrictProps = useMemo(() => {
         return {
             ...props,
-            color: props.color ?? "white",
-            size: props.size ?? 16,
-            transform: props.transform ?? "none"
+            value: value ?? "",
+            paddings: getStylePadding(padding),
+            margins: getStyleMargin(margin),
+            color: color ?? "white",
+            size: size ?? 16,
+            transform: transform ?? "none"
         }
     }, [props]);
 

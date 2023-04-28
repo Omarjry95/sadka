@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View} from "react-native";
+import {Keyboard, TouchableWithoutFeedback, View} from "react-native";
 import styles from "./styles";
 import {useTheme} from "@react-navigation/native";
 import MainShadow from "@app/screens/signIn/mainShadow";
@@ -11,17 +11,19 @@ export default function SignIn() {
     const { colors } = useTheme();
 
     return (
-        <View style={{
-            ...styles.container,
-            backgroundColor: colors.primary
-        }}>
-            <Cover />
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{
+                ...styles.container,
+                backgroundColor: colors.primary
+            }}>
+                <Cover />
 
-            <MainShadow />
+                <MainShadow />
 
-            <View style={styles.main}>
-                <Form />
+                <View style={styles.main}>
+                    <Form />
+                </View>
             </View>
-        </View>
+        </TouchableWithoutFeedback>
     )
 }
