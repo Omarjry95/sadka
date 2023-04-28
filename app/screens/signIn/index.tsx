@@ -6,7 +6,13 @@ export default function SignIn() {
 
     return (
         <View style={styles.container}>
+            <View style={styles.shadowContainer}>
+                <View style={styles.shadow} />
+            </View>
 
+            <View style={styles.main}>
+
+            </View>
         </View>
     )
 }
