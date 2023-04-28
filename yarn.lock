@@ -1069,6 +1069,11 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
+"@expo-google-fonts/merriweather@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/merriweather/-/merriweather-0.2.3.tgz#b28dd46ca4424f74470b7f8c2c30928241c1c19d"
+  integrity sha512-N6E3O+qD58YDZPBXFd2YHb8Q2HHarQ69XJQOPjVo3wvNKoU6ni6G7onKi1n2Zl1jxjGcGsP49BslS0WLz8E8gg==
+
 "@expo-google-fonts/open-sans@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/open-sans/-/open-sans-0.2.3.tgz#63b9f9a555f8764718d3370757431ee084ca66ec"
