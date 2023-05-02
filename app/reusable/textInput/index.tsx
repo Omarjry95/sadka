@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import { LabelInside } from "@app/reusable/textInput/variants";
 import {BaseProps, BaseStrictProps} from "@app/reusable/textInput/models";
+import {getStyleMargin, getStylePadding} from "@app/utilities/spacing";
 
 export default function TextInput({ variant, ...props }: BaseProps) {
 
-    const { label, size } = props;
+    const { label, hideChars, padding, margin, size, rightComponent } = props;
 
     const TextInputVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -19,7 +20,11 @@ export default function TextInput({ variant, ...props }: BaseProps) {
         return {
             ...props,
             label: label ?? "",
-            size: size ?? 16
+            hideChars: hideChars ?? false,
+            paddings: getStylePadding(padding),
+            margins: getStyleMargin(margin),
+            size: size ?? 16,
+            RightComponent: rightComponent
         }
     }, [props]);
 
