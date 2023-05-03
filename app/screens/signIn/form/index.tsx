@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {View} from "react-native";
-import TextInput from "@app/reusable/textInput";
+import { Text, TextInput, Button } from "@app/reusable";
 import styles from "@app/screens/signIn/form/styles";
-import {Button} from "@app/reusable";
 import Entypo from '@expo/vector-icons/Entypo';
 import {useTheme} from "@react-navigation/native";
 
@@ -32,7 +31,7 @@ export default function Form() {
             <TextInput
                 variant="labelInside"
                 padding={{ a: 10 }}
-                margin={{ b: 20 }}
+                margin={{ b: 30 }}
                 label="Adresse éléctronique / Identifiant"
             />
 
@@ -40,8 +39,20 @@ export default function Form() {
                 hideChars={hiddenPasswordChars}
                 variant="labelInside"
                 padding={{ a: 10 }}
+                margin={{ b: 30 }}
                 label="Mot de passe"
                 rightComponent={passwordVisibilityToggler}
+            />
+
+            <Button
+                variant="gradient"
+                padding={{ v: 20, h: 5 }}
+                childComponent={() => (
+                    <Text
+                        variant="normal"
+                        value="Se connecter"
+                    />
+                )}
             />
         </View>
     )

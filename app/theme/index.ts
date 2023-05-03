@@ -5,6 +5,7 @@ const mainTheme = {
     colors: {
         ...DefaultTheme.colors,
         primary: "#D00027",
+        secondary: "#F08003",
         label: "#B6B5B8",
         border: "#dcdcdc"
     },

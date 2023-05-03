@@ -1,4 +1,4 @@
-import {StyleSheet} from "react-native";
+import {Dimensions, StyleSheet} from "react-native";
 
 export default StyleSheet.create({
     container: {
@@ -31,7 +31,8 @@ export default StyleSheet.create({
     },
     main: {
         width: "100%",
-        height: "72%",
+        minHeight: Dimensions.get("window").height * 0.72 - 10,
+        padding: 15,
         backgroundColor: "white",
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
@@ -39,5 +40,9 @@ export default StyleSheet.create({
         bottom: 0,
         left: 0,
         zIndex: 1
+    },
+    wrapper: {
+        flex: 1,
+        justifyContent: "center"
     }
 });

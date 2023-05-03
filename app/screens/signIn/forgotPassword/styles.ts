@@ -2,9 +2,8 @@ import {StyleSheet} from "react-native";
 
 export default StyleSheet.create({
     container: {
-        marginBottom: 40,
-        flexDirection: "column",
-        alignItems: "flex-start",
+        width: "100%",
+        alignItems: "center",
         justifyContent: "center"
     }
 })

@@ -5,6 +5,8 @@ import {useTheme} from "@react-navigation/native";
 import MainShadow from "@app/screens/signIn/mainShadow";
 import Cover from "@app/screens/signIn/cover";
 import Form from "@app/screens/signIn/form";
+import ForgotPassword from "@app/screens/signIn/forgotPassword";
+import GettingStarted from "@app/screens/signIn/gettingStarted";
 
 export default function SignIn() {
 
@@ -21,7 +23,13 @@ export default function SignIn() {
                 <MainShadow />
 
                 <View style={styles.main}>
-                    <Form />
+                    <View style={styles.wrapper}>
+                        <Form />
+
+                        <ForgotPassword />
+                    </View>
+
+                    <GettingStarted />
                 </View>
             </View>
         </TouchableWithoutFeedback>

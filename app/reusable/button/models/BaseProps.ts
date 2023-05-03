@@ -4,9 +4,10 @@ import {Spacing} from "@app/utilities/globalModels";
 
 type BaseProps = {
     variant?: ButtonVariants,
+    width?: string | number,
+    minHeight?: string | number,
     padding?: Spacing,
     margin?: Spacing,
-    minHeight?: string | number,
     onPress?: (event: GestureResponderEvent) => void,
     childComponent: () => JSX.Element
 }
