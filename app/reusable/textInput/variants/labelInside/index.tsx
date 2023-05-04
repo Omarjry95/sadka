@@ -5,7 +5,7 @@ import styles from "@app/reusable/textInput/variants/labelInside/styles";
 import {BaseStrictProps} from "@app/reusable/textInput/models";
 import {useTheme} from "@react-navigation/native";
 
-export default function LabelInside({ label, hideChars, paddings, margins, size, RightComponent }: BaseStrictProps) {
+export default function LabelInside({ value, label, hideChars, paddings, margins, size, RightComponent, onChange }: BaseStrictProps) {
 
     const [isFocused, setFocus] = useState<boolean>(false);
 
@@ -32,6 +32,8 @@ export default function LabelInside({ label, hideChars, paddings, margins, size,
                         fontSize: size
                     }}
                     selectionColor={colors.label}
+                    value={value}
+                    onChangeText={(text) => onChange(text)}
                     onFocus={() => setFocus(true)}
                     onBlur={() => setFocus(false)}
                 />
