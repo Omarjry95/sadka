@@ -1,22 +1,27 @@
 import * as React from 'react';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import routesRegistry from "../routesRegistry";
-import { SignIn } from "@app/screens";
+import {SignIn, SignUp} from "@app/screens";
 
 const Stack = createNativeStackNavigator();
 
 export default function Unrestricted() {
 
-    const { SIGN_UP } = routesRegistry;
+    const { SIGN_UP, SIGN_IN } = routesRegistry;
 
     return (
         <Stack.Navigator
-            initialRouteName={SIGN_UP}
+            initialRouteName={SIGN_IN}
             screenOptions={{ headerShown: false }}
         >
             <Stack.Screen
-                name={SIGN_UP}
+                name={SIGN_IN}
                 component={SignIn}
+            />
+
+            <Stack.Screen
+                name={SIGN_UP}
+                component={SignUp}
             />
         </Stack.Navigator>
     )

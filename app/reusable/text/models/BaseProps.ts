@@ -9,6 +9,7 @@ type BaseProps = {
     margin?: Spacing,
     color?: ColorValue,
     size?: number,
+    align?: "auto" | "left" | "right" | "center" | "justify",
     transform?: 'none' | 'capitalize' | 'uppercase' | 'lowercase'
 }
 

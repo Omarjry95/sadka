@@ -1,6 +1,6 @@
 import React from 'react';
 import {ActivityIndicator, View} from "react-native";
-import styles from "@app/utilities/loader/styles";
+import styles from "@app/reusable/loader/styles";
 import {useTheme} from "@react-navigation/native";
 
 export default function Loader() {

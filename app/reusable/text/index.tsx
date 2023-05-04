@@ -5,7 +5,7 @@ import {getStyleMargin, getStylePadding} from "@app/utilities/spacing";
 
 export default function Text({ variant, ...props }: BaseProps) {
 
-    const { value, padding, margin, color, size, transform } = props;
+    const { value, padding, margin, color, size, align, transform } = props;
 
     const TextVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -26,6 +26,7 @@ export default function Text({ variant, ...props }: BaseProps) {
             margins: getStyleMargin(margin),
             color: color ?? "white",
             size: size ?? 16,
+            align: align ?? "left",
             transform: transform ?? "none"
         }
     }, [props]);

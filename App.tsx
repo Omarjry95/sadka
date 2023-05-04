@@ -4,6 +4,8 @@ import Navigation from "@app/navigation";
 import FontsLoader from "@app/utilities/fontsLoader";
 import RootView from "@app/utilities/rootView";
 import {LogBox} from "react-native";
+import {Provider as ReduxProvider} from "react-redux";
+import {store} from "@app/redux/store";
 
 preventAutoHideAsync();
 
@@ -12,10 +14,12 @@ export default function App() {
     LogBox.ignoreAllLogs();
 
     return (
-        <FontsLoader>
-            <RootView>
-                <Navigation />
-            </RootView>
-        </FontsLoader>
+        <ReduxProvider store={store}>
+            <FontsLoader>
+                <RootView>
+                    <Navigation />
+                </RootView>
+            </FontsLoader>
+        </ReduxProvider>
     );
 }
