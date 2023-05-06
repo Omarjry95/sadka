@@ -3,8 +3,9 @@ import {Button, Divider, Text} from "@app/reusable";
 import {View} from "react-native";
 import styles from "@app/screens/signIn/gettingStarted/styles";
 import {useTheme} from "@react-navigation/native";
+import {BaseProps} from "@app/screens/signIn/gettingStarted/models";
 
-export default function GettingStarted() {
+export default function GettingStarted({ navigation }: BaseProps) {
 
     const { colors } = useTheme();
 
@@ -23,6 +24,7 @@ export default function GettingStarted() {
                         color={colors.primary}
                     />
                 )}
+                onPress={() => navigation.navigate('SignUp')}
             />
         </View>
     )

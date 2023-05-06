@@ -1,5 +1,5 @@
-import * as React from 'react';
-import {Animated, EmitterSubscription, Keyboard, TouchableWithoutFeedback, View} from "react-native";
+import React, { useEffect, useState } from 'react';
+import { EmitterSubscription, Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import styles from "./styles";
 import {useTheme} from "@react-navigation/native";
 import MainShadow from "@app/screens/signIn/mainShadow";
@@ -7,18 +7,16 @@ import Cover from "@app/screens/signIn/cover";
 import Form from "@app/screens/signIn/form";
 import ForgotPassword from "@app/screens/signIn/forgotPassword";
 import GettingStarted from "@app/screens/signIn/gettingStarted";
-import {useEffect, useRef, useState} from "react";
 import { onHideKeyboard, onShowKeyboard, removeKeyboardListeners } from "@app/utilities/keyboardListeners";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
-import CompositeAnimation = Animated.CompositeAnimation;
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {UnrestrictedStackParamList} from "@app/navigation/models";
 
 const ADDITIONAL_VPADDING: number = 15;
 
-export default function SignIn() {
+export default function SignIn({ navigation }: NativeStackScreenProps<UnrestrictedStackParamList, 'SignIn'>) {
 
     const [isKeyboardHidden, setKeyboardHidden] = useState<boolean>(true);
-
-    const minHeightAnimated: Animated.Value = useRef(new Animated.Value(72)).current;
 
     const { colors } = useTheme();
 
@@ -32,16 +30,6 @@ export default function SignIn() {
         return () => removeKeyboardListeners([onShowKeyboardListener, onHideKeyboardListener]);
     }, []);
 
-    useEffect(() => {
-        const toggleMainContainer: CompositeAnimation = Animated.timing(minHeightAnimated, {
-            toValue: isKeyboardHidden ? 72 : 100,
-            duration: 100,
-            useNativeDriver: false
-        });
-
-        toggleMainContainer.start();
-    }, [isKeyboardHidden]);
-
     return (
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View style={{
@@ -53,13 +41,10 @@ export default function SignIn() {
 
                 <MainShadow />
 
-                <Animated.View
+                <View
                     style={{
                         ...styles.main,
-                        height: minHeightAnimated.interpolate({
-                            inputRange: [0, 100],
-                            outputRange: ["0%", "100%"]
-                        }),
+                        height: isKeyboardHidden ? "72%" : "100%",
                         paddingTop: safePaddingTop + ADDITIONAL_VPADDING,
                         paddingBottom: safePaddingBottom + ADDITIONAL_VPADDING
                     }}
@@ -70,8 +55,8 @@ export default function SignIn() {
                         <ForgotPassword />
                     </View>
 
-                    {isKeyboardHidden && (<GettingStarted />)}
-                </Animated.View>
+                    <GettingStarted navigation={navigation} />
+                </View>
             </View>
         </TouchableWithoutFeedback>
     )
