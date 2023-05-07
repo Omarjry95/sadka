@@ -10,6 +10,7 @@ type BaseProps = {
     margin?: Spacing,
     size?: number,
     rightComponent?: () => JSX.Element,
+    helpComponent?: () => JSX.Element,
     onChange: Function
 }
 

@@ -1,46 +1,44 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {SafeAreaView, ScrollView, View} from "react-native";
 import styles from "@app/screens/signUp/styles";
-import {TextInput} from "@app/reusable";
+import {useTheme} from "@react-navigation/native";
+import { Text } from "../../reusable";
+import Form from "@app/screens/signUp/form";
 
 export default function SignUp() {
 
-    const [firstName, setFirstName] = useState<string>("");
-    const [lastName, setLastName] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const []
+    const { colors } = useTheme();
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.wrapper}>
-                <ScrollView contentContainerStyle={{ paddingHorizontal: 15 }}>
-                    <TextInput
-                        variant="labelInside"
-                        value={firstName}
-                        padding={{ a: 10 }}
-                        margin={{ b: 30 }}
-                        label="Prénom"
-                        onChange={setFirstName}
+                <ScrollView contentContainerStyle={styles.scrollable}>
+                    <Text
+                        variant="title"
+                        value="Bienvenue chez SADKA"
+                        margin={{ b: 10 }}
+                        color="black"
+                        size={24}
+                        align="center"
                     />
 
-                    <TextInput
-                        variant="labelInside"
-                        value={lastName}
-                        padding={{ a: 10 }}
-                        margin={{ b: 30 }}
-                        label="Nom"
-                        onChange={setLastName}
+                    <Text
+                        variant="normal"
+                        value="Saisissez vos données personnelles afin de vous créer un compte."
+                        margin={{ b: 10 }}
+                        color={colors.label}
+                        align="center"
                     />
 
-                    <TextInput
-                        variant="labelInside"
-                        value={email}
-                        padding={{ a: 10 }}
+                    <Text
+                        variant="normal"
+                        value="(Tous les champs sont obligatoires.)"
                         margin={{ b: 30 }}
-                        label="Adresse éléctronique"
-                        onChange={setEmail}
+                        color={colors.label}
+                        align="center"
                     />
+
+                    <Form />
                 </ScrollView>
             </View>
         </SafeAreaView>

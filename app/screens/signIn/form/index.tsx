@@ -1,13 +1,13 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View} from "react-native";
 import { Text, TextInput, Button } from "@app/reusable";
 import styles from "@app/screens/signIn/form/styles";
-import Entypo from '@expo/vector-icons/Entypo';
 import {useTheme} from "@react-navigation/native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import {firebaseAuth} from "../../../../firebaseConfig";
 import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
+import {PasswordVisibilityToggler} from "@app/reusable/complex";
 
 export default function Form() {
 
@@ -34,21 +34,6 @@ export default function Form() {
             .finally(() => dispatch(hideLoading()));
     }, [email, password, firebaseAuth]);
 
-    const passwordVisibilityToggler: () => JSX.Element = () => useMemo(() => (
-        <Button
-            variant="straight"
-            padding={{ a: 10 }}
-            onPress={() => hidePasswordChars((hiddenPasswordChars) => !hiddenPasswordChars)}
-            childComponent={() => (
-                <Entypo
-                    name="eye"
-                    color={hiddenPasswordChars ? "black" : colors.primary}
-                    size={16}
-                />
-            )}
-        />
-    ), [hiddenPasswordChars]);
-
     return (
         <View style={styles.container}>
             <TextInput
@@ -67,7 +52,11 @@ export default function Form() {
                 padding={{ a: 10 }}
                 margin={{ b: 30 }}
                 label="Mot de passe"
-                rightComponent={passwordVisibilityToggler}
+                rightComponent={() => (
+                    <PasswordVisibilityToggler
+                        areCharsHidden={hiddenPasswordChars}
+                        toggleChars={() => hidePasswordChars(hiddenChars => !hiddenChars)}
+                    />)}
                 onChange={setPassword}
             />
 

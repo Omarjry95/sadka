@@ -1,4 +1,4 @@
-type Spacing = {
+type SpacingAndBorder = {
     a?: number,
     v?: number,
     h?: number,
@@ -8,4 +8,4 @@ type Spacing = {
     l?: number
 }
 
-export default Spacing;
+export default SpacingAndBorder;

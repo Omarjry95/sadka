@@ -7,5 +7,9 @@ export default StyleSheet.create({
     },
     wrapper: {
         flex: 1
+    },
+    scrollable: {
+        paddingVertical: 10,
+        paddingHorizontal: 15
     }
 });

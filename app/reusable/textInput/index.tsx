@@ -5,7 +5,8 @@ import {getStyleMargin, getStylePadding} from "@app/utilities/spacing";
 
 export default function TextInput({ variant, ...props }: BaseProps) {
 
-    const { label, hideChars, padding, margin, size, rightComponent } = props;
+    const { label, hideChars, padding, margin,
+        size, rightComponent, helpComponent } = props;
 
     const TextInputVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -24,7 +25,8 @@ export default function TextInput({ variant, ...props }: BaseProps) {
             paddings: getStylePadding(padding),
             margins: getStyleMargin(margin),
             size: size ?? 16,
-            RightComponent: rightComponent
+            RightComponent: rightComponent,
+            HelpComponent: helpComponent
         }
     }, [props]);
 

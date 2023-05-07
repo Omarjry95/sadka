@@ -1,9 +1,15 @@
+import Border from "./Border";
+import BorderRadius from "./BorderRadius";
+import Corners from "./Corners";
 import Margin from "./Margin";
 import Padding from "./Padding";
-import Spacing from "./Spacing";
+import SpacingAndBorder from "./SpacingAndBorder";
 
 export type {
-    Spacing,
+    SpacingAndBorder,
+    Corners,
     Padding,
-    Margin
+    Margin,
+    Border,
+    BorderRadius
 }

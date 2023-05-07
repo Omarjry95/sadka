@@ -15,6 +15,10 @@ export default StyleSheet.create({
         alignItems: "flex-start",
         justifyContent: "center"
     },
+    labelWrapper: {
+        flexDirection: "row",
+        alignItems: "flex-start"
+    },
     textInput: {
         width: "100%",
         fontFamily: "OpenSans"

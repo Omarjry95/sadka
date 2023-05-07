@@ -8,6 +8,7 @@ type BaseStrictProps = {
     margins: Margin,
     size: number,
     RightComponent?: () => JSX.Element,
+    HelpComponent?: () => JSX.Element,
     onChange: Function
 }
 

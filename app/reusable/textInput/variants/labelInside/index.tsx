@@ -4,8 +4,10 @@ import Text from '@app/reusable/text';
 import styles from "@app/reusable/textInput/variants/labelInside/styles";
 import {BaseStrictProps} from "@app/reusable/textInput/models";
 import {useTheme} from "@react-navigation/native";
+import { Info } from "@app/reusable/complex";
 
-export default function LabelInside({ value, label, hideChars, paddings, margins, size, RightComponent, onChange }: BaseStrictProps) {
+export default function LabelInside({ value, label, hideChars, paddings, margins, size, RightComponent, HelpComponent,
+                                        onChange }: BaseStrictProps) {
 
     const [isFocused, setFocus] = useState<boolean>(false);
 
@@ -18,13 +20,19 @@ export default function LabelInside({ value, label, hideChars, paddings, margins
             borderColor: isFocused ? colors.primary : colors.border
         }}>
             <View style={styles.textInputWrapper}>
-                <Text
-                    variant="normal"
-                    value={label}
-                    margin={{ b: 5 }}
-                    color="gray"
-                    size={13}
-                />
+                <View style={styles.labelWrapper}>
+                    <Text
+                        variant="normal"
+                        value={label}
+                        margin={{ b: 5 }}
+                        color="gray"
+                        size={13}
+                    />
+
+                    {HelpComponent && (
+                        <Info ModalBody={HelpComponent} />
+                    )}
+                </View>
 
                 <TextInput
                     secureTextEntry={hideChars}

@@ -1,7 +1,6 @@
-import {Margin, Padding, Spacing} from "@app/utilities/globalModels";
-import margin from "@app/utilities/globalModels/Margin";
+import {Margin, Padding, SpacingAndBorder} from "@app/utilities/globalModels";
 
-export const getStylePadding = (spacing?: Spacing): Padding => {
+export const getStylePadding = (spacing?: SpacingAndBorder): Padding => {
 
     let paddings: Padding = {
         paddingTop: 0,
@@ -57,7 +56,7 @@ export const getStylePadding = (spacing?: Spacing): Padding => {
     return paddings;
 }
 
-export const getStyleMargin = (spacing?: Spacing): Margin => {
+export const getStyleMargin = (spacing?: SpacingAndBorder): Margin => {
 
     let margins: Margin = {
         marginTop: 0,
