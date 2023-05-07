@@ -8,6 +8,8 @@ import {useTheme} from "@react-navigation/native";
 import {emailRegex} from "@app/utilities/regex";
 import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {firebaseAuth} from "../../../../firebaseConfig";
 
 export default function Form() {
 
@@ -105,9 +107,7 @@ export default function Form() {
         return true;
     }, [password, repassword]);
 
-    const onSubmit = () => {
-        dispatch(showLoading());
-
+    const applyValidationChain = (): boolean => {
         const validationChain: Array<() => boolean> = [verifyUnfilledFields, validateEmail, validatePasswordConditions,
             validatePasswordAndRepasswordMatching];
 
@@ -119,8 +119,20 @@ export default function Form() {
             validationStepIndex++;
         }
 
-        if (!validationSuccess) {
+        return validationSuccess;
+    }
+
+    const onSubmit = () => {
+        dispatch(showLoading());
+
+        if (!applyValidationChain()) {
             dispatch(hideLoading());
+        }
+        else {
+            createUserWithEmailAndPassword(firebaseAuth, email, password)
+                .then((userCredential) => console.log(userCredential.user))
+                .catch(() => setErrorMessage("Désolé, une erreur s'est produite lors de la création de votre compte. Merci de réessayer."))
+                .finally(() => dispatch(hideLoading()));
         }
     };
 
