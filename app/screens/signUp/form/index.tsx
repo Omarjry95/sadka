@@ -1,10 +1,13 @@
 import React, {useCallback, useState} from 'react';
 import {View} from "react-native";
 import styles from "@app/screens/signUp/form/styles";
-import {Button, TextInput} from "@app/reusable";
-import Text from "../../../reusable/text";
+import {Button, TextInput, Text} from "@app/reusable";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {FormInputsProps} from "@app/screens/signUp/models";
+import {useTheme} from "@react-navigation/native";
+import {emailRegex} from "@app/utilities/regex";
+import {useDispatch} from "react-redux";
+import {hideLoading, showLoading} from "@app/global/globalSlice";
 
 export default function Form() {
 
@@ -15,6 +18,11 @@ export default function Form() {
     const [repassword, setRepassword] = useState<string>("");
     const [hiddenPasswordChars, hidePasswordChars] = useState<boolean>(true);
     const [hiddenRepasswordChars, hideRepasswordChars] = useState<boolean>(true);
+    const [errorMessage, setErrorMessage] = useState<string>("");
+
+    const { colors } = useTheme();
+
+    const dispatch = useDispatch();
 
     const formInputs: FormInputsProps[] = [
         { label: "Prénom", value: firstName, onChange: setFirstName },
@@ -47,9 +55,74 @@ export default function Form() {
         }
     ]
 
-    const onSubmit = useCallback(() => {
+    const verifyUnfilledFields = (): boolean => {
+        let errorMessage: string = "";
 
-    }, []);
+        const unfilledInputs: FormInputsProps[] = formInputs.filter(input => !input.value.length);
+
+        if (unfilledInputs.length) {
+            errorMessage += unfilledInputs.length === 1 ? "Le champ" : "Les champs";
+            errorMessage += " ";
+            errorMessage += unfilledInputs.map(input => "'" + input.label + "'").join(", ");
+            errorMessage += " ";
+            errorMessage += "sont obligatoires."
+
+            setErrorMessage(errorMessage);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    const validateEmail: () => boolean = useCallback((): boolean => {
+        if (!emailRegex.test(email)) {
+            setErrorMessage("Vous n'avez pas saisi une adresse éléctronique valide.");
+
+            return false;
+        }
+
+        return true;
+    }, [email]);
+
+    const validatePasswordConditions: () => boolean = useCallback((): boolean => {
+        if (password.length < 6) {
+            setErrorMessage("Le mot de passe que vous avez saisi ne respecte pas les exigences demandées.")
+
+            return false;
+        }
+
+        return true;
+    }, [password]);
+
+    const validatePasswordAndRepasswordMatching: () => boolean = useCallback((): boolean => {
+        if (password !== repassword) {
+            setErrorMessage("Veuillez resaisir votre mot de passe correctement.");
+
+            return false;
+        }
+
+        return true;
+    }, [password, repassword]);
+
+    const onSubmit = () => {
+        dispatch(showLoading());
+
+        const validationChain: Array<() => boolean> = [verifyUnfilledFields, validateEmail, validatePasswordConditions,
+            validatePasswordAndRepasswordMatching];
+
+        let validationSuccess: boolean = true;
+        let validationStepIndex: number = 0;
+
+        while (validationSuccess && validationStepIndex < validationChain.length) {
+            validationSuccess = validationChain[validationStepIndex]();
+            validationStepIndex++;
+        }
+
+        if (!validationSuccess) {
+            dispatch(hideLoading());
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -66,6 +139,16 @@ export default function Form() {
                     onChange={input.onChange}
                 />
             ))}
+
+            {errorMessage.length > 0 && (
+                <Text
+                    variant="normal"
+                    value={errorMessage}
+                    margin={{ b: 20 }}
+                    color={colors.primary}
+                    align="center"
+                />
+            )}
 
             <Button
                 variant="gradient"
