@@ -1,7 +1,7 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {View} from "react-native";
 import styles from "@app/screens/signUp/form/styles";
-import {Button, TextInput, Text} from "@app/reusable";
+import {Button, TextInput, Text, RadioGroup} from "@app/reusable";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {FormInputsProps} from "@app/screens/signUp/models";
 import {useTheme} from "@react-navigation/native";
@@ -10,9 +10,11 @@ import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {firebaseAuth} from "../../../../firebaseConfig";
+import {useGetRolesQuery} from "@app/api/roleApi";
 
 export default function Form() {
 
+    const [role, setRole] = useState<string>("");
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
@@ -22,9 +24,31 @@ export default function Form() {
     const [hiddenRepasswordChars, hideRepasswordChars] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>("");
 
+    const { data: roles = [], isLoading, isSuccess, isError} = useGetRolesQuery(undefined,
+        {
+            refetchOnMountOrArgChange: true,
+            refetchOnFocus: true
+        });
+
     const { colors } = useTheme();
 
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (isLoading) {
+            dispatch(showLoading());
+        }
+    }, [isLoading]);
+
+    useEffect(() => {
+        if (isSuccess || isError) {
+            if (isSuccess && !!roles.length) {
+                setRole(roles[0]._id);
+            }
+
+            dispatch(hideLoading());
+        }
+    }, [isSuccess, isError]);
 
     const formInputs: FormInputsProps[] = [
         { label: "Prénom", value: firstName, onChange: setFirstName },
@@ -138,6 +162,23 @@ export default function Form() {
 
     return (
         <View style={styles.container}>
+            <RadioGroup
+                variant="bordered"
+                value={role}
+                list={roles.map((role) => {
+                    return {
+                        ...role,
+                        id: role._id
+                    }
+                })}
+                padding={{ h: 5 }}
+                cellPadding={{ a: 10 }}
+                margin={{ b: 20 }}
+                cellMargin={{ r: 10, b: 10 }}
+                border={{ a: 2 }}
+                setValue={setRole}
+            />
+
             {formInputs.map(input => (
                 <TextInput
                     variant="labelInside"
