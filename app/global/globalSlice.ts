@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {GlobalBehavior} from "@app/global/models";
-import {useSelector} from "react-redux";
 import {RootState} from "@app/redux/models";
 
 const initialState: GlobalBehavior = {

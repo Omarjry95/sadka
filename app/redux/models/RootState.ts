@@ -1,5 +1,5 @@
-import {store} from "@app/redux/store";
+import reducers from "@app/redux/reducers";
 
-type RootState = ReturnType<typeof store.getState>;
+type RootState = ReturnType<typeof reducers>;
 
 export default RootState;

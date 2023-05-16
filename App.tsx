@@ -5,7 +5,8 @@ import FontsLoader from "@app/utilities/fontsLoader";
 import RootView from "@app/utilities/rootView";
 import {LogBox} from "react-native";
 import {Provider as ReduxProvider} from "react-redux";
-import {store} from "@app/redux/store";
+import store, { persistor } from "@app/redux/store";
+import {PersistGate} from "redux-persist/integration/react";
 
 preventAutoHideAsync();
 
@@ -15,11 +16,13 @@ export default function App() {
 
     return (
         <ReduxProvider store={store}>
+            <PersistGate persistor={persistor}>
             <FontsLoader>
                 <RootView>
                     <Navigation />
                 </RootView>
             </FontsLoader>
+            </PersistGate>
         </ReduxProvider>
     );
 }
