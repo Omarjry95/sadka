@@ -27,7 +27,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiUrl": "https://ee59-197-1-173-246.ngrok-free.app"
+      "apiUrl": "http://10.0.2.2:3000"
     }
   }
 }

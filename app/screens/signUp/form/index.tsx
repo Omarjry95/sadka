@@ -11,12 +11,14 @@ import {hideLoading, showLoading} from "@app/global/globalSlice";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import {firebaseAuth} from "../../../../firebaseConfig";
 import {useGetRolesQuery} from "@app/api/roleApi";
+import {useCreateUserMutation} from "@app/api/userApi";
 
 export default function Form() {
 
     const [role, setRole] = useState<string>("");
     const [firstName, setFirstName] = useState<string>("");
     const [lastName, setLastName] = useState<string>("");
+    const [charityName, setCharityName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [repassword, setRepassword] = useState<string>("");
@@ -29,6 +31,8 @@ export default function Form() {
             refetchOnMountOrArgChange: true,
             refetchOnFocus: true
         });
+
+    const [createUser, {  }] = useCreateUserMutation();
 
     const { colors } = useTheme();
 
@@ -50,9 +54,24 @@ export default function Form() {
         }
     }, [isSuccess, isError]);
 
+    const addFormInputs = useCallback((): FormInputsProps[] => {
+        let defaultInputs: FormInputsProps[] = [];
+
+        if (!!roles.length) {
+            if (role === roles[0]._id) {
+                defaultInputs = [ { label: "Prénom", value: firstName, onChange: setFirstName },
+                    { label: "Nom", value: lastName, onChange: setLastName } ];
+            }
+            else if (role === roles[1]._id) {
+                defaultInputs = [{ label: "Nom de l'organisme", value: charityName, onChange: setCharityName }];
+            }
+        }
+
+        return defaultInputs;
+    }, [firstName, lastName, charityName, role, roles]);
+
     const formInputs: FormInputsProps[] = [
-        { label: "Prénom", value: firstName, onChange: setFirstName },
-        { label: "Nom", value: lastName, onChange: setLastName },
+        ...addFormInputs(),
         { label: "Adresse éléctronique", value: email, onChange: setEmail },
         { label: "Mot de passe", hideChars: hiddenPasswordChars, value: password, onChange: setPassword,
             rightComponent: () => (
@@ -153,10 +172,7 @@ export default function Form() {
             dispatch(hideLoading());
         }
         else {
-            createUserWithEmailAndPassword(firebaseAuth, email, password)
-                .then((userCredential) => console.log(userCredential.user))
-                .catch(() => setErrorMessage("Désolé, une erreur s'est produite lors de la création de votre compte. Merci de réessayer."))
-                .finally(() => dispatch(hideLoading()));
+
         }
     };
 
