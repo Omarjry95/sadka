@@ -1,5 +1,5 @@
 type BaseProps = {
-    ModalBody?: () => JSX.Element
+    ModalBody: () => JSX.Element
 }
 
 export default BaseProps;

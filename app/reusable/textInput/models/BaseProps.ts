@@ -1,13 +1,13 @@
 import {TextInputVariants} from "@app/reusable/textInput/models";
-import {Spacing} from "@app/utilities/globalModels";
+import {SpacingAndBorder} from "@app/utilities/globalModels";
 
 type BaseProps = {
     variant?: TextInputVariants,
     value: string,
     label?: string,
     hideChars?: boolean,
-    padding?: Spacing,
-    margin?: Spacing,
+    padding?: SpacingAndBorder,
+    margin?: SpacingAndBorder,
     size?: number,
     rightComponent?: () => JSX.Element,
     helpComponent?: () => JSX.Element,

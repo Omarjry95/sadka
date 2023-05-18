@@ -1,12 +1,12 @@
 import React from 'react';
 import {View, Modal} from "react-native";
-import styles from "@app/reusable/complex/info/styles";
+import styles from "@app/reusable/dialog/styles";
 import {Button, Text} from "@app/reusable";
-import {DialogProps} from "@app/reusable/complex/info/models";
+import {StrictBaseProps} from "@app/reusable/dialog/models";
 import {useTheme} from "@react-navigation/native";
-import Backdrop from "@app/reusable/complex/info/dialog/backdrop";
+import Backdrop from "@app/reusable/dialog/backdrop";
 
-export default function Dialog({ visible, showDialog, DialogBody }: DialogProps) {
+export default function Base({ visible, mainAction, DialogBody }: StrictBaseProps) {
 
     const { colors } = useTheme();
 
@@ -15,13 +15,11 @@ export default function Dialog({ visible, showDialog, DialogBody }: DialogProps)
             transparent
             visible={visible}
             animationType="fade"
-            onRequestClose={() => showDialog(false)}
+            onRequestClose={mainAction}
         >
             <View style={styles.container}>
                 <View style={styles.wrapper}>
-                    {DialogBody && (
-                        <DialogBody />
-                    )}
+                    <DialogBody />
 
                     <Button
                         variant="straight"
@@ -31,7 +29,7 @@ export default function Dialog({ visible, showDialog, DialogBody }: DialogProps)
                         border={{ t: 1 }}
                         borderColor={colors.border}
                         borderRadius={{ b: 10 }}
-                        onPress={() => showDialog(false)}
+                        onPress={mainAction}
                         childComponent={() => (
                             <Text
                                 variant="normal"
@@ -43,7 +41,7 @@ export default function Dialog({ visible, showDialog, DialogBody }: DialogProps)
                     />
                 </View>
 
-                <Backdrop showDialog={showDialog} />
+                <Backdrop onPress={mainAction} />
             </View>
         </Modal>
     )

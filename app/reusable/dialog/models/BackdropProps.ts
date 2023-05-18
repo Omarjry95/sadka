@@ -1,5 +1,5 @@
 type BackdropProps = {
-    showDialog: Function
+    onPress: () => void
 }
 
 export default BackdropProps;

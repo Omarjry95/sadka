@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from "react-native";
 import styles from "@app/screens/signUp/form/styles";
 import {Button, TextInput, Text, RadioGroup} from "@app/reusable";
@@ -8,10 +8,9 @@ import {useTheme} from "@react-navigation/native";
 import {emailRegex} from "@app/utilities/regex";
 import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import {firebaseAuth} from "../../../../firebaseConfig";
 import {useGetRolesQuery} from "@app/api/roleApi";
 import {useCreateUserMutation} from "@app/api/userApi";
+import {WsCreateUserBaseProps} from "@app/api/models";
 
 export default function Form() {
 
@@ -26,44 +25,46 @@ export default function Form() {
     const [hiddenRepasswordChars, hideRepasswordChars] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const { data: roles = [], isLoading, isSuccess, isError} = useGetRolesQuery(undefined,
+    const { data: roles = [], isLoading: isGetRolesLoading, isSuccess: isGetRolesSuccess, isError: isGetRolesError } = useGetRolesQuery(undefined,
         {
             refetchOnMountOrArgChange: true,
             refetchOnFocus: true
         });
 
-    const [createUser, {  }] = useCreateUserMutation();
+    const [createUser, { isSuccess: isCreateUserSuccess, isError: isCreateUserError }] = useCreateUserMutation();
 
     const { colors } = useTheme();
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isLoading) {
+        if (isGetRolesLoading) {
             dispatch(showLoading());
         }
-    }, [isLoading]);
 
-    useEffect(() => {
-        if (isSuccess || isError) {
-            if (isSuccess && !!roles.length) {
+        if (isGetRolesSuccess || isGetRolesError) {
+            if (isGetRolesSuccess && !!roles.length) {
                 setRole(roles[0]._id);
             }
 
             dispatch(hideLoading());
         }
-    }, [isSuccess, isError]);
+    }, [isGetRolesLoading, isGetRolesSuccess, isGetRolesError]);
 
-    const addFormInputs = useCallback((): FormInputsProps[] => {
+    useEffect(() => {
+
+    }, [isCreateUserSuccess, isCreateUserError]);
+
+    const additionalFormInputsByRole: FormInputsProps[] = useMemo(() => {
         let defaultInputs: FormInputsProps[] = [];
 
         if (!!roles.length) {
             if (role === roles[0]._id) {
-                defaultInputs = [ { label: "Prénom", value: firstName, onChange: setFirstName },
-                    { label: "Nom", value: lastName, onChange: setLastName } ];
+                defaultInputs = [{ id: 'firstName', label: "Prénom", value: firstName, onChange: setFirstName },
+                    { id: 'lastName', label: "Nom", value: lastName, onChange: setLastName } ];
             }
             else if (role === roles[1]._id) {
-                defaultInputs = [{ label: "Nom de l'organisme", value: charityName, onChange: setCharityName }];
+                defaultInputs = [{ id: 'charityName', label: "Nom de l'organisme", value: charityName, onChange: setCharityName }];
             }
         }
 
@@ -71,9 +72,9 @@ export default function Form() {
     }, [firstName, lastName, charityName, role, roles]);
 
     const formInputs: FormInputsProps[] = [
-        ...addFormInputs(),
-        { label: "Adresse éléctronique", value: email, onChange: setEmail },
-        { label: "Mot de passe", hideChars: hiddenPasswordChars, value: password, onChange: setPassword,
+        ...additionalFormInputsByRole,
+        { id: 'email', label: "Adresse éléctronique", value: email, onChange: setEmail },
+        { id: 'password', label: "Mot de passe", hideChars: hiddenPasswordChars, value: password, onChange: setPassword,
             rightComponent: () => (
                 <PasswordVisibilityToggler
                     areCharsHidden={hiddenPasswordChars}
@@ -98,7 +99,7 @@ export default function Form() {
                 />
             )
         }
-    ]
+    ];
 
     const verifyUnfilledFields = (): boolean => {
         let errorMessage: string = "";
@@ -172,7 +173,14 @@ export default function Form() {
             dispatch(hideLoading());
         }
         else {
+            const createUserWSArgs: WsCreateUserBaseProps = formInputs.reduce((acc, { id, value }) =>
+                id ? {...acc, [id]: value} : acc,
+                {} as WsCreateUserBaseProps);
 
+            createUser({
+                ...createUserWSArgs,
+                role
+            });
         }
     };
 

@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from "@app/reusable/complex/info/styles";
+import styles from "@app/reusable/dialog/styles";
 import {TouchableOpacity} from "react-native";
-import { BackdropProps } from "../../models";
+import { BackdropProps } from "@app/reusable/dialog/models";
 
-const Backdrop = ({ showDialog }: BackdropProps) => (
+const Backdrop = ({ onPress }: BackdropProps) => (
     <TouchableOpacity
         style={styles.pressableBackdrop}
         activeOpacity={1}
-        onPress={() => showDialog(false)}
+        onPress={onPress}
     />
 )
 

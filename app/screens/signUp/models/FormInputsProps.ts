@@ -1,4 +1,5 @@
 type FormInputsProps = {
+    id?: string,
     label: string,
     value: string,
     hideChars?: boolean,

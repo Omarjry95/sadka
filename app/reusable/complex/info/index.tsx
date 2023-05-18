@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import Entypo from "@expo/vector-icons/Entypo";
-import {Button} from "@app/reusable";
+import {Button, Dialog} from "@app/reusable";
 import {useTheme} from "@react-navigation/native";
 import {BaseProps} from "@app/reusable/complex/info/models";
-import Dialog from "@app/reusable/complex/info/dialog";
 
 export default function Info({ ModalBody }: BaseProps) {
 
@@ -28,7 +27,7 @@ export default function Info({ ModalBody }: BaseProps) {
 
             <Dialog
                 visible={infoVisible}
-                showDialog={showInfo}
+                mainAction={() => showInfo(false)}
                 DialogBody={ModalBody}
             />
         </React.Fragment>
