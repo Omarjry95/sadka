@@ -6,8 +6,10 @@ const mainTheme = {
         ...DefaultTheme.colors,
         primary: "#D00027",
         secondary: "#F08003",
+        success: "#95E7BB",
         label: "#B6B5B8",
-        border: "#dcdcdc"
+        border: "#DCDCDC",
+        backdrop: "rgba(0, 0, 0, 0.6)"
     },
 };
 

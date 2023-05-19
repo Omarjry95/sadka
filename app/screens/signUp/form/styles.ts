@@ -8,8 +8,7 @@ export default StyleSheet.create({
     },
     modalBody: {
         width: "100%",
-        paddingVertical: 15,
-        paddingHorizontal: 15,
+        padding: 15,
         backgroundColor: "white",
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,

@@ -7,7 +7,7 @@ import {FormInputsProps} from "@app/screens/signUp/models";
 import {useTheme} from "@react-navigation/native";
 import {emailRegex} from "@app/utilities/regex";
 import {useDispatch} from "react-redux";
-import {hideLoading, showLoading} from "@app/global/globalSlice";
+import {hideLoading, showLoading, showModal} from "@app/global/globalSlice";
 import {useGetRolesQuery} from "@app/api/roleApi";
 import {useCreateUserMutation} from "@app/api/userApi";
 import {WsCreateUserBaseProps} from "@app/api/models";
@@ -45,6 +45,13 @@ export default function Form() {
         if (isGetRolesSuccess || isGetRolesError) {
             if (isGetRolesSuccess && !!roles.length) {
                 setRole(roles[0]._id);
+            }
+
+            if (isGetRolesError) {
+                dispatch(showModal({
+                    variant: "error",
+                    mainAction: () => console.log("Going back to login screen")
+                }))
             }
 
             dispatch(hideLoading());

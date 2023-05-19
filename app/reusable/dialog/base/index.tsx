@@ -17,7 +17,10 @@ export default function Base({ visible, mainAction, DialogBody }: StrictBaseProp
             animationType="fade"
             onRequestClose={mainAction}
         >
-            <View style={styles.container}>
+            <View style={{
+                ...styles.container,
+                backgroundColor: colors.backdrop
+            }}>
                 <View style={styles.wrapper}>
                     <DialogBody />
 

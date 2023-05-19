@@ -1,21 +1,27 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Entypo from "@expo/vector-icons/Entypo";
-import {Button, Dialog} from "@app/reusable";
+import {Button} from "@app/reusable";
 import {useTheme} from "@react-navigation/native";
 import {BaseProps} from "@app/reusable/complex/info/models";
+import {useDispatch} from "react-redux";
+import {hideModal, showModal} from "@app/global/globalSlice";
 
 export default function Info({ ModalBody }: BaseProps) {
 
-    const [infoVisible, showInfo] = useState<boolean>(false);
-
     const { colors } = useTheme();
+
+    const dispatch = useDispatch();
 
     return (
         <React.Fragment>
             <Button
                 variant="straight"
                 margin={{ l: 10 }}
-                onPress={() => showInfo(true)}
+                onPress={() => dispatch(showModal({
+                    variant: "normal",
+                    mainAction: () => dispatch(hideModal()),
+                    dialogBody: ModalBody
+                }))}
                 childComponent={() => (
                     <Entypo
                         name="info-with-circle"
@@ -23,12 +29,6 @@ export default function Info({ ModalBody }: BaseProps) {
                         size={16}
                     />
                 )}
-            />
-
-            <Dialog
-                visible={infoVisible}
-                mainAction={() => showInfo(false)}
-                DialogBody={ModalBody}
             />
         </React.Fragment>
     )
