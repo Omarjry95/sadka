@@ -26,20 +26,20 @@ export default StyleSheet.create({
         width: "100%",
         padding: 15,
         backgroundColor: "white",
-        borderTopLeftRadius: 10,
-        borderTopRightRadius: 10,
+        borderWidth: 2,
+        borderRadius: 10,
         position: "relative",
         flexDirection: "column",
         alignItems: "center"
     },
     iconContainer: {
-        width: 20,
-        height: 20,
+        width: 50,
+        height: 50,
         padding: 5,
-        borderWidth: 2,
-        borderRadius: 10,
+        borderWidth: 3,
+        borderRadius: 25,
         position: "relative",
-        bottom: 10,
+        bottom: 45,
         alignItems: "center",
         justifyContent: "center"
     }

@@ -13,23 +13,28 @@ export default function Error({ message }: StateVariantProps) {
     return (
         <View style={{
             ...styles.modalBody,
-            backgroundColor: colors.primary
+            backgroundColor: colors.primary,
+            borderColor: colors.backdrop
         }}>
             <View style={{
                 ...styles.iconContainer,
-                backgroundColor: colors.primary
+                backgroundColor: colors.primary,
+                borderColor: colors.backdrop
             }}>
                 <FontAwesome
                     name="exclamation"
                     color="white"
-                    size={16}
+                    size={24}
                 />
             </View>
 
             <Text
                 variant="normal"
                 value={message ?? "Une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard."}
-                color="black"
+                color="white"
+                align="center"
+                position="relative"
+                positioning={{ b: 20 }}
             />
         </View>
     )

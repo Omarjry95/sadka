@@ -6,7 +6,7 @@ import {StrictBaseProps} from "@app/reusable/dialog/models";
 import {useTheme} from "@react-navigation/native";
 import Backdrop from "@app/reusable/dialog/backdrop";
 
-export default function Base({ visible, mainAction, DialogBody }: StrictBaseProps) {
+export default function Base({ visible, mainAction, DialogBody, displayActionButton }: StrictBaseProps) {
 
     const { colors } = useTheme();
 
@@ -24,24 +24,26 @@ export default function Base({ visible, mainAction, DialogBody }: StrictBaseProp
                 <View style={styles.wrapper}>
                     <DialogBody />
 
-                    <Button
-                        variant="straight"
-                        width="100%"
-                        padding={{ v: 10 }}
-                        color="white"
-                        border={{ t: 1 }}
-                        borderColor={colors.border}
-                        borderRadius={{ b: 10 }}
-                        onPress={mainAction}
-                        childComponent={() => (
-                            <Text
-                                variant="normal"
-                                value="Fermer"
-                                color="black"
-                                align="center"
-                            />
-                        )}
-                    />
+                    {displayActionButton && (
+                        <Button
+                            variant="straight"
+                            width="100%"
+                            padding={{ v: 10 }}
+                            color="white"
+                            border={{ t: 1 }}
+                            borderColor={colors.border}
+                            borderRadius={{ b: 10 }}
+                            onPress={mainAction}
+                            childComponent={() => (
+                                <Text
+                                    variant="normal"
+                                    value="Fermer"
+                                    color="black"
+                                    align="center"
+                                />
+                            )}
+                        />
+                    )}
                 </View>
 
                 <Backdrop onPress={mainAction} />

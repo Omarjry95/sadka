@@ -1,16 +1,16 @@
 import React, {useMemo} from 'react';
 import Base from "@app/reusable/dialog/base";
-import {BaseProps, StateVariantProps} from "@app/reusable/dialog/models";
+import {BaseProps} from "@app/reusable/dialog/models";
 import {Success, Error} from "@app/reusable/dialog/variants";
 
 export default function Dialog({ variant, mainAction, dialogBody, stateMessage }: BaseProps) {
 
-    const dialogVariant: (({ message }: StateVariantProps) => JSX.Element) | (() => JSX.Element) | undefined = useMemo(() => {
+    const dialogVariant: (() => JSX.Element) | undefined = useMemo(() => {
         switch (variant) {
             case "success":
-                return ({ message: stateMessage }) => <Success message={stateMessage} />;
+                return () => <Success message={stateMessage} />;
             case "error":
-                return ({ message: stateMessage }) => <Error message={stateMessage} />;
+                return () => <Error message={stateMessage} />;
             case "normal":
             default:
                 return dialogBody;
@@ -23,6 +23,7 @@ export default function Dialog({ variant, mainAction, dialogBody, stateMessage }
                 visible
                 mainAction={mainAction}
                 DialogBody={dialogVariant}
+                displayActionButton={variant === "normal"}
             />
         ) : null
     )

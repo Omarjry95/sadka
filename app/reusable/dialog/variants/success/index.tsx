@@ -21,8 +21,8 @@ export default function Success({ message }: StateVariantProps) {
             }}>
                 <Entypo
                     name="check"
-                    color="white"
-                    size={16}
+                    color="black"
+                    size={24}
                 />
             </View>
 
@@ -30,6 +30,9 @@ export default function Success({ message }: StateVariantProps) {
                 variant="normal"
                 value={message ?? "Votre demande a été traitée avec succès."}
                 color="black"
+                align="center"
+                position="relative"
+                positioning={{ b: 20 }}
             />
         </View>
     )
