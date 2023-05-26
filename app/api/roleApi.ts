@@ -3,7 +3,7 @@ import {WsRoleBaseProps} from "@app/api/models";
 
 const roleApi = api.injectEndpoints({
     endpoints: ({ query }) => ({
-        getRoles: query<WsRoleBaseProps[], void>({ query: () => '/roless' })
+        getRoles: query<WsRoleBaseProps[], void>({ query: () => '/roles' })
     })
 });
 

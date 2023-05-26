@@ -7,12 +7,16 @@ import {FormInputsProps} from "@app/screens/signUp/models";
 import {useTheme} from "@react-navigation/native";
 import {emailRegex} from "@app/utilities/regex";
 import {useDispatch} from "react-redux";
-import {hideLoading, showLoading, showModal} from "@app/global/globalSlice";
+import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
 import {useGetRolesQuery} from "@app/api/roleApi";
 import {useCreateUserMutation} from "@app/api/userApi";
 import {WsCreateUserBaseProps} from "@app/api/models";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {UnrestrictedStackParamList} from "@app/navigation/models";
 
-export default function Form() {
+type MutationError = { data: { code: number, message: string }, status: number };
+
+export default function Form({ navigation }: { navigation: NativeStackNavigationProp<UnrestrictedStackParamList, 'SignUp'> }) {
 
     const [role, setRole] = useState<string>("");
     const [firstName, setFirstName] = useState<string>("");
@@ -31,16 +35,14 @@ export default function Form() {
             refetchOnFocus: true
         });
 
-    const [createUser, { isSuccess: isCreateUserSuccess, isError: isCreateUserError }] = useCreateUserMutation();
+    const [createUser, { isSuccess: isCreateUserSuccess, isError: isCreateUserError, error: createUserError }] = useCreateUserMutation();
 
     const { colors } = useTheme();
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (isGetRolesLoading) {
-            dispatch(showLoading());
-        }
+        if (isGetRolesLoading) { dispatch(showLoading()); }
 
         if (isGetRolesSuccess || isGetRolesError) {
             if (isGetRolesSuccess && !!roles.length) {
@@ -50,8 +52,11 @@ export default function Form() {
             if (isGetRolesError) {
                 dispatch(showModal({
                     variant: "error",
-                    mainAction: () => console.log("Going back to login screen")
-                }))
+                    mainAction: () => {
+                        dispatch(hideModal());
+                        navigation.navigate('SignIn');
+                    }
+                }));
             }
 
             dispatch(hideLoading());
@@ -59,7 +64,38 @@ export default function Form() {
     }, [isGetRolesLoading, isGetRolesSuccess, isGetRolesError]);
 
     useEffect(() => {
+        if (isCreateUserSuccess) {
+            dispatch(showModal({
+                variant: "success",
+                mainAction: () => { },
+                stateMessage: "Votre compte a été créé avec succès. Vous pouvez vous connecter sur notre plateforme."
+            }));
 
+            setTimeout(() => {
+                dispatch(hideModal());
+                navigation.navigate('SignIn');
+            }, 2000);
+        }
+
+        if (isCreateUserError) {
+            let message: string = "Désolé, une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.";
+
+            try {
+                const { data: errorData } = createUserError as MutationError;
+                const { message: wsErrorMessage } = errorData;
+
+                if (wsErrorMessage === "UAE") {
+                    message = "L'adresse éléctronique que vous avez saisie est déjà exploitée par un autre utilisateur."
+                }
+            }
+            catch (e: any) {
+                console.log(e.message);
+            }
+
+            setErrorMessage(message);
+        }
+
+        dispatch(hideLoading());
     }, [isCreateUserSuccess, isCreateUserError]);
 
     const additionalFormInputsByRole: FormInputsProps[] = useMemo(() => {

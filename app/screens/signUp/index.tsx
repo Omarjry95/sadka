@@ -4,8 +4,10 @@ import styles from "@app/screens/signUp/styles";
 import {useTheme} from "@react-navigation/native";
 import { Text } from "../../reusable";
 import Form from "@app/screens/signUp/form";
+import {NativeStackScreenProps} from "@react-navigation/native-stack";
+import {UnrestrictedStackParamList} from "@app/navigation/models";
 
-export default function SignUp() {
+export default function SignUp({ navigation }: NativeStackScreenProps<UnrestrictedStackParamList, 'SignUp'>) {
 
     const { colors } = useTheme();
 
@@ -38,7 +40,7 @@ export default function SignUp() {
                         align="center"
                     />
 
-                    <Form />
+                    <Form navigation={navigation} />
                 </ScrollView>
             </View>
         </SafeAreaView>

@@ -13,13 +13,11 @@ export default function Error({ message }: StateVariantProps) {
     return (
         <View style={{
             ...styles.modalBody,
-            backgroundColor: colors.primary,
-            borderColor: colors.backdrop
+            backgroundColor: colors.primary
         }}>
             <View style={{
                 ...styles.iconContainer,
-                backgroundColor: colors.primary,
-                borderColor: colors.backdrop
+                backgroundColor: colors.primary
             }}>
                 <FontAwesome
                     name="exclamation"
