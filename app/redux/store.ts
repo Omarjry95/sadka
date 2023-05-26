@@ -10,7 +10,8 @@ const persistReducerConfig = {
     storage: AsyncStorage,
     blacklist: [
         api.reducerPath,
-        'global'
+        'global',
+        'auth'
     ]
 }
 

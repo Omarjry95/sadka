@@ -8,6 +8,7 @@ import {firebaseAuth} from "../../../../firebaseConfig";
 import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
+import {allowUser} from "@app/global/authSlice";
 
 export default function Form() {
 
@@ -22,14 +23,14 @@ export default function Form() {
 
     useEffect(() => {
         showError(false);
-    }, [email, password])
+    }, [email, password]);
 
     const onSubmit = useCallback(() => {
         showError(false);
         dispatch(showLoading());
 
         signInWithEmailAndPassword(firebaseAuth, email, password)
-            .then((userCredential) => console.log(userCredential.user))
+            .then(() => dispatch(allowUser()))
             .catch(() => showError(true))
             .finally(() => dispatch(hideLoading()));
     }, [email, password, firebaseAuth]);

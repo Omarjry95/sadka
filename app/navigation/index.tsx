@@ -6,10 +6,14 @@ import Loader from "@app/reusable/loader";
 import {useSelector} from "react-redux";
 import {globalSelector} from "@app/global/globalSlice";
 import {Dialog} from "@app/reusable";
+import {authSelector} from "@app/global/authSlice";
+import Restricted from "@app/navigation/restricted";
 
 export default function Navigation() {
 
     const { isLoading, modalProps } = useSelector(globalSelector);
+
+    const { isAuthenticated } = useSelector(authSelector);
 
     return (
         <NavigationContainer theme={mainTheme}>
@@ -17,7 +21,7 @@ export default function Navigation() {
 
             {modalProps && (<Dialog {...modalProps} />)}
 
-            <Unrestricted />
+            {isAuthenticated ? <Restricted /> : <Unrestricted />}
         </NavigationContainer>
     )
 }

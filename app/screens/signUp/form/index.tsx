@@ -13,8 +13,7 @@ import {useCreateUserMutation} from "@app/api/userApi";
 import {WsCreateUserBaseProps} from "@app/api/models";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {UnrestrictedStackParamList} from "@app/navigation/models";
-
-type MutationError = { data: { code: number, message: string }, status: number };
+import {MutationError} from "@app/utilities/globalModels";
 
 export default function Form({ navigation }: { navigation: NativeStackNavigationProp<UnrestrictedStackParamList, 'SignUp'> }) {
 
@@ -78,21 +77,19 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         }
 
         if (isCreateUserError) {
-            let message: string = "Désolé, une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.";
+            let createUserErrorMessage: string = "Désolé, une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.";
 
             try {
-                const { data: errorData } = createUserError as MutationError;
-                const { message: wsErrorMessage } = errorData;
+                const { data: createUserErrorData } = createUserError as MutationError;
+                const { message: wsCreateUserErrorMessage } = createUserErrorData;
 
-                if (wsErrorMessage === "UAE") {
-                    message = "L'adresse éléctronique que vous avez saisie est déjà exploitée par un autre utilisateur."
+                if (wsCreateUserErrorMessage === "UAE") {
+                    createUserErrorMessage = "L'adresse éléctronique que vous avez saisie est déjà exploitée par un autre utilisateur."
                 }
             }
-            catch (e: any) {
-                console.log(e.message);
-            }
+            catch (e: any) { console.log(e.message); }
 
-            setErrorMessage(message);
+            setErrorMessage(createUserErrorMessage);
         }
 
         dispatch(hideLoading());

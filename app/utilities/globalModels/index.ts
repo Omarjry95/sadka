@@ -2,6 +2,7 @@ import Border from "./Border";
 import BorderRadius from "./BorderRadius";
 import Corners from "./Corners";
 import Margin from "./Margin";
+import MutationError from "./MutationError";
 import Padding from "./Padding";
 import PositionCoords from "./PositionCoords";
 import Positioning from "./Positioning";
@@ -15,5 +16,6 @@ export type {
     Margin,
     Border,
     BorderRadius,
-    PositionCoords
+    PositionCoords,
+    MutationError
 }
