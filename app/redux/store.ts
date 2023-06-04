@@ -11,7 +11,8 @@ const persistReducerConfig = {
     blacklist: [
         api.reducerPath,
         'global',
-        'auth'
+        'auth',
+        'user'
     ]
 }
 

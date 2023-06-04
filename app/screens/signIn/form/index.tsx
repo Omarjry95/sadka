@@ -3,12 +3,15 @@ import {View} from "react-native";
 import { Text, TextInput, Button } from "@app/reusable";
 import styles from "@app/screens/signIn/form/styles";
 import {useTheme} from "@react-navigation/native";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 import {firebaseAuth} from "../../../../firebaseConfig";
 import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {allowUser} from "@app/global/authSlice";
+import {useGetUserDetailsMutation} from "@app/api/userApi";
+import {WsUserDetailsBaseProps} from "@app/api/models";
+import {setUserDetails} from "@app/global/userSlice";
 
 export default function Form() {
 
@@ -17,9 +20,11 @@ export default function Form() {
     const [errorShown, showError] = useState<boolean>(false);
     const [hiddenPasswordChars, hidePasswordChars] = useState<boolean>(true);
 
-    const { colors } = useTheme();
+    const [getUserDetails] = useGetUserDetailsMutation();
 
     const dispatch = useDispatch();
+
+    const { colors } = useTheme();
 
     useEffect(() => {
         showError(false);
@@ -30,7 +35,15 @@ export default function Form() {
         dispatch(showLoading());
 
         signInWithEmailAndPassword(firebaseAuth, email, password)
-            .then(() => dispatch(allowUser()))
+            .then((userCredential: UserCredential) => getUserDetails({ id: userCredential.user.uid }).unwrap())
+            .then((userDetails: WsUserDetailsBaseProps) => {
+                dispatch(setUserDetails({
+                    ...userDetails,
+                    email
+                }));
+
+                dispatch(allowUser());
+            })
             .catch(() => showError(true))
             .finally(() => dispatch(hideLoading()));
     }, [email, password, firebaseAuth]);
