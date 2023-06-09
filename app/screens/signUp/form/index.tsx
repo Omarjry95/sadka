@@ -8,12 +8,13 @@ import {useTheme} from "@react-navigation/native";
 import {emailRegex} from "@app/utilities/regex";
 import {useDispatch} from "react-redux";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
-import {useGetRolesQuery} from "@app/api/roleApi";
-import {useCreateUserMutation} from "@app/api/userApi";
-import {WsCreateUserBaseProps} from "@app/api/models";
+import {useLazyGetRolesQuery} from "@app/api/apis/roleApi";
+import {useCreateUserMutation} from "@app/api/apis/userApi";
+import {WsCreateUserBaseProps, WsMiddlewareResponseBaseProps} from "@app/api/models";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {UnrestrictedStackParamList} from "@app/navigation/models";
 import {MutationError} from "@app/utilities/globalModels";
+import {useGetClientCredentialsBearerTokenMutation} from "@app/api/apis/oauth2Api";
 
 export default function Form({ navigation }: { navigation: NativeStackNavigationProp<UnrestrictedStackParamList, 'SignUp'> }) {
 
@@ -28,21 +29,26 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     const [hiddenRepasswordChars, hideRepasswordChars] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const { data: roles = [], isLoading: isGetRolesLoading, isSuccess: isGetRolesSuccess, isError: isGetRolesError } = useGetRolesQuery(undefined,
-        {
-            refetchOnMountOrArgChange: true,
-            refetchOnFocus: true
-        });
+    const [getRoles, { data: roles = [], isLoading: isGetRolesLoading, isSuccess: isGetRolesSuccess, isError: isGetRolesError }] = useLazyGetRolesQuery();
 
     const [createUser, { isSuccess: isCreateUserSuccess, isError: isCreateUserError, error: createUserError }] = useCreateUserMutation();
+
+    const [getClientCredentialsBearerToken] = useGetClientCredentialsBearerTokenMutation();
 
     const { colors } = useTheme();
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (isGetRolesLoading) { dispatch(showLoading()); }
+    const getClientCredentialsBearerTokenAsync = useCallback((): Promise<WsMiddlewareResponseBaseProps> => getClientCredentialsBearerToken().unwrap(), []);
 
+    useEffect(() => {
+        dispatch(showLoading());
+
+        getClientCredentialsBearerTokenAsync()
+            .then(() => getRoles());
+    }, []);
+
+    useEffect(() => {
         if (isGetRolesSuccess || isGetRolesError) {
             if (isGetRolesSuccess && !!roles.length) {
                 setRole(roles[0]._id);
@@ -213,14 +219,14 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
             dispatch(hideLoading());
         }
         else {
-            const createUserWSArgs: WsCreateUserBaseProps = formInputs.reduce((acc, { id, value }) =>
-                id ? {...acc, [id]: value} : acc,
-                {} as WsCreateUserBaseProps);
+            getClientCredentialsBearerTokenAsync()
+                .then(() => {
+                    const createUserWSArgs: WsCreateUserBaseProps = formInputs.reduce((acc, { id, value }) =>
+                            id ? {...acc, [id]: value} : acc,
+                        {} as WsCreateUserBaseProps);
 
-            createUser({
-                ...createUserWSArgs,
-                role
-            });
+                    createUser({...createUserWSArgs, role });
+                });
         }
     };
 

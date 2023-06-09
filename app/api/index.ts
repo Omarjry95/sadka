@@ -1,12 +1,9 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import Constants from "expo-constants";
+import clientProtectedApi from './clientProtected';
+import userProtectedApi from './userProtected';
+import middlewareApi from './middlewares';
 
-export default createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({
-        baseUrl: Constants.expoConfig?.extra?.apiUrl
-    }),
-    endpoints: () => ({
-
-    })
-})
+export {
+    clientProtectedApi,
+    userProtectedApi,
+    middlewareApi
+}

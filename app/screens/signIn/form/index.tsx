@@ -9,7 +9,7 @@ import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {allowUser} from "@app/global/authSlice";
-import {useGetUserDetailsMutation} from "@app/api/userApi";
+import {useGetUserDetailsMutation} from "@app/api/apis/userApi";
 import {WsUserDetailsBaseProps} from "@app/api/models";
 import {setUserDetails} from "@app/global/userSlice";
 

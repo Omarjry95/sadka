@@ -1,15 +1,20 @@
-import api from "@app/api/index";
+import { clientProtectedApi, userProtectedApi } from "@app/api";
 import {SuccessResponse, WsCreateUserBaseProps, WsUserDetailsBaseProps, WsUserDetailsRequestBaseProps} from "@app/api/models";
 
-const userApi = api.injectEndpoints({
-    endpoints: ({ mutation, query }) => ({
+const userApiProtectedByClient = clientProtectedApi.injectEndpoints({
+    endpoints: ({ mutation }) => ({
         createUser: mutation<SuccessResponse, WsCreateUserBaseProps>({
             query: (body) => ({
                 url: '/users',
                 method: 'POST',
                 body
             })
-        }),
+        })
+    })
+});
+
+const userApiProtectedByUser = userProtectedApi.injectEndpoints({
+    endpoints: ({ mutation }) => ({
         getUserDetails: mutation<WsUserDetailsBaseProps, WsUserDetailsRequestBaseProps>({
             query: (body) => ({
                 url: '/users/details',
@@ -20,4 +25,6 @@ const userApi = api.injectEndpoints({
     })
 });
 
-export const { useCreateUserMutation, useGetUserDetailsMutation } = userApi;
+export const { useCreateUserMutation } = userApiProtectedByClient;
+
+export const { useGetUserDetailsMutation } = userApiProtectedByUser;
