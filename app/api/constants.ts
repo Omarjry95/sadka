@@ -1,0 +1,3 @@
+export const AUTHORIZATION_HEADER_KEY: string = "Authorization";
+
+export const AUTHORIZATION_HEADER_PREFIX: string = "Bearer ";

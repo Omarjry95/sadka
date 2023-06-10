@@ -1,5 +1,6 @@
 type MiddlewareProps = {
-    clientCredentialsBearerToken?: string
+    clientCredentialsBearerToken?: string,
+    userBearerToken?: string
 }
 
 export default MiddlewareProps;

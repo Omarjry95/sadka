@@ -14,17 +14,13 @@ const userApiProtectedByClient = clientProtectedApi.injectEndpoints({
 });
 
 const userApiProtectedByUser = userProtectedApi.injectEndpoints({
-    endpoints: ({ mutation }) => ({
-        getUserDetails: mutation<WsUserDetailsBaseProps, WsUserDetailsRequestBaseProps>({
-            query: (body) => ({
-                url: '/users/details',
-                method: 'POST',
-                body
-            })
+    endpoints: ({ query }) => ({
+        getUserDetails: query<WsUserDetailsBaseProps, void>({
+            query: () => '/users/details'
         })
     })
 });
 
 export const { useCreateUserMutation } = userApiProtectedByClient;
 
-export const { useGetUserDetailsMutation } = userApiProtectedByUser;
+export const { useLazyGetUserDetailsQuery } = userApiProtectedByUser;

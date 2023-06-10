@@ -69,36 +69,38 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     }, [isGetRolesLoading, isGetRolesSuccess, isGetRolesError]);
 
     useEffect(() => {
-        if (isCreateUserSuccess) {
-            dispatch(showModal({
-                variant: "success",
-                mainAction: () => { },
-                stateMessage: "Votre compte a été créé avec succès. Vous pouvez vous connecter sur notre plateforme."
-            }));
+        if (isCreateUserSuccess || isCreateUserError) {
+            if (isCreateUserSuccess) {
+                dispatch(showModal({
+                    variant: "success",
+                    mainAction: () => { },
+                    stateMessage: "Votre compte a été créé avec succès. Vous pouvez vous connecter sur notre plateforme."
+                }));
 
-            setTimeout(() => {
-                dispatch(hideModal());
-                navigation.navigate('SignIn');
-            }, 2000);
-        }
-
-        if (isCreateUserError) {
-            let createUserErrorMessage: string = "Désolé, une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.";
-
-            try {
-                const { data: createUserErrorData } = createUserError as MutationError;
-                const { message: wsCreateUserErrorMessage } = createUserErrorData;
-
-                if (wsCreateUserErrorMessage === "UAE") {
-                    createUserErrorMessage = "L'adresse éléctronique que vous avez saisie est déjà exploitée par un autre utilisateur."
-                }
+                setTimeout(() => {
+                    dispatch(hideModal());
+                    navigation.navigate('SignIn');
+                }, 2000);
             }
-            catch (e: any) { console.log(e.message); }
 
-            setErrorMessage(createUserErrorMessage);
+            if (isCreateUserError) {
+                let createUserErrorMessage: string = "Désolé, une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard.";
+
+                try {
+                    const { data: createUserErrorData } = createUserError as MutationError;
+                    const { message: wsCreateUserErrorMessage } = createUserErrorData;
+
+                    if (wsCreateUserErrorMessage === "UAE") {
+                        createUserErrorMessage = "L'adresse éléctronique que vous avez saisie est déjà exploitée par un autre utilisateur."
+                    }
+                }
+                catch (e: any) { console.log(e.message); }
+
+                setErrorMessage(createUserErrorMessage);
+            }
+
+            dispatch(hideLoading());
         }
-
-        dispatch(hideLoading());
     }, [isCreateUserSuccess, isCreateUserError]);
 
     const additionalFormInputsByRole: FormInputsProps[] = useMemo(() => {

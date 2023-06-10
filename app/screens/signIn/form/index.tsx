@@ -5,13 +5,14 @@ import styles from "@app/screens/signIn/form/styles";
 import {useTheme} from "@react-navigation/native";
 import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 import {firebaseAuth} from "../../../../firebaseConfig";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {allowUser} from "@app/global/authSlice";
-import {useGetUserDetailsMutation} from "@app/api/apis/userApi";
+import {useLazyGetUserDetailsQuery} from "@app/api/apis/userApi";
 import {WsUserDetailsBaseProps} from "@app/api/models";
 import {setUserDetails} from "@app/global/userSlice";
+import {middlewareSelector, setUserBearerToken} from "@app/global/middlewareSlice";
 
 export default function Form() {
 
@@ -20,7 +21,9 @@ export default function Form() {
     const [errorShown, showError] = useState<boolean>(false);
     const [hiddenPasswordChars, hidePasswordChars] = useState<boolean>(true);
 
-    const [getUserDetails] = useGetUserDetailsMutation();
+    const { userBearerToken } = useSelector(middlewareSelector);
+
+    const [getUserDetails] = useLazyGetUserDetailsQuery();
 
     const dispatch = useDispatch();
 
@@ -30,22 +33,33 @@ export default function Form() {
         showError(false);
     }, [email, password]);
 
+    useEffect(() => {
+        if (userBearerToken) {
+            getUserDetails().unwrap()
+                .then((userDetails: WsUserDetailsBaseProps) => {
+                    dispatch(setUserDetails({
+                        ...userDetails,
+                        email
+                    }));
+
+                    dispatch(allowUser());
+                })
+                .catch(() => showError(true))
+                .finally(() => dispatch(hideLoading()));
+        }
+    }, [userBearerToken]);
+
     const onSubmit = useCallback(() => {
         showError(false);
         dispatch(showLoading());
 
         signInWithEmailAndPassword(firebaseAuth, email, password)
-            .then((userCredential: UserCredential) => getUserDetails({ id: userCredential.user.uid }).unwrap())
-            .then((userDetails: WsUserDetailsBaseProps) => {
-                dispatch(setUserDetails({
-                    ...userDetails,
-                    email
-                }));
-
-                dispatch(allowUser());
-            })
-            .catch(() => showError(true))
-            .finally(() => dispatch(hideLoading()));
+            .then((userCredential: UserCredential) => userCredential.user.getIdToken())
+            .then((authToken: string) => dispatch(setUserBearerToken(authToken)))
+            .catch(() => {
+                dispatch(hideLoading());
+                showError(true);
+            });
     }, [email, password, firebaseAuth]);
 
     return (
