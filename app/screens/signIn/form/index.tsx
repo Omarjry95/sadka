@@ -18,7 +18,7 @@ export default function Form() {
 
     const [email, setEmail] = useState<string>("omarjry9@gmail.com");
     const [password, setPassword] = useState<string>("azerty");
-    const [errorShown, showError] = useState<boolean>(false);
+    const [errorMessage, setError] = useState<string | undefined>(undefined);
     const [hiddenPasswordChars, hidePasswordChars] = useState<boolean>(true);
 
     const { userBearerToken } = useSelector(middlewareSelector);
@@ -30,7 +30,7 @@ export default function Form() {
     const { colors } = useTheme();
 
     useEffect(() => {
-        showError(false);
+        setError(undefined);
     }, [email, password]);
 
     useEffect(() => {
@@ -44,22 +44,37 @@ export default function Form() {
 
                     dispatch(allowUser());
                 })
-                .catch(() => showError(true))
+                .catch(() => setError("Nous n'avons pas pu vous identifier. Veuillez réessayer."))
                 .finally(() => dispatch(hideLoading()));
         }
     }, [userBearerToken]);
 
-    const onSubmit = useCallback(() => {
-        showError(false);
+    const onSubmit = useCallback(async () => {
+        setError(undefined);
         dispatch(showLoading());
 
-        signInWithEmailAndPassword(firebaseAuth, email, password)
-            .then((userCredential: UserCredential) => userCredential.user.getIdToken())
-            .then((authToken: string) => dispatch(setUserBearerToken(authToken)))
-            .catch(() => {
+        try {
+            const userCredentials: UserCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+
+            const { user } = userCredentials;
+
+            if (user.emailVerified) {
+                const authToken: string = await user.getIdToken();
+
+                dispatch(setUserBearerToken(authToken));
+            }
+            else {
+                // await sendEmailVerification(user);
+
                 dispatch(hideLoading());
-                showError(true);
-            });
+                setError("Votre compte n'est pas encore vérifié. Veuillez consulter votre boîte de réception afin de trouver le courrier électronique" +
+                    " sur lequel nous vous avons envoyé le lien de vérification.");
+            }
+        }
+        catch (e: any) {
+            dispatch(hideLoading());
+            setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");
+        }
     }, [email, password, firebaseAuth]);
 
     return (
@@ -88,7 +103,7 @@ export default function Form() {
                 onChange={setPassword}
             />
 
-            {errorShown && (
+            {errorMessage && (
                 <Text
                     variant="normal"
                     value="Nous n'avons pas pu vous identifier. Veuillez réessayer."
