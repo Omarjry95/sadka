@@ -1,21 +1,14 @@
 import * as React from 'react';
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {RestrictedStackParamList} from "@app/navigation/models";
-import {Homepage} from "@app/screens";
-
-const Stack = createNativeStackNavigator<RestrictedStackParamList>();
+import {useSelector} from "react-redux";
+import {authSelector} from "@app/global/authSlice";
+import Verified from "@app/navigation/restricted/verified";
+import Unverified from "@app/navigation/restricted/unverified";
 
 export default function Restricted() {
 
+    const { isVerified } = useSelector(authSelector);
+
     return (
-        <Stack.Navigator
-            initialRouteName="Homepage"
-            screenOptions={{ headerShown: false }}
-        >
-            <Stack.Screen
-                name="Homepage"
-                component={Homepage}
-            />
-        </Stack.Navigator>
+        isVerified ? <Verified /> : <Unverified />
     )
 }

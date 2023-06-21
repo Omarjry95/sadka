@@ -5,14 +5,14 @@ import styles from "@app/screens/signIn/form/styles";
 import {useTheme} from "@react-navigation/native";
 import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
 import {firebaseAuth} from "../../../../firebaseConfig";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {allowUser} from "@app/global/authSlice";
 import {useLazyGetUserDetailsQuery} from "@app/api/apis/userApi";
 import {WsUserDetailsBaseProps} from "@app/api/models";
 import {setUserDetails} from "@app/global/userSlice";
-import {middlewareSelector, setUserBearerToken} from "@app/global/middlewareSlice";
+import { setUserBearerToken } from "@app/global/middlewareSlice";
 
 export default function Form() {
 
@@ -20,8 +20,6 @@ export default function Form() {
     const [password, setPassword] = useState<string>("azerty");
     const [errorMessage, setError] = useState<string | undefined>(undefined);
     const [hiddenPasswordChars, hidePasswordChars] = useState<boolean>(true);
-
-    const { userBearerToken } = useSelector(middlewareSelector);
 
     const [getUserDetails] = useLazyGetUserDetailsQuery();
 
@@ -33,22 +31,6 @@ export default function Form() {
         setError(undefined);
     }, [email, password]);
 
-    useEffect(() => {
-        if (userBearerToken) {
-            getUserDetails().unwrap()
-                .then((userDetails: WsUserDetailsBaseProps) => {
-                    dispatch(setUserDetails({
-                        ...userDetails,
-                        email
-                    }));
-
-                    dispatch(allowUser());
-                })
-                .catch(() => setError("Nous n'avons pas pu vous identifier. Veuillez réessayer."))
-                .finally(() => dispatch(hideLoading()));
-        }
-    }, [userBearerToken]);
-
     const onSubmit = useCallback(async () => {
         setError(undefined);
         dispatch(showLoading());
@@ -58,22 +40,24 @@ export default function Form() {
 
             const { user } = userCredentials;
 
-            if (user.emailVerified) {
-                const authToken: string = await user.getIdToken();
+            const authToken: string = await user.getIdToken();
 
-                dispatch(setUserBearerToken(authToken));
-            }
-            else {
-                // await sendEmailVerification(user);
+            dispatch(setUserBearerToken(authToken));
 
-                dispatch(hideLoading());
-                setError("Votre compte n'est pas encore vérifié. Veuillez consulter votre boîte de réception afin de trouver le courrier électronique" +
-                    " sur lequel nous vous avons envoyé le lien de vérification.");
-            }
+            const userDetails: WsUserDetailsBaseProps = await getUserDetails().unwrap();
+
+            dispatch(setUserDetails({
+                ...userDetails,
+                email
+            }));
+
+            dispatch(allowUser(user.emailVerified));
+
+            dispatch(hideLoading());
         }
         catch (e: any) {
-            dispatch(hideLoading());
             setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");
+            dispatch(hideLoading());
         }
     }, [email, password, firebaseAuth]);
 

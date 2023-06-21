@@ -1,5 +1,6 @@
 type AuthProps = {
-    isAuthenticated: boolean
+    isAuthenticated: boolean,
+    isVerified: boolean
 }
 
 export default AuthProps;

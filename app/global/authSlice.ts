@@ -1,21 +1,21 @@
 import {AuthProps} from "@app/global/models";
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "@app/redux/models";
 
 const initialState: AuthProps = {
-    isAuthenticated: false
+    isAuthenticated: false,
+    isVerified: false
 }
 
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        allowUser: (state) => {
+        allowUser: (state, action: PayloadAction<boolean>) => {
             state.isAuthenticated = true;
+            state.isVerified = action.payload;
         },
-        disconnectUser: (state) => {
-            state.isAuthenticated = false;
-        }
+        disconnectUser: () => initialState
     }
 });
 
