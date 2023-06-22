@@ -1,12 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View} from "react-native";
 import styles from "@app/screens/lobby/styles";
 import {Button, Text} from "@app/reusable";
 import {useTheme} from "@react-navigation/native";
+import {useLazySendEmailVerificationLinkQuery} from "@app/api/apis/userApi";
+import {useDispatch} from "react-redux";
+import {hideLoading, showLoading} from "@app/global/globalSlice";
 
 export default function Actions() {
 
     const { colors } = useTheme();
+
+    const [sendEmailVerificationLink, { isLoading }] = useLazySendEmailVerificationLinkQuery();
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(isLoading ? showLoading() : hideLoading());
+    }, [isLoading]);
 
     return (
         <View style={styles.actionsContainer}>
@@ -25,6 +36,7 @@ export default function Actions() {
                         align="center"
                     />
                 )}
+                onPress={() => sendEmailVerificationLink()}
             />
 
             <Button

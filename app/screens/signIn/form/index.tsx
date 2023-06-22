@@ -3,23 +3,26 @@ import {View} from "react-native";
 import { Text, TextInput, Button } from "@app/reusable";
 import styles from "@app/screens/signIn/form/styles";
 import {useTheme} from "@react-navigation/native";
-import { signInWithEmailAndPassword, UserCredential } from "firebase/auth";
+import { signInWithEmailAndPassword, UserCredential, User } from "firebase/auth";
 import {firebaseAuth} from "../../../../firebaseConfig";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {allowUser} from "@app/global/authSlice";
 import {useLazyGetUserDetailsQuery} from "@app/api/apis/userApi";
 import {WsUserDetailsBaseProps} from "@app/api/models";
 import {setUserDetails} from "@app/global/userSlice";
-import { setUserBearerToken } from "@app/global/middlewareSlice";
+import { setUserBearerToken, middlewareSelector } from "@app/global/middlewareSlice";
 
 export default function Form() {
 
     const [email, setEmail] = useState<string>("omarjry9@gmail.com");
     const [password, setPassword] = useState<string>("azerty");
+    const [signedInUser, setSignedInUser] = useState<undefined | User>(undefined);
     const [errorMessage, setError] = useState<string | undefined>(undefined);
     const [hiddenPasswordChars, hidePasswordChars] = useState<boolean>(true);
+
+    const { userBearerToken } = useSelector(middlewareSelector);
 
     const [getUserDetails] = useLazyGetUserDetailsQuery();
 
@@ -31,19 +34,8 @@ export default function Form() {
         setError(undefined);
     }, [email, password]);
 
-    const onSubmit = useCallback(async () => {
-        setError(undefined);
-        dispatch(showLoading());
-
-        try {
-            const userCredentials: UserCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
-
-            const { user } = userCredentials;
-
-            const authToken: string = await user.getIdToken();
-
-            dispatch(setUserBearerToken(authToken));
-
+    useEffect(() => {
+        const handleUserDetailsAndVerification = async (user: User) => {
             const userDetails: WsUserDetailsBaseProps = await getUserDetails().unwrap();
 
             dispatch(setUserDetails({
@@ -54,6 +46,27 @@ export default function Form() {
             dispatch(allowUser(user.emailVerified));
 
             dispatch(hideLoading());
+        }
+
+        if (signedInUser && userBearerToken) {
+            handleUserDetailsAndVerification(signedInUser);
+        }
+    }, [signedInUser, userBearerToken]);
+
+    const onSubmit = useCallback(async () => {
+        setError(undefined);
+        dispatch(showLoading());
+
+        try {
+            const userCredentials: UserCredential = await signInWithEmailAndPassword(firebaseAuth, email, password);
+
+            const { user } = userCredentials;
+
+            setSignedInUser(user);
+
+            const authToken: string = await user.getIdToken();
+
+            dispatch(setUserBearerToken(authToken));
         }
         catch (e: any) {
             setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");
