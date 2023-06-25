@@ -12,6 +12,9 @@ export const middlewareSlice = createSlice({
     reducers: {
         setUserBearerToken: (state, action: PayloadAction<string>) => {
             state.userBearerToken = action.payload;
+        },
+        removeUserBearerToken: (state) => {
+            state.userBearerToken = undefined;
         }
     },
     extraReducers: (builder) => {
@@ -25,7 +28,7 @@ export const middlewareSlice = createSlice({
 
 const { actions, reducer } = middlewareSlice;
 
-export const { setUserBearerToken } = actions;
+export const { setUserBearerToken, removeUserBearerToken } = actions;
 
 export const middlewareSelector = (state: RootState) => state.middleware;
 

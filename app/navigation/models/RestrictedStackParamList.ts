@@ -1,5 +1,6 @@
 type RestrictedStackParamList = {
-    Homepage: undefined
+    Homepage: undefined,
+    Profile: undefined
 }
 
 export default RestrictedStackParamList;

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {View} from "react-native";
+import {Keyboard, View} from "react-native";
 import { Text, TextInput, Button } from "@app/reusable";
 import styles from "@app/screens/signIn/form/styles";
 import {useTheme} from "@react-navigation/native";
@@ -36,16 +36,22 @@ export default function Form() {
 
     useEffect(() => {
         const handleUserDetailsAndVerification = async (user: User) => {
-            const userDetails: WsUserDetailsBaseProps = await getUserDetails().unwrap();
+            try {
+                const userDetails: WsUserDetailsBaseProps = await getUserDetails().unwrap();
 
-            dispatch(setUserDetails({
-                ...userDetails,
-                email
-            }));
+                dispatch(setUserDetails({
+                    ...userDetails,
+                    email
+                }));
 
-            dispatch(allowUser(user.emailVerified));
+                dispatch(hideLoading());
 
-            dispatch(hideLoading());
+                dispatch(allowUser(user.emailVerified));
+            }
+            catch (e) {
+                setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");
+                dispatch(hideLoading());
+            }
         }
 
         if (signedInUser && userBearerToken) {
@@ -54,6 +60,7 @@ export default function Form() {
     }, [signedInUser, userBearerToken]);
 
     const onSubmit = useCallback(async () => {
+        Keyboard.dismiss();
         setError(undefined);
         dispatch(showLoading());
 

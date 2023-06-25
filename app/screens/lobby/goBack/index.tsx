@@ -3,10 +3,32 @@ import {Button, Divider, Text} from "@app/reusable";
 import {View} from "react-native";
 import styles from "@app/screens/lobby/styles";
 import {useTheme} from "@react-navigation/native";
+import { signOut } from "firebase/auth";
+import {firebaseAuth} from "../../../../firebaseConfig";
+import {useDispatch} from "react-redux";
+import {disconnectUser} from "@app/global/authSlice";
+import {hideLoading, showLoading} from "@app/global/globalSlice";
+import {removeUserBearerToken} from "@app/global/middlewareSlice";
+import {removeUserDetails} from "@app/global/userSlice";
 
 export default function GoBack() {
 
     const { colors } = useTheme();
+
+    const dispatch = useDispatch();
+
+    const goBack = (): void => {
+        dispatch(showLoading());
+
+        signOut(firebaseAuth)
+            .then(() => {
+                dispatch(removeUserBearerToken());
+                dispatch(removeUserDetails());
+                dispatch(hideLoading());
+                dispatch(disconnectUser());
+            })
+            .finally(() => dispatch(hideLoading()));
+    }
 
     return (
         <View style={styles.bottomContainer}>
@@ -23,6 +45,7 @@ export default function GoBack() {
                         color={colors.label}
                     />
                 )}
+                onPress={goBack}
             />
         </View>
     )

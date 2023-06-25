@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button, Divider, Text} from "@app/reusable";
-import {View} from "react-native";
+import {Keyboard, View} from "react-native";
 import styles from "@app/screens/signIn/gettingStarted/styles";
 import {useTheme} from "@react-navigation/native";
 import {BaseProps} from "@app/screens/signIn/gettingStarted/models";
@@ -8,6 +8,12 @@ import {BaseProps} from "@app/screens/signIn/gettingStarted/models";
 export default function GettingStarted({ navigation }: BaseProps) {
 
     const { colors } = useTheme();
+
+    const goToSignUp = (): void => {
+        Keyboard.dismiss();
+
+        navigation.navigate('SignUp');
+    }
 
     return (
         <View style={styles.container}>
@@ -24,7 +30,7 @@ export default function GettingStarted({ navigation }: BaseProps) {
                         color={colors.primary}
                     />
                 )}
-                onPress={() => navigation.navigate('SignUp')}
+                onPress={goToSignUp}
             />
         </View>
     )

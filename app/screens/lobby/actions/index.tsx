@@ -6,6 +6,9 @@ import {useTheme} from "@react-navigation/native";
 import {useLazySendEmailVerificationLinkQuery} from "@app/api/apis/userApi";
 import {useDispatch} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
+import {reauthenticateWithCredential, EmailAuthProvider, UserCredential} from "firebase/auth";
+import {firebaseAuth} from "../../../../firebaseConfig";
+import {allowUser} from "@app/global/authSlice";
 
 export default function Actions() {
 
@@ -18,6 +21,22 @@ export default function Actions() {
     useEffect(() => {
         dispatch(isLoading ? showLoading() : hideLoading());
     }, [isLoading]);
+
+    const checkEmailVerification = (): void => {
+        dispatch(showLoading());
+
+        const { currentUser } = firebaseAuth;
+
+        if (currentUser) {
+            reauthenticateWithCredential(currentUser,
+                EmailAuthProvider.credential("omar.jarray@esprit.tn", "testtest"))
+                .then((userCredential: UserCredential) => {
+                    dispatch(hideLoading());
+                    dispatch(allowUser(userCredential.user.emailVerified));
+                })
+                .catch(() => dispatch(hideLoading()));
+        }
+    }
 
     return (
         <View style={styles.actionsContainer}>
@@ -48,6 +67,7 @@ export default function Actions() {
                         value="Confirmer"
                     />
                 )}
+                onPress={checkEmailVerification}
             />
         </View>
     )
