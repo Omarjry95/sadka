@@ -4,7 +4,8 @@ import {BaseStrictProps} from "@app/reusable/button/models";
 
 const FULL_WIDTH_STYLE_VALUE: string = "100%";
 
-export default function Straight({ width, minHeight, paddings, margins, color, borders, borderColor, radiuses, onPress, ChildComponent }: BaseStrictProps) {
+export default function Straight({ width, height, minHeight, paddings, margins, color, borders, borderColor, borderStyle, radiuses, onPress,
+                                     ChildComponent }: BaseStrictProps) {
 
     const alignCenterStyle: StyleProp<ViewStyle> = useMemo(() => {
 
@@ -29,9 +30,11 @@ export default function Straight({ width, minHeight, paddings, margins, color, b
                 ...radiuses,
                 ...alignCenterStyle,
                 width,
+                height,
                 minHeight,
                 backgroundColor: color,
-                borderColor
+                borderColor,
+                borderStyle
             }}
             onPress={onPress}
         >

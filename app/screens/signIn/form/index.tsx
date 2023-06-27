@@ -13,6 +13,7 @@ import {useLazyGetUserDetailsQuery} from "@app/api/apis/userApi";
 import {WsUserDetailsBaseProps} from "@app/api/models";
 import {setUserDetails} from "@app/global/userSlice";
 import { setUserBearerToken, middlewareSelector } from "@app/global/middlewareSlice";
+import {CurrentUserProps} from "@app/global/models";
 
 export default function Form() {
 
@@ -37,16 +38,22 @@ export default function Form() {
     useEffect(() => {
         const handleUserDetailsAndVerification = async (user: User) => {
             try {
+                const { emailVerified, photoURL } = user;
+
                 const userDetails: WsUserDetailsBaseProps = await getUserDetails().unwrap();
 
-                dispatch(setUserDetails({
+                let appUserDetails: CurrentUserProps = {
                     ...userDetails,
                     email
-                }));
+                };
+
+                photoURL && Object.assign(appUserDetails, { picture: photoURL });
+
+                dispatch(setUserDetails(appUserDetails));
 
                 dispatch(hideLoading());
 
-                dispatch(allowUser(user.emailVerified));
+                dispatch(allowUser(emailVerified));
             }
             catch (e) {
                 setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");

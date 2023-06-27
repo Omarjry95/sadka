@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, Text} from "react-native";
+import {View} from "react-native";
+import styles from "@app/screens/profile/styles";
+import Picture from "@app/screens/profile/picture";
 
 export default function Profile() {
 
     return (
-        <View>
-            <Text>
-                Profile
-            </Text>
+        <View style={styles.container}>
+            <Picture />
         </View>
     )
 }

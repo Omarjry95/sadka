@@ -4,12 +4,14 @@ import {ColorValue} from "react-native/Libraries/StyleSheet/StyleSheet";
 
 type BaseStrictProps = {
     width?: string | number,
+    height?: string | number,
     minHeight?: string | number,
     paddings: Padding,
     margins: Margin,
     color: ColorValue,
     borders: Border,
     borderColor: ColorValue,
+    borderStyle: "solid" | "dotted" | "dashed",
     radiuses: BorderRadius,
     onPress?: (event: GestureResponderEvent) => void,
     ChildComponent: () => JSX.Element
