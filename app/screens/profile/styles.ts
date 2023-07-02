@@ -14,6 +14,7 @@ export default StyleSheet.create({
     pictureContainer: {
         width: PICTURE_CONTAINER_DIMENSIONS,
         height: PICTURE_CONTAINER_DIMENSIONS,
+        marginBottom: 15,
         alignItems: "center",
         justifyContent: "center"
     },
@@ -21,6 +22,11 @@ export default StyleSheet.create({
         width: "100%",
         height: "100%",
         borderRadius: (PICTURE_CONTAINER_DIMENSIONS - PICTURE_CONTAINER_PADDING * 2) / 2,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    nameContainer: {
+        width: "100%",
         alignItems: "center",
         justifyContent: "center"
     }

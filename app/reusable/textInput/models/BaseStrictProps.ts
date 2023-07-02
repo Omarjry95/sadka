@@ -1,4 +1,4 @@
-import {Margin, Padding} from "@app/utilities/globalModels";
+import {BorderRadius, Margin, Padding} from "@app/utilities/globalModels";
 
 type BaseStrictProps = {
     value: string,
@@ -6,6 +6,7 @@ type BaseStrictProps = {
     hideChars: boolean,
     paddings: Padding,
     margins: Margin,
+    radiuses: BorderRadius,
     size: number,
     RightComponent?: () => JSX.Element,
     HelpComponent?: () => JSX.Element,
