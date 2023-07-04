@@ -27,6 +27,7 @@ export default StyleSheet.create({
     },
     nameContainer: {
         width: "100%",
+        paddingHorizontal: 15,
         alignItems: "center",
         justifyContent: "center"
     }

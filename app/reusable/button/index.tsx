@@ -7,15 +7,14 @@ import {getStyleBorder, getStyleBorderRadius} from "@app/utilities/border";
 export default function Button({ variant, ...props }: BaseProps) {
 
     const { width, height, minHeight, padding,
-        margin, color, border,
-        borderColor, borderStyle, borderRadius, childComponent } = props;
+        margin, color, border, borderColor,
+        borderStyle, borderRadius, style, childComponent } = props;
 
     const ButtonVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
             case "gradient":
                 return Gradient
             case "straight":
-                return Straight
             default:
                 return Straight
         }
@@ -34,6 +33,7 @@ export default function Button({ variant, ...props }: BaseProps) {
             borderColor: borderColor ?? "white",
             borderStyle: borderStyle ?? "solid",
             radiuses: getStyleBorderRadius(borderRadius),
+            style: style ?? {},
             ChildComponent: childComponent
         }
     }, [props]);

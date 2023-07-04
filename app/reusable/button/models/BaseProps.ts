@@ -1,5 +1,5 @@
 import ButtonVariants from "@app/reusable/button/models/ButtonVariants";
-import {GestureResponderEvent} from "react-native";
+import {GestureResponderEvent, StyleProp, ViewStyle} from "react-native";
 import {Corners, SpacingAndBorder} from "@app/utilities/globalModels";
 import {ColorValue} from "react-native/Libraries/StyleSheet/StyleSheet";
 
@@ -15,6 +15,7 @@ type BaseProps = {
     borderColor?: ColorValue,
     borderStyle?: "dotted" | "dashed",
     borderRadius?: Corners,
+    style?: StyleProp<ViewStyle>,
     onPress?: (event: GestureResponderEvent) => void,
     childComponent: () => JSX.Element
 }

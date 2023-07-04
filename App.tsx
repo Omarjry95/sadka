@@ -8,6 +8,7 @@ import {LogBox} from "react-native";
 import {Provider as ReduxProvider} from "react-redux";
 import store, { persistor } from "@app/redux/store";
 import {PersistGate} from "redux-persist/integration/react";
+import {ClickOutsideProvider} from "react-native-click-outside";
 
 preventAutoHideAsync();
 
@@ -19,9 +20,11 @@ export default function App() {
         <ReduxProvider store={store}>
             <PersistGate persistor={persistor}>
             <FontsLoader>
-                <RootView>
-                    <Navigation />
-                </RootView>
+                <ClickOutsideProvider>
+                    <RootView>
+                        <Navigation />
+                    </RootView>
+                </ClickOutsideProvider>
             </FontsLoader>
             </PersistGate>
         </ReduxProvider>

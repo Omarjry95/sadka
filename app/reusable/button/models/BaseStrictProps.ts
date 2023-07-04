@@ -1,4 +1,4 @@
-import {GestureResponderEvent} from "react-native";
+import {GestureResponderEvent, StyleProp, ViewStyle} from "react-native";
 import {Border, BorderRadius, Margin, Padding} from "@app/utilities/globalModels";
 import {ColorValue} from "react-native/Libraries/StyleSheet/StyleSheet";
 
@@ -13,6 +13,7 @@ type BaseStrictProps = {
     borderColor: ColorValue,
     borderStyle: "solid" | "dotted" | "dashed",
     radiuses: BorderRadius,
+    style: StyleProp<ViewStyle>,
     onPress?: (event: GestureResponderEvent) => void,
     ChildComponent: () => JSX.Element
 }

@@ -1,10 +1,10 @@
 import React, {useMemo} from 'react';
-import {StyleProp, TouchableOpacity, ViewStyle} from "react-native";
+import {LayoutChangeEvent, StyleProp, TouchableOpacity, ViewStyle} from "react-native";
 import {BaseStrictProps} from "@app/reusable/button/models";
 
 const FULL_WIDTH_STYLE_VALUE: string = "100%";
 
-export default function Straight({ width, height, minHeight, paddings, margins, color, borders, borderColor, borderStyle, radiuses, onPress,
+export default function Straight({ width, height, minHeight, paddings, margins, color, borders, borderColor, borderStyle, radiuses, onPress, style,
                                      ChildComponent }: BaseStrictProps) {
 
     const alignCenterStyle: StyleProp<ViewStyle> = useMemo(() => {
@@ -23,7 +23,7 @@ export default function Straight({ width, height, minHeight, paddings, margins, 
 
     return (
         <TouchableOpacity
-            style={{
+            style={[{
                 ...paddings,
                 ...margins,
                 ...borders,
@@ -35,7 +35,7 @@ export default function Straight({ width, height, minHeight, paddings, margins, 
                 backgroundColor: color,
                 borderColor,
                 borderStyle
-            }}
+            }, style]}
             onPress={onPress}
         >
             <ChildComponent />

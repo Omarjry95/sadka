@@ -31,7 +31,7 @@ export default function Name() {
                 <TextInput
                     variant="transparent"
                     padding={{ v: 5, h: 10 }}
-                    margin={{ b: index !== array.length - 1 ? 10 : 0 }}
+                    margin={{ b: index !== array.length - 1 ? 5 : 0 }}
                     borderRadius={{ a: 10 }}
                     size={32}
                     onChange={(text: string) => setNameParts((prevState: string[]) => {
