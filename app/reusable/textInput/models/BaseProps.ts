@@ -6,6 +6,7 @@ type BaseProps = {
     value: string,
     label?: string,
     hideChars?: boolean,
+    capitalizeChars?: boolean,
     padding?: SpacingAndBorder,
     margin?: SpacingAndBorder,
     borderRadius?: Corners,

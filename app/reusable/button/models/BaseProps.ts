@@ -15,6 +15,7 @@ type BaseProps = {
     borderColor?: ColorValue,
     borderStyle?: "dotted" | "dashed",
     borderRadius?: Corners,
+    position?: "relative" | "absolute",
     style?: StyleProp<ViewStyle>,
     onPress?: (event: GestureResponderEvent) => void,
     childComponent: () => JSX.Element

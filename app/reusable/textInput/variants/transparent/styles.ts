@@ -2,9 +2,7 @@ import {StyleSheet} from "react-native";
 
 export default StyleSheet.create({
     main: {
-        backgroundColor: "transparent",
-        fontFamily: "MerriweatherBold",
-        textTransform: "uppercase"
+        fontFamily: "MerriweatherBold"
     },
     buttonContainer: {
         position: "relative"

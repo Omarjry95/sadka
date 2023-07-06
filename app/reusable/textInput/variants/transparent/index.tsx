@@ -6,12 +6,12 @@ import {useTheme} from "@react-navigation/native";
 import styles from './styles';
 import {useClickOutside} from "react-native-click-outside";
 
-export default function Transparent({ value, paddings, margins, radiuses, size, onChange }: BaseStrictProps) {
+export default function Transparent({ value, capitalizeChars, paddings, margins, radiuses, size, onChange }: BaseStrictProps) {
 
     const [isFocused, setFocus] = useState<boolean>(false);
 
     const textInputRef = useRef<TextInput>(null);
-    const containerRef = useClickOutside<View>(() => setFocus(false));
+    const containerRef = useClickOutside<View>(() => textInputRef.current?.blur());
 
     const { colors } = useTheme();
 
@@ -24,37 +24,33 @@ export default function Transparent({ value, paddings, margins, radiuses, size, 
             ref={containerRef}
             style={{...margins}}
         >
-            {isFocused ?
+            <View style={styles.buttonContainer}>
                 <TextInput
+                    autoCapitalize={capitalizeChars ? "characters" : "sentences"}
                     ref={textInputRef}
                     style={{...styles.main,
                         ...paddings,
                         ...radiuses,
+                        backgroundColor: isFocused ? "black" : "transparent",
+                        color: isFocused ? "white" : "black",
                         fontSize: size
                     }}
-                    selectionColor="black"
-                    value={value}
+                    selectionColor={colors.label}
+                    value={value.toUpperCase()}
                     onChangeText={(text) => onChange(text)}
-                /> :
-                <View style={{ position: "relative" }}>
+                    onBlur={() => setFocus(false)}
+                />
+
+                {!isFocused && (
                     <Button
-                        style={{...paddings}}
-                        childComponent={() => (
-                            <Text
-                                variant="title"
-                                value={value}
-                                size={size}
-                                color="black"
-                                transform="uppercase"
-                                align="center"
-                            />
-                        )}
+                        width="100%"
+                        height="100%"
+                        position="absolute"
+                        childComponent={() => (<View style={styles.buttonHighlighter} />)}
                         onPress={() => setFocus(true)}
                     />
-
-                    <View style={styles.buttonHighlighter} />
-                </View>
-            }
+                )}
+            </View>
         </View>
     )
 }

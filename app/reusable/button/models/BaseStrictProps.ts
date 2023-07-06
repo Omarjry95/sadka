@@ -13,6 +13,7 @@ type BaseStrictProps = {
     borderColor: ColorValue,
     borderStyle: "solid" | "dotted" | "dashed",
     radiuses: BorderRadius,
+    position?: "relative" | "absolute",
     style: StyleProp<ViewStyle>,
     onPress?: (event: GestureResponderEvent) => void,
     ChildComponent: () => JSX.Element

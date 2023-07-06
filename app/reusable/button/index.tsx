@@ -8,7 +8,8 @@ export default function Button({ variant, ...props }: BaseProps) {
 
     const { width, height, minHeight, padding,
         margin, color, border, borderColor,
-        borderStyle, borderRadius, style, childComponent } = props;
+        borderStyle, borderRadius, position, style,
+        childComponent } = props;
 
     const ButtonVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -20,8 +21,8 @@ export default function Button({ variant, ...props }: BaseProps) {
         }
     }, [variant]);
 
-    const variantProps: BaseStrictProps = useMemo(() => {
-        return {
+    const variantProps: BaseStrictProps = useMemo(() => (
+        {
             ...props,
             width,
             height,
@@ -36,7 +37,7 @@ export default function Button({ variant, ...props }: BaseProps) {
             style: style ?? {},
             ChildComponent: childComponent
         }
-    }, [props]);
+    ), [props]);
 
     return (
         <ButtonVariant {...variantProps} />
