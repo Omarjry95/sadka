@@ -38,6 +38,7 @@ export default function Name() {
                     margin={{ b: index !== array.length - 1 ? 5 : 0 }}
                     borderRadius={{ a: 10 }}
                     size={32}
+                    align="center"
                     onChange={(text: string) => setNameParts((prevState: string[]) => {
                         let newState: string[] = JSON.parse(JSON.stringify(prevState));
 

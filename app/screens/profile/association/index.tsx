@@ -4,6 +4,8 @@ import {Select} from "@app/reusable";
 export default function Association() {
 
     return (
-        <Select />
+        <Select
+            width="100%"
+        />
     )
 }

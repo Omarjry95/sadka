@@ -11,6 +11,7 @@ type BaseProps = {
     margin?: SpacingAndBorder,
     borderRadius?: Corners,
     size?: number,
+    align?: "auto" | "left" | "right" | "center" | "justify",
     rightComponent?: () => JSX.Element,
     helpComponent?: () => JSX.Element,
     onChange: Function

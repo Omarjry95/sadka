@@ -6,7 +6,7 @@ import {useTheme} from "@react-navigation/native";
 import styles from './styles';
 import {useClickOutside} from "react-native-click-outside";
 
-export default function Transparent({ value, capitalizeChars, paddings, margins, radiuses, size, onChange }: BaseStrictProps) {
+export default function Transparent({ value, capitalizeChars, paddings, margins, radiuses, size, align, onChange }: BaseStrictProps) {
 
     const [isFocused, setFocus] = useState<boolean>(false);
 
@@ -26,6 +26,7 @@ export default function Transparent({ value, capitalizeChars, paddings, margins,
         >
             <View style={styles.buttonContainer}>
                 <TextInput
+                    multiline
                     autoCapitalize={capitalizeChars ? "characters" : "sentences"}
                     ref={textInputRef}
                     style={{...styles.main,
@@ -33,7 +34,8 @@ export default function Transparent({ value, capitalizeChars, paddings, margins,
                         ...radiuses,
                         backgroundColor: isFocused ? "black" : "transparent",
                         color: isFocused ? "white" : "black",
-                        fontSize: size
+                        fontSize: size,
+                        textAlign: align
                     }}
                     selectionColor={colors.label}
                     value={value.toUpperCase()}

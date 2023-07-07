@@ -9,6 +9,7 @@ type BaseStrictProps = {
     margins: Margin,
     radiuses: BorderRadius,
     size: number,
+    align: "auto" | "left" | "right" | "center" | "justify",
     RightComponent?: () => JSX.Element,
     HelpComponent?: () => JSX.Element,
     onChange: Function
