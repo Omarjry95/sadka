@@ -36,7 +36,6 @@ export default function Name() {
                     variant="transparent"
                     padding={{ v: 5, h: 10 }}
                     margin={{ b: index !== array.length - 1 ? 5 : 0 }}
-                    borderRadius={{ a: 10 }}
                     size={32}
                     align="center"
                     onChange={(text: string) => setNameParts((prevState: string[]) => {

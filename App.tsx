@@ -9,6 +9,7 @@ import {Provider as ReduxProvider} from "react-redux";
 import store, { persistor } from "@app/redux/store";
 import {PersistGate} from "redux-persist/integration/react";
 import {ClickOutsideProvider} from "react-native-click-outside";
+import {SafeAreaProvider} from "react-native-safe-area-context";
 
 preventAutoHideAsync();
 
@@ -19,13 +20,15 @@ export default function App() {
     return (
         <ReduxProvider store={store}>
             <PersistGate persistor={persistor}>
-            <FontsLoader>
-                <ClickOutsideProvider>
-                    <RootView>
-                        <Navigation />
-                    </RootView>
-                </ClickOutsideProvider>
-            </FontsLoader>
+                <FontsLoader>
+                    <SafeAreaProvider>
+                        <ClickOutsideProvider>
+                            <RootView>
+                                <Navigation />
+                            </RootView>
+                        </ClickOutsideProvider>
+                    </SafeAreaProvider>
+                </FontsLoader>
             </PersistGate>
         </ReduxProvider>
     );

@@ -28,7 +28,12 @@ export default StyleSheet.create({
     nameContainer: {
         width: "100%",
         paddingHorizontal: 15,
+        marginBottom: 25,
         alignItems: "center",
         justifyContent: "center"
+    },
+    selectContainer: {
+        width: "100%",
+        paddingHorizontal: 15
     }
 });

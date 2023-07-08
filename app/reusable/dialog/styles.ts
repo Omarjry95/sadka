@@ -9,11 +9,13 @@ export default StyleSheet.create({
     },
     wrapper: {
         width: "100%",
-        padding: 15,
+        paddingHorizontal: 15,
         position: "relative",
         zIndex: 2,
         flexDirection: "column",
-        alignItems: "center"
+        alignItems: "center",
+        justifyContent: "center",
+        flex: 1
     },
     pressableBackdrop: {
         width: "100%",

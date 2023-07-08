@@ -5,10 +5,13 @@ import {Button, Text} from "@app/reusable";
 import {StrictBaseProps} from "@app/reusable/dialog/models";
 import {useTheme} from "@react-navigation/native";
 import Backdrop from "@app/reusable/dialog/backdrop";
+import {EdgeInsets, useSafeAreaInsets} from "react-native-safe-area-context";
 
 export default function Base({ visible, mainAction, DialogBody, displayActionButton }: StrictBaseProps) {
 
     const { colors } = useTheme();
+
+    const insets: EdgeInsets = useSafeAreaInsets();
 
     return (
         <Modal
@@ -21,7 +24,11 @@ export default function Base({ visible, mainAction, DialogBody, displayActionBut
                 ...styles.container,
                 backgroundColor: colors.backdrop
             }}>
-                <View style={styles.wrapper}>
+                <View style={{
+                    ...styles.wrapper,
+                    paddingTop: insets.top,
+                    paddingBottom: insets.bottom + 80
+                }}>
                     <DialogBody />
 
                     {displayActionButton && (
