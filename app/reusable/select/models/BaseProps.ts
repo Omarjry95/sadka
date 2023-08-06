@@ -6,6 +6,7 @@ import ListItemProps from "@app/reusable/select/models/ListItemProps";
 type BaseProps = {
     variant?: SelectVariants,
     list: ListItemProps[],
+    value: string | number | null,
     label?: string,
     width?: string | number,
     padding?: SpacingAndBorder,

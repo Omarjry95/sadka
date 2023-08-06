@@ -10,7 +10,8 @@ type BaseStrictProps = {
     align: "auto" | "left" | "right" | "center" | "justify",
     transform: 'none' | 'capitalize' | 'uppercase' | 'lowercase',
     position: 'relative' | 'absolute',
-    positionCoords: PositionCoords
+    positionCoords: PositionCoords,
+    italic?: boolean
 }
 
 export default BaseStrictProps;

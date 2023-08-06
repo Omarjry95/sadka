@@ -1,6 +1,6 @@
 import SuccessResponse from "./SuccessResponse";
+import WsAssociationBaseProps from "./WsAssociationBaseProps";
 import WsCreateUserBaseProps from "./WsCreateUserBaseProps";
-import WsMiddlewareRequestBaseProps from "./WsMiddlewareRequestBaseProps";
 import WsMiddlewareResponseBaseProps from "./WsMiddlewareResponseBaseProps";
 import WsRoleBaseProps from "./WsRoleBaseProps";
 import WsUserDetailsBaseProps from "./WsUserDetailsBaseProps";
@@ -11,7 +11,7 @@ export type {
     WsCreateUserBaseProps,
     WsUserDetailsRequestBaseProps,
     WsUserDetailsBaseProps,
+    WsAssociationBaseProps,
     WsRoleBaseProps,
-    WsMiddlewareRequestBaseProps,
     WsMiddlewareResponseBaseProps
 }

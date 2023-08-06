@@ -21,4 +21,4 @@ const oauth2Api = middlewareApi.injectEndpoints({
     })
 });
 
-export const { useGetClientCredentialsBearerTokenMutation, endpoints } = oauth2Api;
+export const { useGetClientCredentialsBearerTokenMutation } = oauth2Api;

@@ -1,6 +1,7 @@
 import { clientProtectedApi, userProtectedApi } from "@app/api";
 import {SuccessResponse, WsCreateUserBaseProps, WsUserDetailsBaseProps} from "@app/api/models";
 import {apiPrefixes} from "@app/api/constants";
+import WsAssociationBaseProps from "../models/WsAssociationBaseProps";
 
 const userApiProtectedByClient = clientProtectedApi.injectEndpoints({
     endpoints: ({ mutation }) => ({
@@ -16,6 +17,9 @@ const userApiProtectedByClient = clientProtectedApi.injectEndpoints({
 
 const userApiProtectedByUser = userProtectedApi.injectEndpoints({
     endpoints: ({ query }) => ({
+        getAssociations: query<WsAssociationBaseProps[], void>({
+            query: () => apiPrefixes.user.concat('/associations')
+        }),
         getUserDetails: query<WsUserDetailsBaseProps, void>({
             query: () => apiPrefixes.user.concat('/details')
         }),
@@ -27,4 +31,5 @@ const userApiProtectedByUser = userProtectedApi.injectEndpoints({
 
 export const { useCreateUserMutation } = userApiProtectedByClient;
 
-export const { useLazyGetUserDetailsQuery, useLazySendEmailVerificationLinkQuery } = userApiProtectedByUser;
+export const { useGetAssociationsQuery, useLazyGetUserDetailsQuery,
+    useLazySendEmailVerificationLinkQuery } = userApiProtectedByUser;

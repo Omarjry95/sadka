@@ -6,7 +6,9 @@ import {getStylePosition} from "@app/utilities/position";
 
 export default function Text({ variant, ...props }: BaseProps) {
 
-    const { value, padding, margin, color, size, align, transform, position, positioning = {} } = props;
+    const { value, padding, margin, color, size,
+        align, transform, position, positioning = {},
+        italic } = props;
 
     const TextVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -29,7 +31,8 @@ export default function Text({ variant, ...props }: BaseProps) {
             align: align ?? "left",
             transform: transform ?? "none",
             position: position ?? 'relative',
-            positionCoords: getStylePosition(positioning)
+            positionCoords: getStylePosition(positioning),
+            fontStyle: italic ? "italic" : "normal"
         }
     }, [props]);
 

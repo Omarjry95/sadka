@@ -15,6 +15,7 @@ export default function Image({ variant, ...props }: BaseProps) {
     }, [variant]);
 
     const variantProps: BaseStrictProps = useMemo(() => ({
+        ...props,
         source: { uri: source }
     }), [props]);
 

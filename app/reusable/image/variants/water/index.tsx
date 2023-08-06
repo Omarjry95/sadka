@@ -3,9 +3,12 @@ import { Image } from 'react-native';
 import {BaseStrictProps} from "@app/reusable/image/models";
 import styles from './styles';
 
-const Water = ({ source }: BaseStrictProps) => (
+const Water = ({ source, borderRadius }: BaseStrictProps) => (
     <Image
-        style={styles.container}
+        style={{
+            ...styles.container,
+            borderRadius
+        }}
         source={source}
     />
 );

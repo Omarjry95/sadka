@@ -2,33 +2,26 @@ import React, {useCallback} from 'react';
 import {FlatList, View} from "react-native";
 import styles from '../styles';
 import {ListItemProps, ListProps} from "@app/reusable/select/models";
-import {Text} from "@app/reusable";
+import ListItem from "@app/reusable/select/variants/modal/listItem";
+import {Divider} from "@app/reusable";
 
-export default function List({ list }: ListProps) {
+export default function List({ list, paddings }: ListProps) {
 
-    const renderItem = useCallback(({ item }: { item: ListItemProps }) => {
-        const { id, label, leftComponent: LeftComponent } = item;
-
-        return (
-            <View
-                key={id}
-                style={{ width: "100%", flexDirection: "row", alignItems: "center" }}
-            >
-                <LeftComponent />
-
-                <Text
-                    value={label}
-                    color="black"
-                />
-            </View>
-        )
-    }, []);
+    const renderItem = useCallback(({ item }: { item: ListItemProps }) => (
+        <ListItem
+            id={item.id}
+            label={item.label}
+            leftComponent={item.leftComponent}
+            paddings={paddings}
+        />
+    ), []);
 
     return (
         <View style={styles.modalBody}>
             <FlatList
                 data={list}
                 renderItem={renderItem}
+                ItemSeparatorComponent={() => (<Divider />)}
             />
         </View>
     )

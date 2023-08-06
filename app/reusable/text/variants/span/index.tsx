@@ -1,13 +1,12 @@
 import React from 'react';
 import { Text } from "react-native";
-import styles from "@app/reusable/text/variants/span/styles";
 import {BaseStrictProps} from "@app/reusable/text/models";
 
-const Span = ({ value, paddings, margins, color, size, align, transform, position, positionCoords }: BaseStrictProps) => (
+const Span = ({ value, paddings, margins, color, size, align, transform, position, positionCoords, italic }: BaseStrictProps) => (
     <Text style={{
-        ...styles.main,
         ...paddings,
         ...margins,
+        fontFamily: italic ? "OpenSansItalic" : "OpenSans",
         color,
         fontSize: size,
         textAlign: align,

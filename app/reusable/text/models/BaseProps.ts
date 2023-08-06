@@ -12,7 +12,8 @@ type BaseProps = {
     align?: "auto" | "left" | "right" | "center" | "justify",
     transform?: 'none' | 'capitalize' | 'uppercase' | 'lowercase',
     position?: 'absolute' | 'relative',
-    positioning?: Positioning
+    positioning?: Positioning,
+    italic?: boolean
 }
 
 export default BaseProps;
