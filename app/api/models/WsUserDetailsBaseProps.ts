@@ -3,7 +3,8 @@ type WsUserDetailsBaseProps = {
     firstName?: string,
     lastName?: string,
     charityName?: string,
-    role: number
+    role: number,
+    defaultAssociation?: string
 }
 
 export default WsUserDetailsBaseProps;

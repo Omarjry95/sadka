@@ -5,7 +5,8 @@ type CurrentUserProps = {
     lastName?: string,
     charityName?: string,
     picture?: string,
-    role: number
+    role: number,
+    defaultAssociation?: string
 }
 
 export default CurrentUserProps;

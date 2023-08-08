@@ -31,5 +31,5 @@ const userApiProtectedByUser = userProtectedApi.injectEndpoints({
 
 export const { useCreateUserMutation } = userApiProtectedByClient;
 
-export const { useGetAssociationsQuery, useLazyGetUserDetailsQuery,
+export const { useLazyGetAssociationsQuery, useLazyGetUserDetailsQuery,
     useLazySendEmailVerificationLinkQuery } = userApiProtectedByUser;

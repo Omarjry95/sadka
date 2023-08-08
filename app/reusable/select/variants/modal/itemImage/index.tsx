@@ -9,13 +9,16 @@ const ItemImage = ({ photoUrl, diameter }: ItemImageProps) => (
         ...styles.imageLeftContainer,
         width: diameter,
         height: diameter,
+        backgroundColor: photoUrl ? "transparent" : "black",
         borderRadius: diameter
     }}>
-        <Image
-            variant="water"
-            source={photoUrl}
-            borderRadius={diameter / 2}
-        />
+        {photoUrl && (
+            <Image
+                variant="water"
+                source={photoUrl}
+                borderRadius={diameter / 2}
+            />
+        )}
     </View>
 );
 

@@ -1,0 +1,1 @@
+export const DEFAULT_SELECT_ITEM_ICON_DIMENSION: number = 40;

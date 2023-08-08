@@ -1,5 +1,5 @@
 type ItemImageProps = {
-    photoUrl: string,
+    photoUrl?: string,
     diameter: number
 }
 
