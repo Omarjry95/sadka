@@ -3,13 +3,13 @@ import {BaseProps, BaseStrictProps} from "@app/reusable/button/models";
 import { Straight, Gradient } from "@app/reusable/button/variants";
 import { getStyleMargin, getStylePadding } from "@app/utilities/spacing";
 import {getStyleBorder, getStyleBorderRadius} from "@app/utilities/border";
+import {getStylePosition} from "@app/utilities/position";
 
 export default function Button({ variant, ...props }: BaseProps) {
 
     const { width, height, minHeight, padding,
         margin, color, border, borderColor,
-        borderStyle, borderRadius, position, style,
-        childComponent } = props;
+        borderStyle, borderRadius, positioning = {}, style, childComponent } = props;
 
     const ButtonVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -34,6 +34,7 @@ export default function Button({ variant, ...props }: BaseProps) {
             borderColor: borderColor ?? "white",
             borderStyle: borderStyle ?? "solid",
             radiuses: getStyleBorderRadius(borderRadius),
+            positionCoords: getStylePosition(positioning),
             style: style ?? {},
             ChildComponent: childComponent
         }
