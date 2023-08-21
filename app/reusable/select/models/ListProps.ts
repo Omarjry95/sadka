@@ -3,7 +3,9 @@ import { Padding } from "@app/utilities/globalModels";
 
 type ListProps = {
     list: ListItemProps[],
-    paddings: Padding
+    selectedId: string | number | null,
+    paddings: Padding,
+    setValue: Function
 }
 
 export default ListProps;

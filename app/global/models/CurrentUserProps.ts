@@ -4,7 +4,7 @@ type CurrentUserProps = {
     firstName?: string,
     lastName?: string,
     charityName?: string,
-    picture?: string,
+    photo?: string,
     role: number,
     defaultAssociation?: string
 }

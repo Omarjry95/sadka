@@ -38,7 +38,7 @@ export default function Transparent({ value, capitalizeChars, paddings, margins,
                         textAlign: align
                     }}
                     selectionColor={colors.label}
-                    value={value.toUpperCase()}
+                    value={value}
                     onChangeText={(text) => onChange(text)}
                     onBlur={() => setFocus(false)}
                 />

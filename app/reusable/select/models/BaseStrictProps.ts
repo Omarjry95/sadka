@@ -11,7 +11,8 @@ type BaseStrictProps = {
     margins: Margin,
     borders: Border,
     borderColor: ColorValue,
-    radiuses: BorderRadius
+    radiuses: BorderRadius,
+    setValue: Function
 }
 
 export default BaseStrictProps;

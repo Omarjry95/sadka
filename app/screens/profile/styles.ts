@@ -1,14 +1,15 @@
 import {StyleSheet} from "react-native";
 
 export const PICTURE_CONTAINER_DIMENSIONS: number = 175;
-
 export const ACTION_BUTTON_DIMENSIONS: number = 45;
 
+export const SAVE_ACTION_BUTTON_DIMENSIONS: number = 80;
 export const PICTURE_CONTAINER_PADDING: number = 5;
 
 export default StyleSheet.create({
     container: {
         paddingTop: 90,
+        position: "relative",
         flexDirection: "column",
         alignItems: "center",
         flex: 1
@@ -28,6 +29,7 @@ export default StyleSheet.create({
     actionButton: {
         width: "100%",
         height: "100%",
+        backgroundColor: "black",
         borderWidth: 1,
         borderRadius: ACTION_BUTTON_DIMENSIONS / 2,
         alignItems: "center",
@@ -54,5 +56,13 @@ export default StyleSheet.create({
     selectContainer: {
         width: "100%",
         paddingHorizontal: 15
+    },
+    saveButtonContainer: {
+        width: "100%",
+        height: "100%",
+        borderWidth: 1,
+        borderRadius: SAVE_ACTION_BUTTON_DIMENSIONS / 2,
+        alignItems: "center",
+        justifyContent: "center"
     }
 });

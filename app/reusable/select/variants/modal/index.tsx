@@ -8,7 +8,7 @@ import {useDispatch} from "react-redux";
 import List from "@app/reusable/select/variants/modal/list";
 import ListItem from "@app/reusable/select/variants/modal/listItem";
 
-export default function Modal({ list, value, label, width, paddings, margins, borders, borderColor, radiuses }: BaseStrictProps) {
+export default function Modal({ list, value, label, width, paddings, margins, borders, borderColor, radiuses, setValue }: BaseStrictProps) {
 
     const dispatch = useDispatch();
 
@@ -39,6 +39,7 @@ export default function Modal({ list, value, label, width, paddings, margins, bo
                     <>
                         {selectedItem && (
                             <ListItem
+                                disabled
                                 id={selectedItem.id}
                                 label={selectedItem.label}
                                 leftComponent={selectedItem.leftComponent}
@@ -55,7 +56,9 @@ export default function Modal({ list, value, label, width, paddings, margins, bo
                             dialogBody: () => (
                                 <List
                                     list={list}
+                                    selectedId={selectedItem.id}
                                     paddings={paddings}
+                                    setValue={setValue}
                                 />
                             )
                         }))

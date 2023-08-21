@@ -1,27 +1,54 @@
-import React from 'react';
-import {Text} from "@app/reusable";
+import React, {useCallback, useMemo} from 'react';
+import {Button, Text} from "@app/reusable";
 import {View} from "react-native";
 import { ListItemProps } from "../../../models";
 import styles from '../styles';
-import {Padding} from "@app/utilities/globalModels";
+import {ListItemAdditionalProps} from "@app/reusable/select/models";
+import {useDispatch} from "react-redux";
+import {hideModal} from "@app/global/globalSlice";
+import {useTheme} from "@react-navigation/native";
 
-export default function ListItem({ id, label, leftComponent: LeftComponent, paddings }: ListItemProps & { paddings: Padding }) {
+export default function ListItem({ id, index, label, leftComponent: LeftComponent, selected, disabled, paddings, setValue }: ListItemProps & ListItemAdditionalProps) {
+
+    const dispatch = useDispatch();
+
+    const { colors } = useTheme();
+
+    const onSetValue = useCallback((): void => {
+        if (setValue) {
+            setValue(id);
+
+            dispatch(hideModal());
+        }
+    }, [id, setValue]);
+
+    const itemBorderTopRadius: 0 | 10 = useMemo(() => index === 0 ? 10 : 0, [index]);
 
     return (
-        <View
+        <Button
             key={id}
             style={{
-                ...styles.listItemContainer,
-                ...paddings
+              ...styles.listItemContainer,
+              backgroundColor: selected ? colors.border : "transparent",
+              borderTopLeftRadius: itemBorderTopRadius,
+              borderTopRightRadius: itemBorderTopRadius
             }}
-        >
-            {LeftComponent && <LeftComponent />}
+            disabled={disabled}
+            childComponent={() => (
+                <View style={{
+                    ...styles.listItemWrapper,
+                    ...paddings
+                }}>
+                    {LeftComponent && <LeftComponent />}
 
-            <Text
-                italic={id === null}
-                value={label}
-                color="black"
-            />
-        </View>
+                    <Text
+                        italic={id === null}
+                        value={label}
+                        color="black"
+                    />
+                </View>
+            )}
+            onPress={onSetValue}
+        />
     )
 }

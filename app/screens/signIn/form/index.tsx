@@ -10,10 +10,7 @@ import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {PasswordVisibilityToggler} from "@app/reusable/complex";
 import {allowUser} from "@app/global/authSlice";
 import {useLazyGetUserDetailsQuery} from "@app/api/apis/userApi";
-import {WsUserDetailsBaseProps} from "@app/api/models";
-import {setUserDetails} from "@app/global/userSlice";
 import { setUserBearerToken, middlewareSelector } from "@app/global/middlewareSlice";
-import {CurrentUserProps} from "@app/global/models";
 
 export default function Form() {
 
@@ -36,33 +33,16 @@ export default function Form() {
     }, [email, password]);
 
     useEffect(() => {
-        const handleUserDetailsAndVerification = async (user: User) => {
-            try {
-                const { emailVerified, photoURL } = user;
-
-                const userDetails: WsUserDetailsBaseProps = await getUserDetails().unwrap();
-
-                let appUserDetails: CurrentUserProps = {
-                    ...userDetails,
-                    email
-                };
-
-                photoURL && Object.assign(appUserDetails, { picture: photoURL });
-
-                dispatch(setUserDetails(appUserDetails));
-
-                dispatch(hideLoading());
-
-                dispatch(allowUser(emailVerified));
-            }
-            catch (e) {
-                setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");
-                dispatch(hideLoading());
-            }
-        }
-
         if (signedInUser && userBearerToken) {
-            handleUserDetailsAndVerification(signedInUser);
+            getUserDetails(email).unwrap()
+              .then(() => {
+                  dispatch(hideLoading());
+                  dispatch(allowUser(signedInUser.emailVerified));
+              })
+              .catch(() => {
+                  setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");
+                  dispatch(hideLoading());
+              })
         }
     }, [signedInUser, userBearerToken]);
 

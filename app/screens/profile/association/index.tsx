@@ -7,16 +7,12 @@ import {WsAssociationBaseProps} from "@app/api/models";
 import {ListItemProps} from "@app/reusable/select/models";
 import ItemImage from "@app/reusable/select/variants/modal/itemImage";
 import {DEFAULT_SELECT_ITEM_ICON_DIMENSION} from "@app/reusable/select/constants";
-import {useDispatch, useSelector} from "react-redux";
-import {userSelector} from "@app/global/userSlice";
+import {useDispatch} from "react-redux";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
-import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {RestrictedStackParamList} from "@app/navigation/models";
 import {useFocusEffect} from "@react-navigation/native";
+import {AssociationBaseProps} from "@app/screens/profile/models";
 
-export default function Association({ navigation }: { navigation: NativeStackNavigationProp<RestrictedStackParamList, 'Profile'> }) {
-
-    const { currentUser } = useSelector(userSelector);
+export default function Association({ defaultAssociation, setNewDefaultAssociation, navigation }: AssociationBaseProps) {
 
     const [getAssociations, { data = [], isLoading: isGetAssociationsLoading,
         isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
@@ -24,7 +20,7 @@ export default function Association({ navigation }: { navigation: NativeStackNav
     const dispatch = useDispatch();
 
     useFocusEffect(
-        useCallback(() => { getAssociations() }, []));
+        useCallback(() => { getAssociations(); }, []));
 
     useEffect(() => {
         dispatch(isGetAssociationsLoading ? showLoading() : hideLoading());
@@ -39,16 +35,6 @@ export default function Association({ navigation }: { navigation: NativeStackNav
             }));
         }
     }, [isGetAssociationsLoading, isGetAssociationsError]);
-
-    const userDefaultAssociation: string | null = useMemo(() => {
-        let defaultAssociation: string | null = null;
-
-        if (currentUser?.defaultAssociation) {
-            defaultAssociation = currentUser?.defaultAssociation;
-        }
-
-        return defaultAssociation;
-    },[currentUser])
 
     const formattedAssociations = useMemo((): ListItemProps[] => {
         let associations: ListItemProps[] = data.map(({ _id: id, label, photoUrl }: WsAssociationBaseProps) => ({
@@ -75,13 +61,14 @@ export default function Association({ navigation }: { navigation: NativeStackNav
         <View style={styles.selectContainer}>
             <Select
                 list={formattedAssociations}
-                value={userDefaultAssociation}
+                value={defaultAssociation}
                 label="Association par défaut"
                 width="100%"
                 padding={{ a: 15 }}
                 border={{ a: 1 }}
                 borderColor="black"
                 borderRadius={{ a: 10 }}
+                setValue={setNewDefaultAssociation}
             />
         </View>
     )

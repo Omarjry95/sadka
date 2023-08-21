@@ -14,7 +14,11 @@ export default StyleSheet.create({
     },
     listItemContainer: {
         width: "100%",
-        padding: 10,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    listItemWrapper: {
+        width: "100%",
         flexDirection: "row",
         alignItems: "center"
     },

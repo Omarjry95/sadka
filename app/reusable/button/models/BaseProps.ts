@@ -17,6 +17,7 @@ type BaseProps = {
     borderRadius?: Corners,
     position?: "relative" | "absolute",
     positioning?: Positioning,
+    disabled?: boolean,
     style?: StyleProp<ViewStyle>,
     onPress?: (event: GestureResponderEvent) => void,
     childComponent: () => JSX.Element

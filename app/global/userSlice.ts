@@ -1,6 +1,8 @@
 import {CurrentUserProps} from "@app/global/models";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "@app/redux/models";
+import userProtectedApi from "../api/userProtected";
+import {WsUserDetailsBaseProps} from "@app/api/models";
 
 type UserSliceProps = { currentUser?: CurrentUserProps };
 
@@ -16,12 +18,19 @@ export const userSlice = createSlice({
         removeUserDetails: (state) => {
             state.currentUser = undefined
         }
+    },
+    extraReducers: (builder) => {
+        // @ts-ignore
+        builder.addMatcher(userProtectedApi.endpoints.getUserDetails.matchFulfilled,
+          (state, action: PayloadAction<WsUserDetailsBaseProps>) => {
+            state.currentUser = action.payload;
+          })
     }
 });
 
 const { actions, reducer } = userSlice;
 
-export const { setUserDetails, removeUserDetails } = actions;
+export const { removeUserDetails } = actions;
 
 export const userSelector = (state: RootState) => state.user;
 

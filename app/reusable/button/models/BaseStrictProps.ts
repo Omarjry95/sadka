@@ -16,6 +16,7 @@ type BaseStrictProps = {
     position?: "relative" | "absolute",
     positionCoords: PositionCoords,
     style: StyleProp<ViewStyle>,
+    disabled: boolean,
     onPress?: (event: GestureResponderEvent) => void,
     ChildComponent: () => JSX.Element
 }

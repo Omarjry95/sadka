@@ -13,7 +13,8 @@ type BaseProps = {
     margin?: SpacingAndBorder,
     border?: SpacingAndBorder,
     borderColor?: ColorValue,
-    borderRadius?: Corners
+    borderRadius?: Corners,
+    setValue: Function
 }
 
 export default BaseProps;
