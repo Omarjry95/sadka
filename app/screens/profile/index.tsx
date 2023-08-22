@@ -4,18 +4,18 @@ import styles, {SAVE_ACTION_BUTTON_DIMENSIONS} from "@app/screens/profile/styles
 import Picture from "@app/screens/profile/picture";
 import Name from "@app/screens/profile/name";
 import Association from "@app/screens/profile/association";
-import {NativeStackScreenProps} from "@react-navigation/native-stack";
-import {RestrictedStackParamList} from "@app/navigation/models";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "@app/global/userSlice";
 import {useFocusEffect, useTheme} from "@react-navigation/native";
-import {Button} from "@app/reusable";
+import {Button, Text} from "@app/reusable";
 import Entypo from "@expo/vector-icons/Entypo";
 import {CurrentUserProps} from "@app/global/models";
 import {useLazyGetUserDetailsQuery, useUpdateUserMutation} from "@app/api/apis/userApi";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
+import {NativeStackNavigationProp} from "@react-navigation/native-stack";
+import {ProfileStackParamList} from "@app/navigation/models";
 
-export default function Profile({ navigation }: NativeStackScreenProps<RestrictedStackParamList, 'Profile'>) {
+export default function Profile({ navigation }: { navigation: NativeStackNavigationProp<ProfileStackParamList, 'Profile'> }) {
 
     const [pictureUri, setNewPicture] = useState<string | undefined>(undefined);
     const [nameParts, setNameParts] = useState<string[]>([]);
@@ -144,7 +144,18 @@ export default function Profile({ navigation }: NativeStackScreenProps<Restricte
             <Association
                 defaultAssociation={association}
                 setNewDefaultAssociation={setNewAssociation}
-                navigation={navigation}
+            />
+
+            <Button
+              variant="gradient"
+              padding={{ v: 20, h: 5 }}
+              childComponent={() => (
+                <Text
+                  variant="normal"
+                  value="Changer votre mot de passe"
+                />
+              )}
+              onPress={() => navigation.navigate('ChangePassword')}
             />
 
             {isSaveEnabled && (

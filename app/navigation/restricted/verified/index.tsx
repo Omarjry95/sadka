@@ -1,11 +1,12 @@
 import * as React from "react";
 import {createDrawerNavigator} from "@react-navigation/drawer";
 import {RestrictedStackParamList} from "@app/navigation/models";
-import {Homepage, Profile} from "@app/screens";
+import {Homepage} from "@app/screens";
 import {useTheme} from "@react-navigation/native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { DrawerLabel } from "@app/reusable/complex";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import ProfileNavigator from "@app/navigation/restricted/verified/profile";
 
 const Drawer = createDrawerNavigator<RestrictedStackParamList>();
 
@@ -39,16 +40,17 @@ export default function Verified() {
 
             <Drawer.Screen
                 name="Profile"
-                component={Profile}
+                component={ProfileNavigator}
                 options={{
-                    drawerLabel: () => <DrawerLabel label="Profil" />,
-                    drawerIcon: () => (
-                        <FontAwesome5
-                            name="user-alt"
-                            color="black"
-                            size={22}
-                        />
-                    )
+                  headerShown: false,
+                  drawerLabel: () => <DrawerLabel label="Profil" />,
+                  drawerIcon: () => (
+                    <FontAwesome5
+                      name="user-alt"
+                      color="black"
+                      size={22}
+                    />
+                  )
                 }}
             />
         </Drawer.Navigator>

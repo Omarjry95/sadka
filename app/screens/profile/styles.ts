@@ -9,6 +9,7 @@ export const PICTURE_CONTAINER_PADDING: number = 5;
 export default StyleSheet.create({
     container: {
         paddingTop: 90,
+        paddingHorizontal: 15,
         position: "relative",
         flexDirection: "column",
         alignItems: "center",
@@ -55,7 +56,7 @@ export default StyleSheet.create({
     },
     selectContainer: {
         width: "100%",
-        paddingHorizontal: 15
+        marginBottom: 15
     },
     saveButtonContainer: {
         width: "100%",

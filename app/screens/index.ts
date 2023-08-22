@@ -1,3 +1,4 @@
+import ChangePassword from "./changePassword";
 import Homepage from "./homepage";
 import Lobby from "./lobby";
 import Profile from "./profile";
@@ -9,5 +10,6 @@ export {
     SignUp,
     Lobby,
     Homepage,
-    Profile
+    Profile,
+    ChangePassword
 }

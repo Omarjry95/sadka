@@ -9,15 +9,18 @@ import ItemImage from "@app/reusable/select/variants/modal/itemImage";
 import {DEFAULT_SELECT_ITEM_ICON_DIMENSION} from "@app/reusable/select/constants";
 import {useDispatch} from "react-redux";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
-import {useFocusEffect} from "@react-navigation/native";
+import {NavigationProp, useFocusEffect, useNavigation} from "@react-navigation/native";
 import {AssociationBaseProps} from "@app/screens/profile/models";
+import RestrictedStackParamList from "../../../navigation/models/RestrictedStackParamList";
 
-export default function Association({ defaultAssociation, setNewDefaultAssociation, navigation }: AssociationBaseProps) {
+export default function Association({ defaultAssociation, setNewDefaultAssociation }: AssociationBaseProps) {
 
     const [getAssociations, { data = [], isLoading: isGetAssociationsLoading,
         isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
 
     const dispatch = useDispatch();
+
+    const navigation = useNavigation<NavigationProp<RestrictedStackParamList>>();
 
     useFocusEffect(
         useCallback(() => { getAssociations(); }, []));

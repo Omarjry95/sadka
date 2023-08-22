@@ -5,7 +5,7 @@ type ListItemAdditionalProps = {
     selected?: boolean,
     disabled: boolean,
     setValue?: Function,
-    index: number
+    index?: number
 }
 
 export default ListItemAdditionalProps;
