@@ -65,5 +65,8 @@ export default StyleSheet.create({
         borderRadius: SAVE_ACTION_BUTTON_DIMENSIONS / 2,
         alignItems: "center",
         justifyContent: "center"
+    },
+    header: {
+        paddingTop: 45
     }
 });
