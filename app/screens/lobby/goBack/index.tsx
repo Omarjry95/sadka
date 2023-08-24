@@ -24,7 +24,6 @@ export default function GoBack() {
             .then(() => {
                 dispatch(removeUserBearerToken());
                 dispatch(removeUserDetails());
-                dispatch(hideLoading());
                 dispatch(disconnectUser());
             })
             .finally(() => dispatch(hideLoading()));

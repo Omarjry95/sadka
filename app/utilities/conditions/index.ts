@@ -1,0 +1,1 @@
+export const passwordConditions = (password: string): boolean => [password.length >= 6].every((c: boolean) => c);

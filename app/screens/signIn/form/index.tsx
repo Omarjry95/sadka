@@ -15,7 +15,7 @@ import { setUserBearerToken, middlewareSelector } from "@app/global/middlewareSl
 export default function Form() {
 
     const [email, setEmail] = useState<string>("omarjry9@gmail.com");
-    const [password, setPassword] = useState<string>("azerty");
+    const [password, setPassword] = useState<string>("loulou95");
     const [signedInUser, setSignedInUser] = useState<undefined | User>(undefined);
     const [errorMessage, setError] = useState<string | undefined>(undefined);
     const [hiddenPasswordChars, hidePasswordChars] = useState<boolean>(true);

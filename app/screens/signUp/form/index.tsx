@@ -15,6 +15,7 @@ import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {UnrestrictedStackParamList} from "@app/navigation/models";
 import {MutationError} from "@app/utilities/globalModels";
 import {useGetClientCredentialsBearerTokenMutation} from "@app/api/apis/oauth2Api";
+import {passwordConditions} from "@app/utilities/conditions";
 
 export default function Form({ navigation }: { navigation: NativeStackNavigationProp<UnrestrictedStackParamList, 'SignUp'> }) {
 
@@ -180,7 +181,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     }, [email]);
 
     const validatePasswordConditions: () => boolean = useCallback((): boolean => {
-        if (password.length < 6) {
+        if (!passwordConditions(password)) {
             setErrorMessage("Le mot de passe que vous avez saisi ne respecte pas les exigences demandées.")
 
             return false;
