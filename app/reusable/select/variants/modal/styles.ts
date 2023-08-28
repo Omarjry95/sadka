@@ -19,6 +19,12 @@ export default StyleSheet.create({
     },
     listItemWrapper: {
         width: "100%",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        justifyContent: "center"
+    },
+    listItemHorizontalContainer: {
+        width: "100%",
         flexDirection: "row",
         alignItems: "center"
     },

@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
-import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {RestrictedStackParamList} from "@app/navigation/models";
+import {WsAssociationBaseProps} from "@app/api/models";
 
 type AssociationBaseProps = {
+    list: WsAssociationBaseProps[],
     defaultAssociation: string | null,
     setNewDefaultAssociation: Dispatch<SetStateAction<string | null>>
 }

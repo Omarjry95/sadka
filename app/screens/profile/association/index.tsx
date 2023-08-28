@@ -1,46 +1,17 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useMemo} from 'react';
 import {Select} from "@app/reusable";
 import {View} from "react-native";
 import styles from '../styles';
-import {useLazyGetAssociationsQuery} from "@app/api/apis/userApi";
 import {WsAssociationBaseProps} from "@app/api/models";
 import {ListItemProps} from "@app/reusable/select/models";
 import ItemImage from "@app/reusable/select/variants/modal/itemImage";
 import {DEFAULT_SELECT_ITEM_ICON_DIMENSION} from "@app/reusable/select/constants";
-import {useDispatch} from "react-redux";
-import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
-import {NavigationProp, useFocusEffect, useNavigation} from "@react-navigation/native";
 import {AssociationBaseProps} from "@app/screens/profile/models";
-import RestrictedStackParamList from "../../../navigation/models/RestrictedStackParamList";
 
-export default function Association({ defaultAssociation, setNewDefaultAssociation }: AssociationBaseProps) {
+export default function Association({ list, defaultAssociation, setNewDefaultAssociation }: AssociationBaseProps) {
 
-    const [getAssociations, { data = [], isLoading: isGetAssociationsLoading,
-        isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
-
-    const dispatch = useDispatch();
-
-    const navigation = useNavigation<NavigationProp<RestrictedStackParamList>>();
-
-    useFocusEffect(
-        useCallback(() => { getAssociations(); }, []));
-
-    useEffect(() => {
-        dispatch(isGetAssociationsLoading ? showLoading() : hideLoading());
-
-        if (isGetAssociationsError) {
-            dispatch(showModal({
-                variant: "error",
-                mainAction: () => {
-                    dispatch(hideModal());
-                    navigation.navigate('Homepage');
-                }
-            }));
-        }
-    }, [isGetAssociationsLoading, isGetAssociationsError]);
-
-    const formattedAssociations = useMemo((): ListItemProps[] => {
-        let associations: ListItemProps[] = data.map(({ _id: id, label, photoUrl }: WsAssociationBaseProps) => ({
+    const formattedAssociations: ListItemProps[] = useMemo(() => {
+        let associations: ListItemProps[] = list.map(({ _id: id, label, photoUrl }: WsAssociationBaseProps) => ({
             id,
             label,
             leftComponent: () => (
@@ -58,7 +29,7 @@ export default function Association({ defaultAssociation, setNewDefaultAssociati
         });
 
         return associations;
-    }, [data]);
+    }, [list]);
 
     return (
         <View style={styles.selectContainer}>

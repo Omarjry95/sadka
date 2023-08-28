@@ -16,6 +16,7 @@ export default function List({ list, selectedId, paddings, setValue }: ListProps
                 index={index}
                 label={item.label}
                 leftComponent={item.leftComponent}
+                bottomComponent={item.bottomComponent}
                 selected={isSelected}
                 disabled={isSelected}
                 paddings={paddings}

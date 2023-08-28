@@ -13,7 +13,8 @@ const userApiProtectedByClient = clientProtectedApi.injectEndpoints({
                 body
             })
         })
-    })
+    }),
+    overrideExisting: true
 });
 
 const userApiProtectedByUser = userProtectedApi.injectEndpoints({
@@ -63,7 +64,8 @@ const userApiProtectedByUser = userProtectedApi.injectEndpoints({
                 body
             })
         })
-    })
+    }),
+    overrideExisting: true
 });
 
 export const { useCreateUserMutation } = userApiProtectedByClient;

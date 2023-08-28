@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import {persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
+import {persistReducer, persistStore} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { userProtectedApi, clientProtectedApi, middlewareApi } from "@app/api";
 import reducers from "@app/redux/reducers";
@@ -22,9 +22,7 @@ const persistReducerConfig = {
 const store = configureStore({
     reducer: persistReducer(persistReducerConfig, reducers),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-        serializableCheck: {
-            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        }
+        serializableCheck: false
     })
         .concat(userProtectedApi.middleware)
         .concat(clientProtectedApi.middleware)

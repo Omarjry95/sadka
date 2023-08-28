@@ -3,5 +3,6 @@ export const AUTHORIZATION_HEADER_PREFIX: string = "Bearer ";
 
 export const apiPrefixes = {
     user: '/users',
-    role: '/roles'
+    role: '/roles',
+    rounding: '/roundings'
 }

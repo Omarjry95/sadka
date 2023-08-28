@@ -8,7 +8,7 @@ import {useDispatch} from "react-redux";
 import {hideModal} from "@app/global/globalSlice";
 import {useTheme} from "@react-navigation/native";
 
-export default function ListItem({ id, index, label, leftComponent: LeftComponent, selected, disabled, paddings, setValue }: ListItemProps & ListItemAdditionalProps) {
+export default function ListItem({ id, index, label, leftComponent: LeftComponent, bottomComponent: BottomComponent, selected, disabled, paddings, setValue }: ListItemProps & ListItemAdditionalProps) {
 
     const dispatch = useDispatch();
 
@@ -39,13 +39,21 @@ export default function ListItem({ id, index, label, leftComponent: LeftComponen
                     ...styles.listItemWrapper,
                     ...paddings
                 }}>
-                    {LeftComponent && <LeftComponent />}
+                  <View style={styles.listItemHorizontalContainer}>
+                    {LeftComponent && (
+                      <LeftComponent />
+                    )}
 
                     <Text
-                        italic={id === null}
-                        value={label}
-                        color="black"
+                      italic={id === null}
+                      value={label}
+                      color="black"
                     />
+                  </View>
+
+                  {BottomComponent && (
+                    <BottomComponent />
+                  )}
                 </View>
             )}
             onPress={onSetValue}

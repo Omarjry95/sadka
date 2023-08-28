@@ -43,6 +43,7 @@ export default function Modal({ list, value, label, width, paddings, margins, bo
                                 id={selectedItem.id}
                                 label={selectedItem.label}
                                 leftComponent={selectedItem.leftComponent}
+                                bottomComponent={selectedItem.bottomComponent}
                                 paddings={paddings}
                             />
                         )}

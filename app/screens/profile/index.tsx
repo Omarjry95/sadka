@@ -6,22 +6,32 @@ import Name from "@app/screens/profile/name";
 import Association from "@app/screens/profile/association";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "@app/global/userSlice";
-import {useFocusEffect, useTheme} from "@react-navigation/native";
+import {NavigationProp, useFocusEffect, useNavigation, useTheme} from "@react-navigation/native";
 import {Button, Text} from "@app/reusable";
 import Entypo from "@expo/vector-icons/Entypo";
 import {CurrentUserProps} from "@app/global/models";
-import {useLazyGetUserDetailsQuery, useUpdateUserMutation} from "@app/api/apis/userApi";
+import {useLazyGetAssociationsQuery, useLazyGetUserDetailsQuery, useUpdateUserMutation} from "@app/api/apis/userApi";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {ProfileStackParamList} from "@app/navigation/models";
+import Rounding from "@app/screens/profile/rounding";
+import {useLazyGetRoundingsQuery} from "@app/api/apis/roundingApi";
+import RestrictedStackParamList from "../../navigation/models/RestrictedStackParamList";
 
 export default function Profile({ navigation }: { navigation: NativeStackNavigationProp<ProfileStackParamList, 'Profile'> }) {
 
     const [pictureUri, setNewPicture] = useState<string | undefined>(undefined);
     const [nameParts, setNameParts] = useState<string[]>([]);
+    const [rounding, setRounding] = useState<string | null>(null);
     const [association, setNewAssociation] = useState<string | null>(null);
 
     const { currentUser } = useSelector(userSelector);
+
+    const [getRoundings, { data: wsRoundingsData = [], isLoading: isGetRoundingsLoading,
+        isError: isGetRoundingsError }] = useLazyGetRoundingsQuery();
+
+    const [getAssociations, { data: wsAssociationsData = [], isLoading: isGetAssociationsLoading,
+        isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
 
     const [updateUser, { isSuccess: isUpdateUserSuccess, isError: isUpdateUserError }] = useUpdateUserMutation();
 
@@ -30,7 +40,43 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
 
     const dispatch = useDispatch();
 
+    const parentNavigation = useNavigation<NavigationProp<RestrictedStackParamList>>();
+
     const { colors } = useTheme();
+
+    useFocusEffect(
+      useCallback(() => {
+          getAssociations()
+            .then(() => getRoundings())
+            .then(() => {
+                if (currentUser) {
+                    const { defaultAssociation, photo } = currentUser;
+
+                    setNameParts(partitionName(currentUser));
+
+                    setNewAssociation(defaultAssociation ?? null);
+
+                    setNewPicture(photo);
+                }
+            });
+      }, [currentUser])
+    );
+
+    useEffect(() => {
+        dispatch(isGetAssociationsLoading || isGetRoundingsLoading ? showLoading() : hideLoading());
+
+        if (isGetAssociationsError || isGetRoundingsError) {
+            dispatch(hideModal());
+
+            dispatch(showModal({
+                variant: "error",
+                mainAction: () => {
+                    dispatch(hideModal());
+                    parentNavigation.navigate('Homepage');
+                }
+            }));
+        }
+    }, [isGetAssociationsLoading, isGetRoundingsLoading, isGetAssociationsError, isGetRoundingsError]);
 
     useEffect(() => {
         if (isUpdateUserSuccess && currentUser) { getUserDetails(currentUser.email); }
@@ -59,20 +105,6 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
 
         return parts;
     }, [currentUser]);
-
-    useFocusEffect(
-        useCallback(() => {
-            if (currentUser) {
-                const { defaultAssociation, photo } = currentUser;
-
-                setNameParts(partitionName(currentUser));
-
-                setNewAssociation(defaultAssociation ?? null);
-
-                setNewPicture(photo);
-            }
-        }, [currentUser])
-    );
 
     const isSaveEnabled: boolean = useMemo(() => {
         let isEnabled: boolean = false;
@@ -141,9 +173,16 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
                 setNameParts={setNameParts}
             />
 
+            <Rounding
+              list={wsRoundingsData}
+              rounding={rounding}
+              setRounding={setRounding}
+            />
+
             <Association
-                defaultAssociation={association}
-                setNewDefaultAssociation={setNewAssociation}
+              list={wsAssociationsData}
+              defaultAssociation={association}
+              setNewDefaultAssociation={setNewAssociation}
             />
 
             <Button
