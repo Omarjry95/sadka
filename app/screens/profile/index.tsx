@@ -33,9 +33,10 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
     const [getAssociations, { data: wsAssociationsData = [], isLoading: isGetAssociationsLoading,
         isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
 
-    const [updateUser, { isSuccess: isUpdateUserSuccess, isError: isUpdateUserError }] = useUpdateUserMutation();
+    const [updateUser, { isLoading: isUpdateUserLoading, isSuccess: isUpdateUserSuccess,
+        isError: isUpdateUserError }] = useUpdateUserMutation();
 
-    const [getUserDetails, { isSuccess: isGetUserDetailsSuccess,
+    const [getUserDetails, { isLoading: isGetUserDetailsLoading, isSuccess: isGetUserDetailsSuccess,
         isError: isGetUserDetailsError }] = useLazyGetUserDetailsQuery();
 
     const dispatch = useDispatch();
@@ -50,9 +51,11 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
             .then(() => getRoundings())
             .then(() => {
                 if (currentUser) {
-                    const { defaultAssociation, photo } = currentUser;
+                    const { defaultRounding, defaultAssociation, photo } = currentUser;
 
                     setNameParts(partitionName(currentUser));
+
+                    setRounding(defaultRounding ?? null);
 
                     setNewAssociation(defaultAssociation ?? null);
 
@@ -79,9 +82,9 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
     }, [isGetAssociationsLoading, isGetRoundingsLoading, isGetAssociationsError, isGetRoundingsError]);
 
     useEffect(() => {
-        if (isUpdateUserSuccess && currentUser) { getUserDetails(currentUser.email); }
+        dispatch(isUpdateUserLoading || isGetUserDetailsLoading ? showLoading() : hideLoading());
 
-        if (isUpdateUserError) {
+        if (isUpdateUserError || isGetUserDetailsError) {
             dispatch(hideLoading());
 
             dispatch(showModal({
@@ -89,11 +92,7 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
                 mainAction: () => dispatch(hideModal())
             }));
         }
-    }, [isUpdateUserSuccess, isUpdateUserError]);
-
-    useEffect(() => {
-        if (isGetUserDetailsSuccess || isGetUserDetailsError) { dispatch(hideLoading()); }
-    }, [isGetUserDetailsSuccess, isGetUserDetailsError]);
+    }, [isUpdateUserLoading, isGetUserDetailsLoading, isUpdateUserError, isGetUserDetailsError]);
 
     const partitionName = useCallback((user: CurrentUserProps): string[] => {
         let parts: string[] = [];
@@ -110,7 +109,7 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
         let isEnabled: boolean = false;
 
         if (currentUser) {
-            const { photo, defaultAssociation } = currentUser;
+            const { photo, defaultAssociation, defaultRounding } = currentUser;
 
             const isPictureChanged: boolean = pictureUri !== photo;
 
@@ -119,11 +118,13 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
 
             const isAssociationChanged: boolean = (association ?? undefined) !== defaultAssociation;
 
-            isEnabled = isPictureChanged || isNameChanged || isAssociationChanged;
+            const isRoundingChanged: boolean = (rounding ?? undefined) !== defaultRounding;
+
+            isEnabled = isPictureChanged || isNameChanged || isRoundingChanged || isAssociationChanged;
         }
 
         return isEnabled;
-    },[currentUser, pictureUri, nameParts, association]);
+    },[currentUser, pictureUri, nameParts, rounding, association]);
 
     const handleUpdateUser = () => {
         if (currentUser) {
@@ -139,7 +140,13 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
                 wsUpdateUserBody.append('charityName', nameParts[0]);
             }
 
-            if (association) { wsUpdateUserBody.append('defaultAssociation', association); }
+            if (rounding) {
+                wsUpdateUserBody.append('defaultRounding', rounding);
+            }
+
+            if (association) {
+                wsUpdateUserBody.append('defaultAssociation', association);
+            }
 
             if (pictureUri) {
                 const splittedPictureName: string[] = pictureUri.split(".");
@@ -155,9 +162,8 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
 
             wsUpdateUserBody.append('role', role.toString());
 
-            dispatch(showLoading());
-
-            updateUser(wsUpdateUserBody);
+            updateUser(wsUpdateUserBody)
+              .then(() => getUserDetails(currentUser.email));
         }
     }
 

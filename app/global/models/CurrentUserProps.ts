@@ -6,6 +6,7 @@ type CurrentUserProps = {
     charityName?: string,
     photo?: string,
     role: number,
+    defaultRounding?: string,
     defaultAssociation?: string
 }
 
