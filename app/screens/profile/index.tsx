@@ -75,7 +75,7 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
                 variant: "error",
                 mainAction: () => {
                     dispatch(hideModal());
-                    parentNavigation.navigate('Homepage');
+                    parentNavigation.navigate('Main');
                 }
             }));
         }

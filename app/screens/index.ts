@@ -4,6 +4,7 @@ import Lobby from "./lobby";
 import Profile from "./profile";
 import SignIn from "./signIn";
 import SignUp from "./signUp";
+import Spontaneous from "./spontaneous";
 
 export {
     SignIn,
@@ -11,5 +12,6 @@ export {
     Lobby,
     Homepage,
     Profile,
-    ChangePassword
+    ChangePassword,
+    Spontaneous
 }

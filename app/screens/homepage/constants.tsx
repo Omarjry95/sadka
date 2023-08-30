@@ -11,7 +11,8 @@ export const homepageActions: ActionBaseProps[] = [
         color="white"
         size={24}
       />
-    )
+    ),
+    screen: "Spontaneous"
   },
   {
     label: "L'arrondi solidaire",
@@ -21,8 +22,11 @@ export const homepageActions: ActionBaseProps[] = [
         color="white"
         size={24}
       />
-    )
+    ),
+    screen: "Spontaneous"
   }
 ];
 
 export const homepageCoverUrl: string = 'homepage.jpg';
+
+export const HEADER_RIGHT_PIN_DIMENSIONS: number = 45;

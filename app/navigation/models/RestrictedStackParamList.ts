@@ -1,5 +1,5 @@
 type RestrictedStackParamList = {
-    Homepage: undefined,
+    Main: undefined,
     Profile: undefined
 }
 
