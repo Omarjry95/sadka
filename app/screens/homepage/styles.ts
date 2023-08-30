@@ -11,21 +11,29 @@ export default StyleSheet.create({
   },
   coverSection: {
     width: "100%",
-    height: '40%',
-    marginBottom: 30
+    marginBottom: 30,
+    flex: 1
   },
   mainSection: {
     width: "100%",
     backgroundColor: "black",
-    position: "relative",
-    flex: 1
+    position: "relative"
   },
   mainContent: {
     width: "100%",
     paddingHorizontal: 15,
+    paddingBottom: 10,
     flexDirection: "column",
-    alignItems: "center",
-    flex: 1
+    alignItems: "center"
+  },
+  actionsContainer: {
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+  actionButtonContentContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start"
   },
   curvedLine: {
     width: "20%",

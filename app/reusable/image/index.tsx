@@ -4,7 +4,7 @@ import {Water} from "@app/reusable/image/variants";
 
 export default function Image({ variant, ...props }: BaseProps) {
 
-    const { source } = props;
+    const { source, resizeMode } = props;
 
     const ImageVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -16,7 +16,8 @@ export default function Image({ variant, ...props }: BaseProps) {
 
     const variantProps: BaseStrictProps = useMemo(() => ({
         ...props,
-        source: { uri: source }
+        source: { uri: source },
+        resizeMode: resizeMode ?? "cover"
     }), [props]);
 
     return (
