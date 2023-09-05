@@ -2,7 +2,7 @@ import React from "react";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
 import {Homepage, Spontaneous} from "@app/screens";
-import HeaderRight from "@app/screens/homepage/headerRight";
+import Header from "@app/screens/homepage/header";
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
@@ -18,8 +18,8 @@ const MainNavigator = () => (
       name="Homepage"
       component={Homepage}
       options={({ navigation }) => ({
-        headerRight: () => (
-          <HeaderRight navigation={navigation} />
+        header: () => (
+          <Header navigation={navigation} />
         )
       })}
     />

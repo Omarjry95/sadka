@@ -11,6 +11,7 @@ type BaseStrictProps = {
     transform: 'none' | 'capitalize' | 'uppercase' | 'lowercase',
     position: 'relative' | 'absolute',
     positionCoords: PositionCoords,
+    bold?: boolean,
     italic?: boolean
 }
 

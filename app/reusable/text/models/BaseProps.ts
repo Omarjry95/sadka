@@ -13,6 +13,7 @@ type BaseProps = {
     transform?: 'none' | 'capitalize' | 'uppercase' | 'lowercase',
     position?: 'absolute' | 'relative',
     positioning?: Positioning,
+    bold?: boolean,
     italic?: boolean
 }
 

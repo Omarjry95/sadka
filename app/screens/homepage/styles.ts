@@ -47,15 +47,19 @@ export default StyleSheet.create({
     transform: [{ scaleX: 5 }, { scaleY: 1 }]
   },
   pinContainer: {
-    paddingTop: 30,
-    paddingRight: 20
+    width: "100%",
+    paddingTop: 45,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
   },
   pinWrapper: {
     paddingVertical: 5,
     paddingRight: 5,
     paddingLeft: 10,
     backgroundColor: "transparent",
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: HEADER_RIGHT_PIN_DIMENSIONS / 2,
     flexDirection: "row",
     alignItems: "center"

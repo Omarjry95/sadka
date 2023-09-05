@@ -7,6 +7,7 @@ import { DrawerLabel } from "@app/reusable/complex";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import ProfileNavigator from "@app/navigation/restricted/verified/profile";
 import MainNavigator from "@app/navigation/restricted/verified/main";
+import HeaderRight from "@app/screens/homepage/header";
 
 const Drawer = createDrawerNavigator<RestrictedStackParamList>();
 
