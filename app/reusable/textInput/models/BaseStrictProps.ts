@@ -5,6 +5,7 @@ type BaseStrictProps = {
     label: string,
     hideChars: boolean,
     capitalizeChars: boolean,
+    numericKeyboard: boolean,
     paddings: Padding,
     margins: Margin,
     radiuses: BorderRadius,

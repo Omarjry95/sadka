@@ -6,9 +6,9 @@ import {getStyleBorderRadius} from "@app/utilities/border";
 
 export default function TextInput({ variant, ...props }: BaseProps) {
 
-    const { label, hideChars, capitalizeChars, padding,
-        margin, borderRadius, size, align,
-        rightComponent, helpComponent } = props;
+    const { label, hideChars, capitalizeChars, numericKeyboard,
+        padding, margin, borderRadius, size,
+        align, rightComponent, helpComponent } = props;
 
     const TextInputVariant: (_props: BaseStrictProps) => JSX.Element = useMemo(() => {
         switch (variant) {
@@ -26,6 +26,7 @@ export default function TextInput({ variant, ...props }: BaseProps) {
             label: label ?? "",
             hideChars: hideChars ?? false,
             capitalizeChars: capitalizeChars ?? false,
+            numericKeyboard: numericKeyboard ?? false,
             paddings: getStylePadding(padding),
             margins: getStyleMargin(margin),
             radiuses: getStyleBorderRadius(borderRadius),

@@ -6,7 +6,7 @@ import {BaseStrictProps} from "@app/reusable/textInput/models";
 import {useTheme} from "@react-navigation/native";
 import { Info } from "@app/reusable/complex";
 
-export default function LabelInside({ value, label, hideChars, paddings, margins, size, RightComponent, HelpComponent,
+export default function LabelInside({ value, label, hideChars, numericKeyboard, paddings, margins, size, RightComponent, HelpComponent,
                                         onChange }: BaseStrictProps) {
 
     const [isFocused, setFocus] = useState<boolean>(false);
@@ -35,15 +35,16 @@ export default function LabelInside({ value, label, hideChars, paddings, margins
                 </View>
 
                 <TextInput
-                    secureTextEntry={hideChars}
-                    style={{...styles.textInput,
-                        fontSize: size
-                    }}
-                    selectionColor={colors.label}
-                    value={value}
-                    onChangeText={(text) => onChange(text)}
-                    onFocus={() => setFocus(true)}
-                    onBlur={() => setFocus(false)}
+                  style={{...styles.textInput,
+                    fontSize: size
+                  }}
+                  secureTextEntry={hideChars}
+                  keyboardType={numericKeyboard ? "numeric" : "default"}
+                  selectionColor={colors.label}
+                  value={value}
+                  onChangeText={(text) => onChange(text)}
+                  onFocus={() => setFocus(true)}
+                  onBlur={() => setFocus(false)}
                 />
             </View>
 

@@ -148,21 +148,25 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
                 wsUpdateUserBody.append('defaultAssociation', association);
             }
 
-            if (pictureUri) {
-                const splittedPictureName: string[] = pictureUri.split(".");
+            if (pictureUri !== photo) {
+                wsUpdateUserBody.append('isPhotoChanged', '1');
 
-                const pictureExtension: string = splittedPictureName[splittedPictureName.length - 1];
+                if (pictureUri) {
+                    const splittedPictureName: string[] = pictureUri.split(".");
 
-                wsUpdateUserBody.append('photo', { uri: pictureUri, name: `userProfilePhoto.${pictureExtension}`, type: `image/${pictureExtension}` });
-            } else {
-                if (pictureUri !== photo) {
-                    wsUpdateUserBody.append('isPhotoChanged', '1');
+                    const pictureExtension: string = splittedPictureName[splittedPictureName.length - 1];
+
+                    wsUpdateUserBody.append('photo', { uri: pictureUri, name: `userProfilePhoto.${pictureExtension}`, type: `image/${pictureExtension}` });
                 }
             }
 
             wsUpdateUserBody.append('role', role.toString());
 
-            updateUser(wsUpdateUserBody)
+            console.log(wsUpdateUserBody);
+
+            updateUser(wsUpdateUserBody).unwrap()
+              .then((response: any) => console.log(response))
+              .catch((error: any) => console.log(error))
               .then(() => getUserDetails(currentUser.email));
         }
     }
