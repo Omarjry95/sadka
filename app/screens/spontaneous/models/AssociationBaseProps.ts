@@ -1,10 +1,10 @@
-import {NativeStackNavigationProp} from "@react-navigation/native-stack";
-import {MainStackParamList} from "@app/navigation/models";
 import {Dispatch, SetStateAction} from "react";
+import {WsAssociationBaseProps} from "@app/api/models";
 
 type AssociationBaseProps = {
-  navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'>,
+  list: WsAssociationBaseProps[],
   association: string | null,
+  defaultAssociation: string | null,
   setAssociation: Dispatch<SetStateAction<string | null>>
 }
 
