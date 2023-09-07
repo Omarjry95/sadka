@@ -6,7 +6,7 @@ import {getStyleBorderRadius} from "@app/utilities/border";
 
 export default function TextInput({ variant, ...props }: BaseProps) {
 
-    const { label, hideChars, capitalizeChars, numericKeyboard,
+    const { label, hideChars, multiline, defaultNumberOfLines, capitalizeChars, numericKeyboard,
         padding, margin, borderRadius, size,
         align, rightComponent, helpComponent } = props;
 
@@ -24,6 +24,8 @@ export default function TextInput({ variant, ...props }: BaseProps) {
         return {
             ...props,
             label: label ?? "",
+            multiline: multiline ?? false,
+            numberOfLines: defaultNumberOfLines,
             hideChars: hideChars ?? false,
             capitalizeChars: capitalizeChars ?? false,
             numericKeyboard: numericKeyboard ?? false,

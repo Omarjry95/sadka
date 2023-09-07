@@ -1,19 +1,19 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from "react-native";
 import {TextInput} from "@app/reusable";
-import styles from '../styles';
+import styles from '../../styles';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
-import Association from "@app/screens/spontaneous/form/association";
+import Association from "@app/screens/spontaneous/main/form/association";
 import {useFocusEffect} from "@react-navigation/native";
 import {useLazyGetAssociationsQuery} from "@app/api/apis/userApi";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "@app/global/userSlice";
-import Payment from "@app/screens/spontaneous/form/payment";
 import {useLazyGetStripePublishableKeyQuery} from "@app/api/apis/paymentApi";
 import {initStripe} from "@stripe/stripe-react-native";
 import {WsStripePublishableKeyBaseProps} from "@app/api/models";
+import PaymentForm from "@app/reusable/complex/paymentForm";
 
 export default function Form({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) {
 
@@ -21,6 +21,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
 
   const [amount, setAmount] = useState<string>("");
   const [association, setAssociation] = useState<string | null>(null);
+  const [note, setNote] = useState<string>("");
 
   const [getAssociations, { data: wsAssociationsData = [],
     isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
@@ -65,7 +66,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         numericKeyboard
         variant="labelInside"
         padding={{ a: 10 }}
-        margin={{ b: 15 }}
+        margin={{ b: 25 }}
         label="Montant"
         value={amount}
         onChange={setAmount}
@@ -78,7 +79,23 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         setAssociation={setAssociation}
       />
 
-      <Payment />
+      <PaymentForm
+        label="Données de paiement"
+        margin={{ b: 25 }}
+        borderWidth={1}
+        borderRadius={10}
+      />
+
+      <TextInput
+        multiline
+        variant="labelInside"
+        padding={{ a: 10 }}
+        margin={{ b: 25 }}
+        label="Note"
+        defaultNumberOfLines={3}
+        value={note}
+        onChange={setNote}
+      />
     </View>
   )
 }

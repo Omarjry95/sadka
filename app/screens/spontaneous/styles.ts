@@ -2,8 +2,14 @@ import {StyleSheet} from "react-native";
 
 export default StyleSheet.create({
   container: {
+    width: "100%"
+  },
+  header: {
     width: "100%",
-    paddingTop: 90,
+    height: 90
+  },
+  scrollContainer: {
+    width: "100%",
     paddingHorizontal: 20,
     flexDirection: "column",
     alignItems: "center"

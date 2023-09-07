@@ -1,25 +1,16 @@
 import React from 'react';
-import {Text} from "@app/reusable";
-import {ScrollView} from "react-native";
+import {View} from "react-native";
 import styles from './styles';
-import Form from "@app/screens/spontaneous/form";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
+import Main from "@app/screens/spontaneous/main";
 
-export default function Spontaneous({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) {
+const Spontaneous = ({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) => (
+  <View style={styles.container}>
+    <View style={styles.header} />
 
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text
-        variant="title"
-        margin={{ b: 30 }}
-        color="black"
-        size={24}
-        align="center"
-        value="Faites votre don ici"
-      />
+    <Main navigation={navigation} />
+  </View>
+)
 
-      <Form navigation={navigation} />
-    </ScrollView>
-  )
-}
+export default Spontaneous;

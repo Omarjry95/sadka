@@ -12,8 +12,7 @@ export default StyleSheet.create({
     textInputWrapper: {
         flex: 1,
         flexDirection: "column",
-        alignItems: "flex-start",
-        justifyContent: "center"
+        alignItems: "flex-start"
     },
     labelWrapper: {
         flexDirection: "row",

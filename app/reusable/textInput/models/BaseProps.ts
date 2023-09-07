@@ -5,6 +5,8 @@ type BaseProps = {
     variant?: TextInputVariants,
     value: string,
     label?: string,
+    multiline?: boolean,
+    defaultNumberOfLines?: number,
     hideChars?: boolean,
     capitalizeChars?: boolean,
     numericKeyboard?: boolean,

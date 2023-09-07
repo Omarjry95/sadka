@@ -1,17 +1,31 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {TextInput, View} from "react-native";
 import Text from '@app/reusable/text';
 import styles from "@app/reusable/textInput/variants/labelInside/styles";
-import {BaseStrictProps} from "@app/reusable/textInput/models";
+import {BaseStrictProps, TextAreaProps} from "@app/reusable/textInput/models";
 import {useTheme} from "@react-navigation/native";
 import { Info } from "@app/reusable/complex";
 
-export default function LabelInside({ value, label, hideChars, numericKeyboard, paddings, margins, size, RightComponent, HelpComponent,
+export default function LabelInside({ value, label, multiline, numberOfLines, hideChars, numericKeyboard, paddings, margins, size, RightComponent, HelpComponent,
                                         onChange }: BaseStrictProps) {
 
     const [isFocused, setFocus] = useState<boolean>(false);
 
     const { colors } = useTheme();
+
+    const textAreaProps: TextAreaProps = useMemo(() => {
+      let props: TextAreaProps = {};
+
+      if (multiline && numberOfLines && numberOfLines > 0) {
+        props = {
+          multiline,
+          numberOfLines,
+          textAlignVertical: "top"
+        }
+      }
+
+      return props;
+    }, [multiline, numberOfLines])
 
     return (
         <View style={{...styles.container,
@@ -35,10 +49,12 @@ export default function LabelInside({ value, label, hideChars, numericKeyboard, 
                 </View>
 
                 <TextInput
+                  {...textAreaProps}
                   style={{...styles.textInput,
                     fontSize: size
                   }}
                   secureTextEntry={hideChars}
+                  textAlignVertical="top"
                   keyboardType={numericKeyboard ? "numeric" : "default"}
                   selectionColor={colors.label}
                   value={value}

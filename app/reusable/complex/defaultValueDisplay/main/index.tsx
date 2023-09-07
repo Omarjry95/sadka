@@ -2,8 +2,9 @@ import React from 'react';
 import styles from "@app/reusable/complex/defaultValueDisplay/styles";
 import {View} from "react-native";
 import {MainBaseProps} from "@app/reusable/complex/defaultValueDisplay/models";
+import {getStyleBorderRadius} from "@app/utilities/border";
 
-export default function Main({ disabled, mainComponent: MainComponent }: MainBaseProps) {
+export default function Main({ disabled, borderRadius, mainComponent: MainComponent }: MainBaseProps) {
 
   return (
     <View style={styles.main}>
@@ -12,7 +13,11 @@ export default function Main({ disabled, mainComponent: MainComponent }: MainBas
       </View>
 
       {disabled && (
-        <View style={styles.cover} />
+        <View style={{
+            ...styles.cover,
+            ...getStyleBorderRadius(borderRadius)
+          }}
+        />
       )}
     </View>
   )

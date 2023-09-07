@@ -3,6 +3,8 @@ import {BorderRadius, Margin, Padding} from "@app/utilities/globalModels";
 type BaseStrictProps = {
     value: string,
     label: string,
+    multiline: boolean,
+    numberOfLines?: number,
     hideChars: boolean,
     capitalizeChars: boolean,
     numericKeyboard: boolean,

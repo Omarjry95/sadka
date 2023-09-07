@@ -5,7 +5,7 @@ import {ListItemProps} from "@app/reusable/select/models";
 import {WsAssociationBaseProps} from "@app/api/models";
 import ItemImage from "@app/reusable/select/variants/modal/itemImage";
 import {DEFAULT_SELECT_ITEM_ICON_DIMENSION} from "@app/reusable/select/constants";
-import AssociationBaseProps from "../../models/AssociationBaseProps";
+import AssociationBaseProps from "../../../models/AssociationBaseProps";
 
 export default function Association({ list, association, defaultAssociation, setAssociation }: AssociationBaseProps) {
 
@@ -33,6 +33,8 @@ export default function Association({ list, association, defaultAssociation, set
   return (
     <DefaultValueDisplay
       autoDisabled={!!defaultAssociation}
+      margin={{ b: 25 }}
+      borderRadius={{ a: 10 }}
       mainComponent={() => (
         <Select
           list={formattedAssociations}
