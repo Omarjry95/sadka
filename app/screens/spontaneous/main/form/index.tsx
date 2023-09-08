@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {View} from "react-native";
-import {TextInput} from "@app/reusable";
+import {Button, Text, TextInput} from "@app/reusable";
 import styles from '../../styles';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
@@ -21,6 +21,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
 
   const [amount, setAmount] = useState<string>("");
   const [association, setAssociation] = useState<string | null>(null);
+  const [isPaymentDataValid, setIsPaymentDataValid] = useState<boolean>(false);
   const [note, setNote] = useState<string>("");
 
   const [getAssociations, { data: wsAssociationsData = [],
@@ -60,6 +61,9 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     }
   }, [isGetAssociationsError, isGetStripePublishableKeyError]);
 
+  const isDisabled: boolean = useMemo(() => isNaN(Number(amount)) || Number(amount) === 0 || association === null || !isPaymentDataValid,
+    [amount, association, isPaymentDataValid]);
+
   return (
     <View style={styles.form}>
       <TextInput
@@ -84,6 +88,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         margin={{ b: 25 }}
         borderWidth={1}
         borderRadius={10}
+        setIsPaymentDataValid={setIsPaymentDataValid}
       />
 
       <TextInput
@@ -95,6 +100,19 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         defaultNumberOfLines={3}
         value={note}
         onChange={setNote}
+      />
+
+      <Button
+        disabled={isDisabled}
+        variant="gradient"
+        padding={{ v: 20, h: 5 }}
+        margin={{ b: 10 }}
+        childComponent={() => (
+          <Text
+            variant="normal"
+            value="Confirmer"
+          />
+        )}
       />
     </View>
   )

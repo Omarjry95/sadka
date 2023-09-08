@@ -5,20 +5,32 @@ import Form from "@app/screens/spontaneous/main/form";
 import {ScrollView} from "react-native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
+import {useTheme} from "@react-navigation/native";
 
-const Main = ({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) => (
-  <ScrollView contentContainerStyle={styles.scrollContainer}>
-    <Text
-      variant="title"
-      margin={{ b: 30 }}
-      color="black"
-      size={24}
-      align="center"
-      value="Faites votre don ici"
-    />
+export default function Main({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) {
 
-    <Form navigation={navigation} />
-  </ScrollView>
-)
+  const { colors } = useTheme();
 
-export default Main;
+  return (
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <Text
+        variant="title"
+        margin={{ b: 10 }}
+        color="black"
+        size={24}
+        align="center"
+        value="Faites votre don ici"
+      />
+
+      <Text
+        variant="normal"
+        value="Des simples saisies vous mènent à effectuer votre don rapidement."
+        margin={{ b: 20 }}
+        color={colors.label}
+        align="center"
+      />
+
+      <Form navigation={navigation} />
+    </ScrollView>
+  )
+}
