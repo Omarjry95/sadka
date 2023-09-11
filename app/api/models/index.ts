@@ -1,5 +1,7 @@
 import SuccessResponse from "./SuccessResponse";
 import WsAssociationBaseProps from "./WsAssociationBaseProps";
+import WsCreatePaymentRequestBaseProps from "./WsCreatePaymentRequestBaseProps";
+import WsCreatePaymentResponseBaseProps from "./WsCreatePaymentResponseBaseProps";
 import WsCreateUserBaseProps from "./WsCreateUserBaseProps";
 import WsMiddlewareResponseBaseProps from "./WsMiddlewareResponseBaseProps";
 import WsRoleBaseProps from "./WsRoleBaseProps";
@@ -16,6 +18,8 @@ export type {
   WsAssociationBaseProps,
   WsRoleBaseProps,
   WsRoundingBaseProps,
+  WsCreatePaymentRequestBaseProps,
+  WsCreatePaymentResponseBaseProps,
   WsStripePublishableKeyBaseProps,
   WsMiddlewareResponseBaseProps
 }

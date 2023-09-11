@@ -10,8 +10,14 @@ import {useLazyGetAssociationsQuery} from "@app/api/apis/userApi";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "@app/global/userSlice";
-import {useLazyGetStripePublishableKeyQuery} from "@app/api/apis/paymentApi";
-import {initStripe} from "@stripe/stripe-react-native";
+import {useCreatePaymentMutation, useLazyGetStripePublishableKeyQuery} from "@app/api/apis/paymentApi";
+import {
+  initStripe,
+  BillingDetails,
+  createPaymentMethod,
+  handleNextAction,
+  HandleNextActionResult, PaymentIntent
+} from "@stripe/stripe-react-native";
 import {WsStripePublishableKeyBaseProps} from "@app/api/models";
 import PaymentForm from "@app/reusable/complex/paymentForm";
 
@@ -28,6 +34,9 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
 
   const [getStripePublishableKey, { isError: isGetStripePublishableKeyError }] = useLazyGetStripePublishableKeyQuery();
+
+  const [createPayment, { data: wsCreatePaymentData,
+    isError: isCreatePaymentError }] = useCreatePaymentMutation();
 
   const dispatch = useDispatch();
 
@@ -49,20 +58,92 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
 
   useEffect(() => {
     if (isGetAssociationsError || isGetStripePublishableKeyError) {
-      dispatch(hideLoading());
+      displayError('Homepage');
+    }
 
-      dispatch(showModal({
-        variant: "error",
-        mainAction: () => {
+    if (isCreatePaymentError) {
+      displayError();
+    }
+  }, [isGetAssociationsError, isGetStripePublishableKeyError, isCreatePaymentError]);
+
+  useEffect(() => {
+    if (wsCreatePaymentData) {
+      const { success, requiresAction, clientSecret } = wsCreatePaymentData;
+
+      if (success) {
+        dispatch(hideLoading());
+
+        dispatch(showModal({
+          variant: "success",
+          mainAction: () => { },
+          stateMessage: "Votre don a été fait avec succès. Merci pour votre générosité."
+        }));
+
+        setTimeout(() => {
           dispatch(hideModal());
           navigation.navigate('Homepage');
-        }
-      }));
+        }, 2000);
+      }
+      else if (requiresAction && clientSecret) {
+        handleNextAction(clientSecret)
+          .then(({ paymentIntent, error }: HandleNextActionResult) => {
+            if (error || !paymentIntent) {
+              displayError();
+              return;
+            }
+
+            if (paymentIntent.status === PaymentIntent.Status.RequiresConfirmation) {
+              createPayment({ paymentIntentId: paymentIntent.id })
+            }
+          })
+          .catch(() => displayError());
+      }
     }
-  }, [isGetAssociationsError, isGetStripePublishableKeyError]);
+  }, [wsCreatePaymentData]);
 
   const isDisabled: boolean = useMemo(() => isNaN(Number(amount)) || Number(amount) === 0 || association === null || !isPaymentDataValid,
     [amount, association, isPaymentDataValid]);
+
+  const displayError = useCallback((navigateTo?: keyof MainStackParamList): void => {
+    dispatch(hideLoading());
+
+    dispatch(showModal({
+      variant: "error",
+      mainAction: () => {
+        dispatch(hideModal());
+
+        if (navigateTo) { navigation.navigate(navigateTo); }
+      }
+    }));
+  }, [navigation]);
+
+  const onSubmit = async () => {
+    if (currentUser) {
+      const { lastName, firstName , email } = currentUser;
+
+      dispatch(showLoading());
+
+      const billingDetails: BillingDetails = {
+        name: `${firstName} ${lastName}`,
+        email
+      }
+
+      const { paymentMethod, error } = await createPaymentMethod({
+        paymentMethodType: 'Card',
+        paymentMethodData: { billingDetails }
+      });
+
+      if (error || !paymentMethod) {
+        displayError();
+        return;
+      }
+
+      createPayment({
+        amount: Number(amount),
+        paymentMethodId: paymentMethod.id
+      });
+    }
+  }
 
   return (
     <View style={styles.form}>
@@ -113,6 +194,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
             value="Confirmer"
           />
         )}
+        onPress={onSubmit}
       />
     </View>
   )
