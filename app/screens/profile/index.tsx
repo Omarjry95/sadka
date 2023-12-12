@@ -33,8 +33,7 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
     const [getAssociations, { data: wsAssociationsData = [], isLoading: isGetAssociationsLoading,
         isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
 
-    const [updateUser, { isLoading: isUpdateUserLoading, isSuccess: isUpdateUserSuccess,
-        isError: isUpdateUserError }] = useUpdateUserMutation();
+    const [updateUser, { isLoading: isUpdateUserLoading, isError: isUpdateUserError }] = useUpdateUserMutation();
 
     const [getUserDetails, { isLoading: isGetUserDetailsLoading, isSuccess: isGetUserDetailsSuccess,
         isError: isGetUserDetailsError }] = useLazyGetUserDetailsQuery();
@@ -162,11 +161,7 @@ export default function Profile({ navigation }: { navigation: NativeStackNavigat
 
             wsUpdateUserBody.append('role', role.toString());
 
-            console.log(wsUpdateUserBody);
-
             updateUser(wsUpdateUserBody).unwrap()
-              .then((response: any) => console.log(response))
-              .catch((error: any) => console.log(error))
               .then(() => getUserDetails(currentUser.email));
         }
     }

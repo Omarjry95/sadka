@@ -4,19 +4,21 @@ import styles from "@app/screens/lobby/styles";
 import {Button, Text} from "@app/reusable";
 import {useTheme} from "@react-navigation/native";
 import {useLazySendEmailVerificationLinkQuery} from "@app/api/apis/userApi";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {reauthenticateWithCredential, EmailAuthProvider, UserCredential} from "firebase/auth";
 import {firebaseAuth} from "../../../../firebaseConfig";
-import {allowUser} from "@app/global/authSlice";
+import {allowUser, authSelector} from "@app/global/authSlice";
 
 export default function Actions() {
 
-    const { colors } = useTheme();
+    const { password } = useSelector(authSelector);
 
     const [sendEmailVerificationLink, { isLoading }] = useLazySendEmailVerificationLinkQuery();
 
     const dispatch = useDispatch();
+
+    const { colors } = useTheme();
 
     useEffect(() => {
         dispatch(isLoading ? showLoading() : hideLoading());
@@ -27,12 +29,15 @@ export default function Actions() {
 
         const { currentUser } = firebaseAuth;
 
-        if (currentUser) {
+        if (currentUser && currentUser.email) {
             reauthenticateWithCredential(currentUser,
-                EmailAuthProvider.credential("omar.jarray@esprit.tn", "testtest"))
+                EmailAuthProvider.credential(currentUser.email, password))
                 .then((userCredential: UserCredential) => {
                     dispatch(hideLoading());
-                    dispatch(allowUser(userCredential.user.emailVerified));
+                    dispatch(allowUser({
+                      isVerified: userCredential.user.emailVerified,
+                      password
+                    }));
                 })
                 .catch(() => dispatch(hideLoading()));
         }

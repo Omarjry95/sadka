@@ -3,6 +3,7 @@ import WsAssociationBaseProps from "./WsAssociationBaseProps";
 import WsCreatePaymentRequestBaseProps from "./WsCreatePaymentRequestBaseProps";
 import WsCreatePaymentResponseBaseProps from "./WsCreatePaymentResponseBaseProps";
 import WsCreateUserBaseProps from "./WsCreateUserBaseProps";
+import WsGenericResponse from "./WsGenericResponse";
 import WsMiddlewareResponseBaseProps from "./WsMiddlewareResponseBaseProps";
 import WsRoleBaseProps from "./WsRoleBaseProps";
 import WsRoundingBaseProps from "./WsRoundingBaseProps";
@@ -11,6 +12,7 @@ import WsUserDetailsBaseProps from "./WsUserDetailsBaseProps";
 import WsUserDetailsRequestBaseProps from "./WsUserDetailsRequestBaseProps";
 
 export type {
+  WsGenericResponse,
   SuccessResponse,
   WsCreateUserBaseProps,
   WsUserDetailsRequestBaseProps,

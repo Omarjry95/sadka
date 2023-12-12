@@ -13,13 +13,14 @@ import {
 import NewPasswordHelpComponent from "@app/screens/changePassword/newPasswordHelp";
 import {hideLoading, showLoading} from "@app/global/globalSlice";
 import {useDispatch} from "react-redux";
-import {useTheme} from "@react-navigation/native";
+import {CommonActions, NavigationProp, useNavigation, useTheme} from "@react-navigation/native";
 import {EmailAuthProvider, reauthenticateWithCredential, signOut, updatePassword, User} from "firebase/auth";
 import {firebaseAuth} from "../../../firebaseConfig";
 import {removeUserBearerToken} from "@app/global/middlewareSlice";
 import {removeUserDetails} from "@app/global/userSlice";
 import {disconnectUser} from "@app/global/authSlice";
 import {passwordConditions} from "@app/utilities/conditions";
+import {RestrictedStackParamList} from "@app/navigation/models";
 
 type ChangePasswordBaseKeys = keyof ChangePasswordBaseProps;
 
@@ -33,6 +34,8 @@ export default function ChangePassword() {
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const dispatch = useDispatch();
+
+  const navigation = useNavigation<NavigationProp<RestrictedStackParamList>>();
 
   const { colors } = useTheme();
 
@@ -82,11 +85,13 @@ export default function ChangePassword() {
 
     dispatch(showLoading());
 
-    if (!isConditionsVerified()) { return; }
+    if (!isConditionsVerified())
+      return;
 
     const currentUser: User | null = firebaseAuth.currentUser;
 
     if (currentUser && currentUser.email) {
+
       const { oldPassword, newPassword } = changePasswordElements;
 
       reauthenticateWithCredential(currentUser, EmailAuthProvider.credential(currentUser.email, oldPassword.value))
@@ -95,6 +100,9 @@ export default function ChangePassword() {
         .then(() => {
           dispatch(removeUserBearerToken());
           dispatch(removeUserDetails());
+
+          navigation.navigate('Main');
+          
           dispatch(disconnectUser());
         })
         .catch(() => setErrorMessage("Une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer."))
@@ -103,6 +111,7 @@ export default function ChangePassword() {
   }
 
   const renderElement = (k: string): JSX.Element => {
+
     const elementKey: ChangePasswordBaseKeys = k as ChangePasswordBaseKeys;
 
     const changePasswordElement: ChangePasswordElementBaseProps = changePasswordElements[elementKey];

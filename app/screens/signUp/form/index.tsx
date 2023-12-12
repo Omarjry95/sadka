@@ -30,9 +30,11 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     const [hiddenRepasswordChars, hideRepasswordChars] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>("");
 
-    const [getRoles, { data: roles = [], isLoading: isGetRolesLoading, isSuccess: isGetRolesSuccess, isError: isGetRolesError }] = useLazyGetRolesQuery();
+    const [getRoles, { data: roles = [], isLoading: isGetRolesLoading, isSuccess: isGetRolesSuccess,
+        isError: isGetRolesError }] = useLazyGetRolesQuery();
 
-    const [createUser, { isSuccess: isCreateUserSuccess, isError: isCreateUserError, error: createUserError }] = useCreateUserMutation();
+    const [createUser, { isSuccess: isCreateUserSuccess, isError: isCreateUserError,
+        error: createUserError }] = useCreateUserMutation();
 
     const [getClientCredentialsBearerToken] = useGetClientCredentialsBearerTokenMutation();
 
@@ -89,13 +91,14 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
 
                 try {
                     const { data: createUserErrorData } = createUserError as MutationError;
-                    const { message: wsCreateUserErrorMessage } = createUserErrorData;
+                    const { _code: wsCreateUserErrorCode } = createUserErrorData;
 
-                    if (wsCreateUserErrorMessage === "UAE") {
-                        createUserErrorMessage = "L'adresse éléctronique que vous avez saisie est déjà exploitée par un autre utilisateur."
-                    }
+                    if (wsCreateUserErrorCode === "UNU")
+                        createUserErrorMessage = "L'adresse éléctronique que vous avez saisie est déjà exploitée par un autre utilisateur.";
                 }
-                catch (e: any) { console.log(e.message); }
+                catch (e: any) {
+                    console.log(e.message);
+                }
 
                 setErrorMessage(createUserErrorMessage);
             }

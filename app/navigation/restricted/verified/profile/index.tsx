@@ -8,6 +8,7 @@ const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 const ProfileNavigator = () => (
   <Stack.Navigator
+    key="ProfileNavigator"
     initialRouteName="Profile"
     screenOptions={{
       headerTransparent: true,

@@ -3,72 +3,83 @@ import {SuccessResponse, WsCreateUserBaseProps, WsUserDetailsBaseProps} from "@a
 import {apiPrefixes} from "@app/api/constants";
 import WsAssociationBaseProps from "../models/WsAssociationBaseProps";
 import {getDownloadURL, getStorage, ref} from "firebase/storage";
+import WsGenericResponse from "../models/WsGenericResponse";
 
 const userApiProtectedByClient = clientProtectedApi.injectEndpoints({
-    endpoints: ({ mutation }) => ({
-        createUser: mutation<SuccessResponse, WsCreateUserBaseProps>({
-            query: (body) => ({
-                url: apiPrefixes.user,
-                method: 'POST',
-                body
-            })
-        })
-    }),
-    overrideExisting: true
+  endpoints: ({ mutation }) => ({
+    createUser: mutation<SuccessResponse, WsCreateUserBaseProps>({
+      query: (body) => ({
+        url: apiPrefixes.user,
+        method: 'POST',
+        body
+      })
+    })
+  }),
+  overrideExisting: true
 });
 
 const userApiProtectedByUser = userProtectedApi.injectEndpoints({
-    endpoints: ({ query, mutation }) => ({
-        getAssociations: query<WsAssociationBaseProps[], void>({
-            query: () => apiPrefixes.user.concat('/associations'),
-            transformResponse: async (value: WsAssociationBaseProps[]): Promise<WsAssociationBaseProps[]> => {
-                for (let index: number = 0; index < value.length; index++) {
-                    let association: WsAssociationBaseProps = value[index];
+  endpoints: ({ query, mutation }) => ({
+    getAssociations: query<WsAssociationBaseProps[], void>({
+      query: () => apiPrefixes.user.concat('/associations'),
+      transformResponse: async (value: WsGenericResponse<WsAssociationBaseProps[]>): Promise<WsAssociationBaseProps[]> => {
 
-                    const { photoUrl } = association;
+        let { body } = value;
 
-                    if (photoUrl) {
-                        let downloadedPhotoUrl: string = await getDownloadURL(ref(getStorage(), photoUrl));
+        for (let index: number = 0; index < body.length; index++) {
+          let association: WsAssociationBaseProps = body[index];
 
-                        value[index] = {
-                            ...association,
-                            photoUrl: downloadedPhotoUrl
-                        }
-                    }
-                }
+          const { photoUrl } = association;
 
-                return value;
+          if (photoUrl) {
+            let downloadedPhotoUrl: string = await getDownloadURL(ref(getStorage(), photoUrl));
+
+            body[index] = {
+              ...association,
+              photoUrl: downloadedPhotoUrl
             }
-        }),
-        getUserDetails: query<WsUserDetailsBaseProps, string>({
-            query: () => apiPrefixes.user.concat('/details'),
-            transformResponse: async (value: WsUserDetailsBaseProps, meta, email): Promise<WsUserDetailsBaseProps> => {
-                let { photo } = value;
+          }
+        }
 
-                if (photo) { photo = await getDownloadURL(ref(getStorage(), photo)); }
-
-                return {
-                    ...value,
-                    photo,
-                    email
-                };
-            }
-        }),
-        sendEmailVerificationLink: query<SuccessResponse, void>({
-            query: () => apiPrefixes.user.concat('/send-email-verification-link')
-        }),
-        updateUser: mutation<SuccessResponse, FormData>({
-            query: (body) => ({
-                url: apiPrefixes.user,
-                method: 'PUT',
-                body
-            })
-        })
+        return body;
+      }
     }),
-    overrideExisting: true
+    getUserDetails: query<WsUserDetailsBaseProps, string>({
+      query: () => apiPrefixes.user.concat('/details'),
+      transformResponse: async (value: WsGenericResponse<WsUserDetailsBaseProps>, meta, email): Promise<WsUserDetailsBaseProps> => {
+
+        const { body } = value;
+
+        let { photo } = body;
+
+        if (photo)
+          photo = await getDownloadURL(ref(getStorage(), photo));
+
+        return {
+          ...body,
+          photo,
+          email
+        };
+      }
+    }),
+    sendEmailVerificationLink: query<SuccessResponse, void>({
+      query: () => ({
+        url: apiPrefixes.user.concat('/email-verification-link'),
+        method: 'POST'
+      })
+    }),
+    updateUser: mutation<SuccessResponse, FormData>({
+      query: (body) => ({
+        url: apiPrefixes.user,
+        method: 'PUT',
+        body
+      })
+    })
+  }),
+  overrideExisting: true
 });
 
 export const { useCreateUserMutation } = userApiProtectedByClient;
 
 export const { useLazyGetAssociationsQuery, useLazyGetUserDetailsQuery,
-    useLazySendEmailVerificationLinkQuery, useUpdateUserMutation } = userApiProtectedByUser;
+  useLazySendEmailVerificationLinkQuery, useUpdateUserMutation } = userApiProtectedByUser;

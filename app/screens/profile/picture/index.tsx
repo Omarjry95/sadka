@@ -10,6 +10,9 @@ import { PictureBaseProps } from "../models";
 import SelectedPictureDisplay from "@app/screens/profile/picture/selectedPictureDisplay";
 import EmptyPictureDisplay from "@app/screens/profile/picture/emptyPictureDisplay";
 
+/*
+  TODO: When the picked image gets loaded, show loading
+*/
 export default function Picture({ pictureUri, setNewPicture }: PictureBaseProps) {
 
     const pickImage = useCallback(async () => {

@@ -8,6 +8,7 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 
 const MainNavigator = () => (
   <Stack.Navigator
+    key="MainNavigator"
     initialRouteName="Homepage"
     screenOptions={{
       headerTransparent: true,

@@ -9,6 +9,7 @@ export default function Unverified() {
 
     return (
         <Stack.Navigator
+            key="UnverifiedNavigator"
             initialRouteName="Lobby"
             screenOptions={{ headerShown: false }}
         >

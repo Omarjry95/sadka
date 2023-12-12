@@ -37,7 +37,10 @@ export default function Form() {
             getUserDetails(email).unwrap()
               .then(() => {
                   dispatch(hideLoading());
-                  dispatch(allowUser(signedInUser.emailVerified));
+                  dispatch(allowUser({
+                    isVerified: signedInUser.emailVerified,
+                    password
+                  }));
               })
               .catch(() => {
                   setError("Nous n'avons pas pu vous identifier. Veuillez réessayer.");

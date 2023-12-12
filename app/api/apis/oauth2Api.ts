@@ -2,7 +2,6 @@ import { middlewareApi } from "@app/api";
 import {WsMiddlewareResponseBaseProps} from "@app/api/models";
 import Constants from "expo-constants";
 
-
 const oauth2Api = middlewareApi.injectEndpoints({
     endpoints: ({ mutation }) => ({
         getClientCredentialsBearerToken: mutation<WsMiddlewareResponseBaseProps, void>({

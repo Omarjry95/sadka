@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Divider, Text} from "@app/reusable";
 import {View} from "react-native";
 import styles from "@app/screens/lobby/styles";
-import {useTheme} from "@react-navigation/native";
+import {CommonActions, useTheme} from "@react-navigation/native";
 import { signOut } from "firebase/auth";
 import {firebaseAuth} from "../../../../firebaseConfig";
 import {useDispatch} from "react-redux";

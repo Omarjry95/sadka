@@ -1,7 +1,7 @@
 type MutationError = {
     data: {
-        code: number,
-        message: string
+        _code: string,
+        _message: string
     },
     status: number
 }

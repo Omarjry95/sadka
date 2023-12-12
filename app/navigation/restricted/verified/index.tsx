@@ -17,6 +17,7 @@ export default function Verified() {
 
     return (
         <Drawer.Navigator
+            key="VerifiedNavigator"
             initialRouteName="Main"
             screenOptions={{
                 headerTransparent: true,
