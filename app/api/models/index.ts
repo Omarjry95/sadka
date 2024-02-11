@@ -10,6 +10,8 @@ import WsRoundingBaseProps from "./WsRoundingBaseProps";
 import WsStripePublishableKeyBaseProps from "./WsStripePublishableKeyBaseProps";
 import WsUserDetailsBaseProps from "./WsUserDetailsBaseProps";
 import WsUserDetailsRequestBaseProps from "./WsUserDetailsRequestBaseProps";
+import WsConfirmPaymentBaseProps from "./WsConfirmPaymentRequestBaseProps";
+import WsConfirmPaymentResponseBaseProps from "./WsConfirmPaymentResponseBaseProps";
 
 export type {
   WsGenericResponse,
@@ -21,7 +23,9 @@ export type {
   WsRoleBaseProps,
   WsRoundingBaseProps,
   WsCreatePaymentRequestBaseProps,
+  WsConfirmPaymentBaseProps,
   WsCreatePaymentResponseBaseProps,
+  WsConfirmPaymentResponseBaseProps,
   WsStripePublishableKeyBaseProps,
   WsMiddlewareResponseBaseProps
 }

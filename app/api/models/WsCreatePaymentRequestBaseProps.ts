@@ -1,12 +1,8 @@
-type WsCreatePaymentBaseProps = {
-  amount: number,
-  paymentMethodId: string
+type WsCreatePaymentRequestBaseProps = {
+  originalAmount: number,
+  association: string,
+  paymentMethodId: string,
+  note?: string
 };
-
-type WsConfirmPaymentBaseProps = {
-  paymentIntentId: string
-};
-
-type WsCreatePaymentRequestBaseProps = WsCreatePaymentBaseProps | WsConfirmPaymentBaseProps;
 
 export default WsCreatePaymentRequestBaseProps;

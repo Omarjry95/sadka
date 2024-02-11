@@ -102,7 +102,7 @@ export default function ChangePassword() {
           dispatch(removeUserDetails());
 
           navigation.navigate('Main');
-          
+
           dispatch(disconnectUser());
         })
         .catch(() => setErrorMessage("Une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer."))

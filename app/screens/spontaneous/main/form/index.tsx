@@ -10,7 +10,11 @@ import {useLazyGetAssociationsQuery} from "@app/api/apis/userApi";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
 import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "@app/global/userSlice";
-import {useCreatePaymentMutation, useLazyGetStripePublishableKeyQuery} from "@app/api/apis/paymentApi";
+import {
+  useConfirmPaymentMutation,
+  useCreatePaymentMutation,
+  useLazyGetStripePublishableKeyQuery
+} from "@app/api/apis/paymentApi";
 import {
   initStripe,
   BillingDetails,
@@ -20,6 +24,7 @@ import {
 } from "@stripe/stripe-react-native";
 import {WsStripePublishableKeyBaseProps} from "@app/api/models";
 import PaymentForm from "@app/reusable/complex/paymentForm";
+import WsCreatePaymentRequestBaseProps from "../../../../api/models/WsCreatePaymentRequestBaseProps";
 
 export default function Form({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) {
 
@@ -33,10 +38,14 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
   const [getAssociations, { data: wsAssociationsData = [],
     isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
 
-  const [getStripePublishableKey, { isError: isGetStripePublishableKeyError }] = useLazyGetStripePublishableKeyQuery();
+  const [getStripePublishableKey,
+    { isError: isGetStripePublishableKeyError }] = useLazyGetStripePublishableKeyQuery();
 
   const [createPayment, { data: wsCreatePaymentData,
     isError: isCreatePaymentError }] = useCreatePaymentMutation();
+
+  const [confirmPayment,
+    { data: wsConfirmPaymentData }] = useConfirmPaymentMutation();
 
   const dispatch = useDispatch();
 
@@ -68,22 +77,11 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
 
   useEffect(() => {
     if (wsCreatePaymentData) {
-      const { success, requiresAction, clientSecret } = wsCreatePaymentData;
+      const { success, requiresAction,
+        clientSecret } = wsCreatePaymentData;
 
-      if (success) {
-        dispatch(hideLoading());
-
-        dispatch(showModal({
-          variant: "success",
-          mainAction: () => { },
-          stateMessage: "Votre don a été fait avec succès. Merci pour votre générosité."
-        }));
-
-        setTimeout(() => {
-          dispatch(hideModal());
-          navigation.navigate('Homepage');
-        }, 2000);
-      }
+      if (success)
+        displaySuccess();
       else if (requiresAction && clientSecret) {
         handleNextAction(clientSecret)
           .then(({ paymentIntent, error }: HandleNextActionResult) => {
@@ -93,7 +91,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
             }
 
             if (paymentIntent.status === PaymentIntent.Status.RequiresConfirmation) {
-              createPayment({ paymentIntentId: paymentIntent.id })
+              confirmPayment({ paymentIntentId: paymentIntent.id });
             }
           })
           .catch(() => displayError());
@@ -101,8 +99,29 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     }
   }, [wsCreatePaymentData]);
 
-  const isDisabled: boolean = useMemo(() => isNaN(Number(amount)) || Number(amount) === 0 || association === null || !isPaymentDataValid,
+  useEffect(() => {
+    if (wsConfirmPaymentData)
+      wsConfirmPaymentData.success ? displaySuccess() : displayError();
+  }, [wsConfirmPaymentData]);
+
+  const isDisabled: boolean = useMemo(() => isNaN(Number(amount)) || Number(amount) === 0 ||
+      association === null || !isPaymentDataValid,
     [amount, association, isPaymentDataValid]);
+
+  const displaySuccess = useCallback((): void => {
+    dispatch(hideLoading());
+
+    dispatch(showModal({
+      variant: "success",
+      mainAction: () => { },
+      stateMessage: "Votre don a été fait avec succès. Merci pour votre générosité."
+    }));
+
+    setTimeout(() => {
+      dispatch(hideModal());
+      navigation.navigate('Homepage');
+    }, 2000);
+  }, [navigation]);
 
   const displayError = useCallback((navigateTo?: keyof MainStackParamList): void => {
     dispatch(hideLoading());
@@ -112,13 +131,14 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
       mainAction: () => {
         dispatch(hideModal());
 
-        if (navigateTo) { navigation.navigate(navigateTo); }
+        if (navigateTo)
+          navigation.navigate(navigateTo);
       }
     }));
   }, [navigation]);
 
   const onSubmit = async () => {
-    if (currentUser) {
+    if (currentUser && association) {
       const { lastName, firstName , email } = currentUser;
 
       dispatch(showLoading());
@@ -138,10 +158,20 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         return;
       }
 
-      createPayment({
-        amount: Number(amount),
-        paymentMethodId: paymentMethod.id
-      });
+      let wsCreatePaymentProps: WsCreatePaymentRequestBaseProps = {
+        originalAmount: Number(amount),
+        paymentMethodId: paymentMethod.id,
+        association
+      };
+
+      if (note.trim().length > 0) {
+        wsCreatePaymentProps = {
+          ...wsCreatePaymentProps,
+          note
+        }
+      }
+
+      createPayment(wsCreatePaymentProps);
     }
   }
 

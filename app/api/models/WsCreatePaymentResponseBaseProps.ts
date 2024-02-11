@@ -1,5 +1,5 @@
 type WsCreatePaymentResponseBaseProps = {
-  success?: boolean,
+  success: boolean,
   requiresAction?: boolean,
   clientSecret?: string
 }
