@@ -3,7 +3,8 @@ import Base from "@app/reusable/dialog/base";
 import {BaseProps} from "@app/reusable/dialog/models";
 import {Success, Error} from "@app/reusable/dialog/variants";
 
-export default function Dialog({ variant, mainAction, dialogBody, stateMessage }: BaseProps) {
+export default function Dialog({ variant, mainAction, dialogBody, stateMessage,
+                                   customActions = [] }: BaseProps) {
 
     const dialogVariant: (() => JSX.Element) | undefined = useMemo(() => {
         switch (variant) {
@@ -23,7 +24,8 @@ export default function Dialog({ variant, mainAction, dialogBody, stateMessage }
                 visible
                 mainAction={mainAction}
                 DialogBody={dialogVariant}
-                displayActionButton={variant === "normal"}
+                overrideClassicAction={variant !== "normal" || customActions.length > 0}
+                customActions={customActions}
             />
         ) : null
     )

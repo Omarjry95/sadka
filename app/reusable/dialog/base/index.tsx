@@ -7,7 +7,7 @@ import {useTheme} from "@react-navigation/native";
 import Backdrop from "@app/reusable/dialog/backdrop";
 import {EdgeInsets, useSafeAreaInsets} from "react-native-safe-area-context";
 
-export default function Base({ visible, mainAction, DialogBody, displayActionButton }: StrictBaseProps) {
+export default function Base({ visible, mainAction, DialogBody, overrideClassicAction }: StrictBaseProps) {
 
     const { colors } = useTheme();
 
@@ -31,7 +31,7 @@ export default function Base({ visible, mainAction, DialogBody, displayActionBut
                 }}>
                     <DialogBody />
 
-                    {displayActionButton && (
+                    {!overrideClassicAction && (
                         <Button
                             variant="straight"
                             width="100%"

@@ -1,3 +1,4 @@
+import ActionButtonProps from "./ActionButtonProps";
 import BackdropProps from "./BackdropProps";
 import BaseProps from "./BaseProps";
 import DialogVariants from "./DialogVariants";
@@ -9,5 +10,6 @@ export type {
     DialogVariants,
     StrictBaseProps,
     BackdropProps,
-    StateVariantProps
+    StateVariantProps,
+    ActionButtonProps
 }

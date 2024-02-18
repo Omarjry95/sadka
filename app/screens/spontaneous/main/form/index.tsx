@@ -161,7 +161,8 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
       let wsCreatePaymentProps: WsCreatePaymentRequestBaseProps = {
         originalAmount: Number(amount),
         paymentMethodId: paymentMethod.id,
-        association
+        association,
+        savePaymentMethod: true
       };
 
       if (note.trim().length > 0) {
@@ -224,7 +225,22 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
             value="Confirmer"
           />
         )}
-        onPress={onSubmit}
+        onPress={() => dispatch(showModal({
+          variant: "normal",
+          mainAction: () => dispatch(hideModal()),
+          dialogBody: () => <View style={{
+            width: "100%",
+            padding: 15,
+            backgroundColor: "white",
+            borderWidth: 2,
+            borderRadius: 10,
+            position: "relative",
+            flexDirection: "column",
+            alignItems: "center"
+          }}>
+
+          </View>
+        }))}
       />
     </View>
   )
