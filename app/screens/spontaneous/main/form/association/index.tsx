@@ -33,6 +33,7 @@ export default function Association({ list, association, defaultAssociation, set
   return (
     <DefaultValueDisplay
       autoDisabled={!!defaultAssociation}
+      captionText="Votre association par défaut"
       margin={{ b: 25 }}
       borderRadius={{ a: 10 }}
       mainComponent={() => (

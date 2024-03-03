@@ -1,5 +1,9 @@
+import AlternatePaymentComponentBaseProps from "./AlternatePaymentComponentBaseProps";
 import AssociationBaseProps from "./AssociationBaseProps";
+import PaymentFormBaseProps from "./PaymentFormBaseProps";
 
 export {
-  AssociationBaseProps
+  AssociationBaseProps,
+  PaymentFormBaseProps,
+  AlternatePaymentComponentBaseProps
 }

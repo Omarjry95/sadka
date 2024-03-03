@@ -19,5 +19,31 @@ export default StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     alignItems: "center"
+  },
+  paymentAlternateContainer: {
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "flex-start",
+    justifyContent: "center"
+  },
+  paymentDataContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  paymentCardNumberContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    flex: 2
+  },
+  paymentExpiryDateContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    flex: 1
+  },
+  paymentDataIcon: {
+    marginRight: 10
   }
 })

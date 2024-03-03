@@ -12,7 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {userSelector} from "@app/global/userSlice";
 import {
   useConfirmPaymentMutation,
-  useCreatePaymentMutation,
+  useCreatePaymentMutation, useLazyGetLastSetupCardQuery,
   useLazyGetStripePublishableKeyQuery
 } from "@app/api/apis/paymentApi";
 import {
@@ -23,20 +23,27 @@ import {
   HandleNextActionResult, PaymentIntent
 } from "@stripe/stripe-react-native";
 import {WsStripePublishableKeyBaseProps} from "@app/api/models";
-import PaymentForm from "@app/reusable/complex/paymentForm";
 import WsCreatePaymentRequestBaseProps from "../../../../api/models/WsCreatePaymentRequestBaseProps";
+import PaymentForm from "@app/screens/spontaneous/main/form/paymentForm";
 
 export default function Form({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) {
 
   const { currentUser } = useSelector(userSelector);
 
   const [amount, setAmount] = useState<string>("");
-  const [association, setAssociation] = useState<string | null>(null);
-  const [isPaymentDataValid, setIsPaymentDataValid] = useState<boolean>(false);
+  const [association,
+    setAssociation] = useState<string | null>(null);
+  const [isPaymentDataValid,
+    setIsPaymentDataValid] = useState<boolean>(false);
   const [note, setNote] = useState<string>("");
+  const [useLastCardSetup,
+    setUseLastCardSetup] = useState<boolean>(false)
 
   const [getAssociations, { data: wsAssociationsData = [],
     isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
+
+  const [getLastSetupCard, { data: wsLastSetupCardData,
+    isError: isGetLastSetupCardError }] = useLazyGetLastSetupCardQuery();
 
   const [getStripePublishableKey,
     { isError: isGetStripePublishableKeyError }] = useLazyGetStripePublishableKeyQuery();
@@ -58,7 +65,9 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
       getAssociations()
         .then(() => getStripePublishableKey().unwrap())
         .then(({ stripePublishableKey: publishableKey }: WsStripePublishableKeyBaseProps) => initStripe({ publishableKey }))
-        .then(() => {
+        .then(() => getLastSetupCard().unwrap())
+        .then((lastSetupCardData) => {
+          setUseLastCardSetup(!!lastSetupCardData);
           setAssociation(defaultAssociation);
 
           dispatch(hideLoading());
@@ -66,14 +75,13 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     }, [defaultAssociation]));
 
   useEffect(() => {
-    if (isGetAssociationsError || isGetStripePublishableKeyError) {
+    if (isGetAssociationsError || isGetLastSetupCardError || isGetStripePublishableKeyError)
       displayError('Homepage');
-    }
 
-    if (isCreatePaymentError) {
+    if (isCreatePaymentError)
       displayError();
-    }
-  }, [isGetAssociationsError, isGetStripePublishableKeyError, isCreatePaymentError]);
+  }, [isGetAssociationsError, isGetLastSetupCardError, isGetStripePublishableKeyError,
+    isCreatePaymentError]);
 
   useEffect(() => {
     if (wsCreatePaymentData) {
@@ -105,8 +113,8 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
   }, [wsConfirmPaymentData]);
 
   const isDisabled: boolean = useMemo(() => isNaN(Number(amount)) || Number(amount) === 0 ||
-      association === null || !isPaymentDataValid,
-    [amount, association, isPaymentDataValid]);
+      association === null || (useLastCardSetup || !isPaymentDataValid),
+    [amount, association, isPaymentDataValid, useLastCardSetup]);
 
   const displaySuccess = useCallback((): void => {
     dispatch(hideLoading());
@@ -197,10 +205,10 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
 
       <PaymentForm
         label="Données de paiement"
-        margin={{ b: 25 }}
-        borderWidth={1}
-        borderRadius={10}
+        lastSetupCard={wsLastSetupCardData}
+        useLastCardSetup={useLastCardSetup}
         setIsPaymentDataValid={setIsPaymentDataValid}
+        setUseLastCardSetup={setUseLastCardSetup}
       />
 
       <TextInput

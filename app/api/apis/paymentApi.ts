@@ -8,6 +8,7 @@ import {
 } from "@app/api/models";
 import WsConfirmPaymentRequestBaseProps from "@app/api/models/WsConfirmPaymentRequestBaseProps";
 import WsConfirmPaymentResponseBaseProps from "../models/WsConfirmPaymentResponseBaseProps";
+import WsLastSetupCardBaseProps from "../models/WsLastSetupCardBaseProps";
 
 const paymentApi = userProtectedApi.injectEndpoints({
   endpoints: ({ query, mutation }) => ({
@@ -27,6 +28,10 @@ const paymentApi = userProtectedApi.injectEndpoints({
       }),
       transformResponse: (response: WsGenericResponse<WsConfirmPaymentResponseBaseProps>): WsConfirmPaymentResponseBaseProps => response.body
     }),
+    getLastSetupCard: query<WsLastSetupCardBaseProps | undefined, void>({
+      query: () => apiPrefixes.payment.concat('/lastSetupCard'),
+      transformResponse: (response: WsGenericResponse<WsLastSetupCardBaseProps>): WsLastSetupCardBaseProps => response.body || undefined
+    }),
     getStripePublishableKey: query<WsStripePublishableKeyBaseProps, void>({
       query: () => apiPrefixes.payment.concat('/publishable-key'),
       transformResponse: (response: WsGenericResponse<WsStripePublishableKeyBaseProps>): WsStripePublishableKeyBaseProps => response.body
@@ -36,6 +41,7 @@ const paymentApi = userProtectedApi.injectEndpoints({
 });
 
 export const { useCreatePaymentMutation,
+  useLazyGetLastSetupCardQuery ,
   useLazyGetStripePublishableKeyQuery ,
   useConfirmPaymentMutation
 } = paymentApi;

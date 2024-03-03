@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {CardField, CardFieldInput} from "@stripe/stripe-react-native";
 import {useTheme} from "@react-navigation/native";
 import styles from "@app/reusable/complex/paymentForm/styles";
@@ -7,9 +7,12 @@ import {View} from "react-native";
 import {Text} from "@app/reusable";
 import {getStyleMargin} from "@app/utilities/spacing";
 
-export default function PaymentForm({ label, margin, borderWidth, borderRadius, size, setIsPaymentDataValid }: PaymentFormBaseProps) {
+export default function PaymentForm({ label, margin, borderWidth, borderRadius, size,
+                                      setIsPaymentDataValid }: PaymentFormBaseProps) {
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  const inputRef = useRef<CardFieldInput.Methods>(null);
 
   const { colors } = useTheme();
 
@@ -27,6 +30,7 @@ export default function PaymentForm({ label, margin, borderWidth, borderRadius, 
       )}
 
       <CardField
+        ref={inputRef}
         style={styles.form}
         cardStyle={{
           backgroundColor: "white",

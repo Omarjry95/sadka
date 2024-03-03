@@ -1,5 +1,6 @@
 import {SpacingAndBorder} from "@app/utilities/globalModels";
 import {Dispatch, SetStateAction} from "react";
+import wsLastSetupCardBaseProps from "@app/api/models/WsLastSetupCardBaseProps";
 
 type PaymentFormBaseProps = {
   label?: string,

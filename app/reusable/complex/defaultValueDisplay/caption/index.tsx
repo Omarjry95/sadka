@@ -6,7 +6,7 @@ import {View} from "react-native";
 import { CaptionBaseProps } from "../models";
 import {useTheme} from "@react-navigation/native";
 
-export default function Caption({ disabled, setDisabled, setDefaultValue }: CaptionBaseProps) {
+export default function Caption({ disabled, text, setDisabled, setDefaultValue }: CaptionBaseProps) {
 
   const { colors } = useTheme();
 
@@ -28,7 +28,7 @@ export default function Caption({ disabled, setDisabled, setDefaultValue }: Capt
       <Text
         variant="normal"
         color="black"
-        value="Votre association par défaut"
+        value={text}
       />
     </View>
   )

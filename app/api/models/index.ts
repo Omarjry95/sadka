@@ -12,6 +12,7 @@ import WsUserDetailsBaseProps from "./WsUserDetailsBaseProps";
 import WsUserDetailsRequestBaseProps from "./WsUserDetailsRequestBaseProps";
 import WsConfirmPaymentBaseProps from "./WsConfirmPaymentRequestBaseProps";
 import WsConfirmPaymentResponseBaseProps from "./WsConfirmPaymentResponseBaseProps";
+import WsLastSetupCardBaseProps from "./WsLastSetupCardBaseProps";
 
 export type {
   WsGenericResponse,
@@ -26,6 +27,7 @@ export type {
   WsConfirmPaymentBaseProps,
   WsCreatePaymentResponseBaseProps,
   WsConfirmPaymentResponseBaseProps,
+  WsLastSetupCardBaseProps,
   WsStripePublishableKeyBaseProps,
   WsMiddlewareResponseBaseProps
 }
