@@ -16,6 +16,12 @@ export default StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
+    actions: {
+        width: "100%",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center"
+    },
     pressableBackdrop: {
         width: "100%",
         height: "100%",

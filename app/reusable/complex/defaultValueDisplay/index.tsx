@@ -7,8 +7,9 @@ import Main from "@app/reusable/complex/defaultValueDisplay/main";
 import {useFocusEffect} from "@react-navigation/native";
 import {getStyleMargin} from "@app/utilities/spacing";
 
-export default function DefaultValueDisplay({ autoDisabled, captionText, margin, borderRadius, mainComponent,
-                                              alternateComponent, setDefaultValue }: DefaultValueDisplayBaseProps) {
+export default function DefaultValueDisplay({ autoDisabled, captionText, margin, borderRadius,
+                                              mainComponent, alternateComponent,
+                                              setDefaultValue }: DefaultValueDisplayBaseProps) {
 
   const [disabled, setDisabled] = useState<boolean>(false);
 

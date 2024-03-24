@@ -6,17 +6,28 @@ import {getStyleBorderRadius} from "@app/utilities/border";
 
 export default function Main({ disabled, borderRadius, mainComponent, alternateComponent }: MainBaseProps) {
 
-  const DisplayedComponent: () => JSX.Element = useMemo(() => {
-    if (!alternateComponent)
-      return mainComponent;
+  // const displayedComponent = (): (() => JSX.Element) | JSX.Element => {
+  //   if (!alternateComponent)
+  //     return mainComponent;
+  //
+  //   return disabled ? alternateComponent : mainComponent;
+  // };
 
-    return disabled ? alternateComponent : mainComponent;
-  }, [disabled, mainComponent, alternateComponent]);
+  const displayedComponent = (): JSX.Element => {
+    const getComponent = (component: (() => JSX.Element) | JSX.Element): JSX.Element => {
+      return typeof component === 'function' ? component() : component;
+    };
+
+    if (!alternateComponent)
+      return getComponent(mainComponent);
+
+    return disabled ? getComponent(alternateComponent) : getComponent(mainComponent);
+  };
 
   return (
     <View style={styles.main}>
       <View style={styles.mainWrapper}>
-        <DisplayedComponent />
+        {displayedComponent()}
       </View>
 
       {disabled && (

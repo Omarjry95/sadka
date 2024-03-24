@@ -1,6 +1,6 @@
 type MainStackParamList = {
   Homepage: undefined,
-  Spontaneous: undefined
+  Donation: undefined
 }
 
 export default MainStackParamList;

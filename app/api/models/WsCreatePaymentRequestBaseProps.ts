@@ -1,7 +1,7 @@
 type WsCreatePaymentRequestBaseProps = {
   originalAmount: number,
   association: string,
-  paymentMethodId: string,
+  paymentMethodId?: string,
   note?: string,
   savePaymentMethod: boolean
 };

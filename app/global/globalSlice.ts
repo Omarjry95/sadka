@@ -28,7 +28,8 @@ export const globalSlice = createSlice({
 
 const { actions, reducer } = globalSlice;
 
-export const { showLoading, hideLoading, showModal, hideModal } = actions;
+export const { showLoading, hideLoading,
+    showModal, hideModal } = actions;
 
 export const globalSelector = (state: RootState) => state.global;
 

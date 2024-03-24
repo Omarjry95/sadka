@@ -2,20 +2,20 @@ import React, {useMemo} from 'react';
 import {Select} from "@app/reusable";
 import {DefaultValueDisplay} from "@app/reusable/complex";
 import {ListItemProps} from "@app/reusable/select/models";
-import {WsAssociationBaseProps} from "@app/api/models";
 import ItemImage from "@app/reusable/select/variants/modal/itemImage";
 import {DEFAULT_SELECT_ITEM_ICON_DIMENSION} from "@app/reusable/select/constants";
 import AssociationBaseProps from "../../../models/AssociationBaseProps";
+import {WsListSelectBaseProps} from "@app/api/models";
 
 export default function Association({ list, association, defaultAssociation, setAssociation }: AssociationBaseProps) {
 
   const formattedAssociations: ListItemProps[] = useMemo(() => {
-    let associations: ListItemProps[] = list.map(({ _id: id, label, photoUrl }: WsAssociationBaseProps) => ({
+    let associations: ListItemProps[] = list.map(({ _id: id, label, photo }: WsListSelectBaseProps) => ({
       id,
       label,
       leftComponent: () => (
         <ItemImage
-          photoUrl={photoUrl}
+          photoUrl={photo}
           diameter={DEFAULT_SELECT_ITEM_ICON_DIMENSION}
         />
       )

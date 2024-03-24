@@ -1,13 +1,13 @@
 import React from 'react';
-import styles from "@app/screens/spontaneous/styles";
+import styles from "@app/screens/donation/styles";
 import {Text} from "@app/reusable";
-import Form from "@app/screens/spontaneous/main/form";
+import Form from "@app/screens/donation/main/form";
 import {ScrollView} from "react-native";
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
 import {useTheme} from "@react-navigation/native";
 
-export default function Main({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) {
+export default function Main({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Donation'> }) {
 
   const { colors } = useTheme();
 

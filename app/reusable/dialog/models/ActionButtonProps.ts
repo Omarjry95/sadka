@@ -1,6 +1,8 @@
+import {GestureResponderEvent} from "react-native";
+
 type ActionButtonProps = {
-  label: string,
-  action: () => void
+  onPress?: (event: GestureResponderEvent) => void,
+  childComponent: () => JSX.Element
 }
 
 export default ActionButtonProps;

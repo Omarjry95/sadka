@@ -4,7 +4,7 @@ import {Button, Text, TextInput} from "@app/reusable";
 import styles from '../../styles';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
-import Association from "@app/screens/spontaneous/main/form/association";
+import Association from "@app/screens/donation/main/form/association";
 import {useFocusEffect} from "@react-navigation/native";
 import {useLazyGetAssociationsQuery} from "@app/api/apis/userApi";
 import {hideLoading, hideModal, showLoading, showModal} from "@app/global/globalSlice";
@@ -24,13 +24,25 @@ import {
 } from "@stripe/stripe-react-native";
 import {WsStripePublishableKeyBaseProps} from "@app/api/models";
 import WsCreatePaymentRequestBaseProps from "../../../../api/models/WsCreatePaymentRequestBaseProps";
-import PaymentForm from "@app/screens/spontaneous/main/form/paymentForm";
+import PaymentForm from "@app/screens/donation/main/form/paymentForm";
+import SaveCardDialog from "@app/screens/donation/main/form/saveCardDialog";
+import {SaveCardDialogActionBaseProps} from "@app/screens/donation/models";
+import {useLazyGetStoresQuery} from "@app/api/apis/storeApi";
+import {donationSelector} from "@app/global/donationSlice";
+import Store from "@app/screens/donation/main/form/store";
+import Rounding from "@app/screens/donation/main/form/rounding";
+import {useLazyGetRoundingsQuery} from "@app/api/apis/roundingApi";
+import {SAVE_CARD_DIALOG_ACTIONS} from "@app/screens/donation/constants";
+import Overview from "@app/screens/donation/main/form/overview";
 
-export default function Form({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) {
+export default function Form({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Donation'> }) {
 
   const { currentUser } = useSelector(userSelector);
+  const { isSpontaneous } = useSelector(donationSelector);
 
+  const [store, setStore] = useState<string | null>(null);
   const [amount, setAmount] = useState<string>("");
+  const [rounding, setRounding] = useState<string | null>(null);
   const [association,
     setAssociation] = useState<string | null>(null);
   const [isPaymentDataValid,
@@ -39,8 +51,14 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
   const [useLastCardSetup,
     setUseLastCardSetup] = useState<boolean>(false)
 
+  const [getStores, { data: wsStoresData = [],
+    isError: isGetStoresError }] = useLazyGetStoresQuery();
+
   const [getAssociations, { data: wsAssociationsData = [],
     isError: isGetAssociationsError }] = useLazyGetAssociationsQuery();
+
+  const [getRoundings, { data: wsRoundingsData = [],
+    isError: isGetRoundingsError }] = useLazyGetRoundingsQuery();
 
   const [getLastSetupCard, { data: wsLastSetupCardData,
     isError: isGetLastSetupCardError }] = useLazyGetLastSetupCardQuery();
@@ -57,6 +75,7 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
   const dispatch = useDispatch();
 
   const defaultAssociation: string | null = useMemo(() => currentUser?.defaultAssociation ?? null, [currentUser]);
+  const defaultRounding: string | null = useMemo(() => currentUser?.defaultRounding ?? null, [currentUser]);
 
   useFocusEffect(
     useCallback(() => {
@@ -66,22 +85,29 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         .then(() => getStripePublishableKey().unwrap())
         .then(({ stripePublishableKey: publishableKey }: WsStripePublishableKeyBaseProps) => initStripe({ publishableKey }))
         .then(() => getLastSetupCard().unwrap())
-        .then((lastSetupCardData) => {
+        .then(async (lastSetupCardData) => {
+          if (!isSpontaneous) {
+            await getStores();
+            await getRoundings();
+          }
+
           setUseLastCardSetup(!!lastSetupCardData);
           setAssociation(defaultAssociation);
+          setRounding(defaultRounding);
 
           dispatch(hideLoading());
         });
     }, [defaultAssociation]));
 
   useEffect(() => {
-    if (isGetAssociationsError || isGetLastSetupCardError || isGetStripePublishableKeyError)
+    if (isGetAssociationsError || isGetLastSetupCardError || isGetStripePublishableKeyError
+      || isGetStoresError)
       displayError('Homepage');
 
     if (isCreatePaymentError)
       displayError();
   }, [isGetAssociationsError, isGetLastSetupCardError, isGetStripePublishableKeyError,
-    isCreatePaymentError]);
+    isCreatePaymentError, isGetStoresError]);
 
   useEffect(() => {
     if (wsCreatePaymentData) {
@@ -113,8 +139,14 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
   }, [wsConfirmPaymentData]);
 
   const isDisabled: boolean = useMemo(() => isNaN(Number(amount)) || Number(amount) === 0 ||
-      association === null || (useLastCardSetup || !isPaymentDataValid),
+      association === null || (!useLastCardSetup && !isPaymentDataValid),
     [amount, association, isPaymentDataValid, useLastCardSetup]);
+
+  const getAmountInputLabel = useCallback((): string => {
+    const label: string = "Montant";
+
+    return isSpontaneous ? label : [label, "original"].join(" ");
+  }, [isSpontaneous]);
 
   const displaySuccess = useCallback((): void => {
     dispatch(hideLoading());
@@ -145,35 +177,42 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     }));
   }, [navigation]);
 
-  const onSubmit = async () => {
+  const onSubmit = async (savePaymentMethod?: boolean) => {
     if (currentUser && association) {
       const { lastName, firstName , email } = currentUser;
 
       dispatch(showLoading());
 
-      const billingDetails: BillingDetails = {
-        name: `${firstName} ${lastName}`,
-        email
-      }
-
-      const { paymentMethod, error } = await createPaymentMethod({
-        paymentMethodType: 'Card',
-        paymentMethodData: { billingDetails }
-      });
-
-      if (error || !paymentMethod) {
-        displayError();
-        return;
-      }
-
       let wsCreatePaymentProps: WsCreatePaymentRequestBaseProps = {
         originalAmount: Number(amount),
-        paymentMethodId: paymentMethod.id,
         association,
-        savePaymentMethod: true
+        savePaymentMethod: !!savePaymentMethod
       };
 
-      if (note.trim().length > 0) {
+      if (!useLastCardSetup) {
+        const billingDetails: BillingDetails = {
+          name: `${firstName} ${lastName}`,
+          email
+        }
+
+        const { paymentMethod,
+          error } = await createPaymentMethod({
+          paymentMethodType: 'Card',
+          paymentMethodData: { billingDetails }
+        });
+
+        if (error || !paymentMethod) {
+          displayError();
+          return;
+        }
+
+        wsCreatePaymentProps = {
+          ...wsCreatePaymentProps,
+          paymentMethodId: paymentMethod.id
+        }
+      }
+
+      if (note.trim()) {
         wsCreatePaymentProps = {
           ...wsCreatePaymentProps,
           note
@@ -184,17 +223,52 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
     }
   }
 
+  const onSubmitConditional = () => {
+    !useLastCardSetup ? dispatch(showModal({
+      variant: "normal",
+      mainAction: () => dispatch(hideModal()),
+      dialogBody: () => (<SaveCardDialog />),
+      customActions: SAVE_CARD_DIALOG_ACTIONS.map(({ save, label }) => ({
+        onPress: () => onSubmit(save), childComponent: () => (
+          <Text
+            variant="normal"
+            value={label}
+            color="black"
+            align="center"
+          />
+        )
+      }))
+    })) : onSubmit();
+  }
+
   return (
     <View style={styles.form}>
+      {!isSpontaneous && (
+        <Store
+          list={wsStoresData}
+          store={store}
+          setStore={setStore}
+        />
+      )}
+
       <TextInput
         numericKeyboard
         variant="labelInside"
         padding={{ a: 10 }}
         margin={{ b: 25 }}
-        label="Montant"
+        label={getAmountInputLabel()}
         value={amount}
         onChange={setAmount}
       />
+
+      {!isSpontaneous && (
+        <Rounding
+          list={wsRoundingsData}
+          rounding={rounding}
+          defaultRounding={defaultRounding}
+          setRounding={setRounding}
+        />
+      )}
 
       <Association
         list={wsAssociationsData}
@@ -202,6 +276,14 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
         defaultAssociation={defaultAssociation}
         setAssociation={setAssociation}
       />
+
+      {(!isSpontaneous && rounding) && (
+        <Overview
+          amount={amount}
+          rounding={rounding}
+          roundings={wsRoundingsData}
+        />
+      )}
 
       <PaymentForm
         label="Données de paiement"
@@ -233,22 +315,8 @@ export default function Form({ navigation }: { navigation: NativeStackNavigation
             value="Confirmer"
           />
         )}
-        onPress={() => dispatch(showModal({
-          variant: "normal",
-          mainAction: () => dispatch(hideModal()),
-          dialogBody: () => <View style={{
-            width: "100%",
-            padding: 15,
-            backgroundColor: "white",
-            borderWidth: 2,
-            borderRadius: 10,
-            position: "relative",
-            flexDirection: "column",
-            alignItems: "center"
-          }}>
-
-          </View>
-        }))}
+        // onPress={onSubmit}
+        onPress={onSubmitConditional}
       />
     </View>
   )

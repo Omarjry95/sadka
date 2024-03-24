@@ -6,10 +6,20 @@ import {ActionBaseProps} from "@app/screens/homepage/models";
 import {homepageActions} from "@app/screens/homepage/constants";
 import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {MainStackParamList} from "@app/navigation/models";
+import {useDispatch} from "react-redux";
+import {setIsDonationSpontaneous} from "@app/global/donationSlice";
 
 export default function Actions() {
 
+  const dispatch = useDispatch();
+
   const navigation = useNavigation<NavigationProp<MainStackParamList>>();
+
+  const onPressHomepageAction = (isDonationSpontaneous: boolean) => {
+    dispatch(setIsDonationSpontaneous(isDonationSpontaneous));
+
+    navigation.navigate("Donation");
+  }
 
   return (
     <View style={styles.actionsContainer}>
@@ -28,7 +38,7 @@ export default function Actions() {
               />
             </View>
           )}
-          onPress={() => navigation.navigate(action.screen)}
+          onPress={() => onPressHomepageAction(action.isDonationSpontaneous)}
         />
       ))}
     </View>

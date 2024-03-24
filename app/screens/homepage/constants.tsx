@@ -12,7 +12,7 @@ export const homepageActions: ActionBaseProps[] = [
         size={24}
       />
     ),
-    screen: "Spontaneous"
+    isDonationSpontaneous: true
   },
   {
     label: "L'arrondi solidaire",
@@ -23,7 +23,7 @@ export const homepageActions: ActionBaseProps[] = [
         size={24}
       />
     ),
-    screen: "Spontaneous"
+    isDonationSpontaneous: false
   }
 ];
 

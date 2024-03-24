@@ -5,5 +5,6 @@ export const apiPrefixes = {
     user: '/users',
     role: '/roles',
     rounding: '/roundings',
-    payment: '/payments'
+    payment: '/payments',
+    store: '/stores'
 }

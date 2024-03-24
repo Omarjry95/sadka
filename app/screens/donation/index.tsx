@@ -3,9 +3,9 @@ import {View} from "react-native";
 import styles from './styles';
 import {NativeStackNavigationProp} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
-import Main from "@app/screens/spontaneous/main";
+import Main from "@app/screens/donation/main";
 
-const Spontaneous = ({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Spontaneous'> }) => (
+const Donation = ({ navigation }: { navigation: NativeStackNavigationProp<MainStackParamList, 'Donation'> }) => (
   <View style={styles.container}>
     <View style={styles.header} />
 
@@ -13,4 +13,4 @@ const Spontaneous = ({ navigation }: { navigation: NativeStackNavigationProp<Mai
   </View>
 )
 
-export default Spontaneous;
+export default Donation;

@@ -14,7 +14,7 @@ export default function Caption({ disabled, text, setDisabled, setDefaultValue }
     setDisabled(!disabled);
 
     setDefaultValue();
-  }, [disabled]);
+  }, [disabled, setDefaultValue]);
 
   return (
     <View style={styles.captionContainer}>

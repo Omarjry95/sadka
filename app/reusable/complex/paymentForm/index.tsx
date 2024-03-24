@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {CardField, CardFieldInput} from "@stripe/stripe-react-native";
 import {useTheme} from "@react-navigation/native";
 import styles from "@app/reusable/complex/paymentForm/styles";
@@ -11,8 +11,6 @@ export default function PaymentForm({ label, margin, borderWidth, borderRadius, 
                                       setIsPaymentDataValid }: PaymentFormBaseProps) {
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
-
-  const inputRef = useRef<CardFieldInput.Methods>(null);
 
   const { colors } = useTheme();
 
@@ -30,7 +28,6 @@ export default function PaymentForm({ label, margin, borderWidth, borderRadius, 
       )}
 
       <CardField
-        ref={inputRef}
         style={styles.form}
         cardStyle={{
           backgroundColor: "white",
@@ -52,7 +49,8 @@ export default function PaymentForm({ label, margin, borderWidth, borderRadius, 
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         onCardChange={(data: CardFieldInput.Details) => {
-          const { validNumber, validExpiryDate, validCVC } = data;
+          const { validNumber, validExpiryDate,
+            validCVC } = data;
 
           const isDataValid: boolean = [validNumber, validExpiryDate, validCVC]
             .every((v: CardFieldInput.ValidationState) => v === CardFieldInput.ValidationState.Valid);
@@ -60,6 +58,7 @@ export default function PaymentForm({ label, margin, borderWidth, borderRadius, 
           setIsPaymentDataValid(isDataValid);
         }}
       />
+
     </View>
   )
 }

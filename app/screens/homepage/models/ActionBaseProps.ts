@@ -1,9 +1,7 @@
-import {MainStackParamList} from "@app/navigation/models";
-
 type ActionBaseProps = {
   label: string,
   icon: () => JSX.Element,
-  screen: keyof MainStackParamList
+  isDonationSpontaneous: boolean
 }
 
 export default ActionBaseProps;

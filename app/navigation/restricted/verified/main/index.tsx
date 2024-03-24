@@ -1,7 +1,7 @@
 import React from "react";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {MainStackParamList} from "@app/navigation/models";
-import {Homepage, Spontaneous} from "@app/screens";
+import {Homepage, Donation} from "@app/screens";
 import Header from "@app/screens/homepage/header";
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
@@ -26,8 +26,8 @@ const MainNavigator = () => (
     />
 
     <Stack.Screen
-      name="Spontaneous"
-      component={Spontaneous}
+      name="Donation"
+      component={Donation}
     />
   </Stack.Navigator>
 )

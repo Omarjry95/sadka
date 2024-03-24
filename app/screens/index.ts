@@ -4,7 +4,7 @@ import Lobby from "./lobby";
 import Profile from "./profile";
 import SignIn from "./signIn";
 import SignUp from "./signUp";
-import Spontaneous from "./spontaneous";
+import Donation from "./donation";
 
 export {
     SignIn,
@@ -13,5 +13,5 @@ export {
     Homepage,
     Profile,
     ChangePassword,
-    Spontaneous
+    Donation
 }

@@ -5,8 +5,8 @@ type DefaultValueDisplayBaseProps = {
   captionText: string,
   margin?: SpacingAndBorder,
   borderRadius?: Corners,
-  mainComponent: () => JSX.Element,
-  alternateComponent?: () => JSX.Element,
+  mainComponent: (() => JSX.Element) | JSX.Element,
+  alternateComponent?: (() => JSX.Element) | JSX.Element,
   setDefaultValue: Function
 }
 

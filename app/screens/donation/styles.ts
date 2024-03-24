@@ -20,6 +20,25 @@ export default StyleSheet.create({
     flexDirection: "column",
     alignItems: "center"
   },
+  overviewContainer: {
+    width: "100%",
+    marginBottom: 25,
+    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+    flexDirection: "column",
+    alignItems: "flex-start"
+  },
+  overviewItemContainer: {
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  overviewItemLabelContainer: {
+    marginRight: 10,
+    flex: 1
+  },
   paymentAlternateContainer: {
     width: "100%",
     flexDirection: "column",

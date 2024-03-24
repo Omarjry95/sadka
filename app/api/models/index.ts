@@ -1,5 +1,4 @@
 import SuccessResponse from "./SuccessResponse";
-import WsAssociationBaseProps from "./WsAssociationBaseProps";
 import WsCreatePaymentRequestBaseProps from "./WsCreatePaymentRequestBaseProps";
 import WsCreatePaymentResponseBaseProps from "./WsCreatePaymentResponseBaseProps";
 import WsCreateUserBaseProps from "./WsCreateUserBaseProps";
@@ -13,6 +12,7 @@ import WsUserDetailsRequestBaseProps from "./WsUserDetailsRequestBaseProps";
 import WsConfirmPaymentBaseProps from "./WsConfirmPaymentRequestBaseProps";
 import WsConfirmPaymentResponseBaseProps from "./WsConfirmPaymentResponseBaseProps";
 import WsLastSetupCardBaseProps from "./WsLastSetupCardBaseProps";
+import WsListSelectBaseProps from "./WsListSelectBaseProps";
 
 export type {
   WsGenericResponse,
@@ -20,7 +20,7 @@ export type {
   WsCreateUserBaseProps,
   WsUserDetailsRequestBaseProps,
   WsUserDetailsBaseProps,
-  WsAssociationBaseProps,
+  WsListSelectBaseProps,
   WsRoleBaseProps,
   WsRoundingBaseProps,
   WsCreatePaymentRequestBaseProps,

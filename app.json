@@ -27,7 +27,7 @@
       "favicon": "./assets/favicon.png"
     },
     "extra": {
-      "apiUrl": "https://145b-2a01-e0a-14e-8f60-8861-32b0-7daf-6cce.ngrok-free.app",
+      "apiUrl": "https://f3fe-2a01-e0a-14e-8f60-ac2e-3d1e-5636-e28f.ngrok-free.app",
       "oauth2TokenUrl": "https://sadka.eu.auth0.com/oauth/token",
       "oauth2ClientId": "Q5skDaZtJDgCHHFiq57Q50jEWq8N9zH1",
       "oauth2ClientSecret": "W1UUeHJP461XL_bRSxjLrh-qcNZG7FLS8dsjv3sLr26O3sQ_ONoWD3G0VLDg8Cdp",
